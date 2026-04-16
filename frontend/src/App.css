@@ -1,0 +1,34 @@
+:root {
+  --font-coco-raffine: "cofo-raffine", sans-serif;
+
+  /* color theme complimentary palette */
+  --color-primary: hsl(212, 50%, 34%);
+  --color-secondary: hsl(212, 100%, 92%);
+  --color-accent: hsl(39, 50%, 34%);
+  --color-background: hsl(212, 27%, 20%);
+  --color-neutral-light: hsl(38, 47%, 70%);
+
+  /* map colors */
+  --color-water-blue: hsl(194, 45%, 77%);
+  --color-park-green: hsl(156, 43%, 81%);
+  --color-grid-grey: hsl(0, 0%, 90%);
+  --color-landmass: hsl(0, 0%, 96%);
+  --color-blueprint-blue: hsl(209, 30%, 24%);
+  --color-water: hsl(194, 45%, 77%);
+  --color-river-deep: hsl(193, 35%, 67%);
+  --color-park: hsl(156, 43%, 81%);
+  --color-woodland: hsl(155, 35%, 75%);
+  --color-street: hsl(0, 0%, 100%);
+  --color-block: hsl(0, 0%, 95%);
+  --color-grid-line: hsl(0, 0%, 86%);
+  --color-report-alert: hsl(0, 100%, 66%);
+  --color-civic-blue: hsl(213, 49%, 34%);
+
+  --text-sm: 0.85rem;
+  --text-md: 1.125rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-3xl: 3rem;
+  --text-4xl: 4rem;
+}
