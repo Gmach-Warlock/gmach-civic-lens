@@ -1,11 +1,76 @@
-header {
+/* Global Button Reset & Base */
+.header__container button {
+  font-family: var(--font-coco-raffine);
+  font-size: var(--text-sm);
+  border-radius: 0.25rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  border: 1px solid transparent;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* 1. TOP BAR BUTTONS (The "HeaderButton" component) 
+   Should feel like secondary/utility links. */
+.header__bottom nav button {
+  background: transparent;
+  color: var(--color-secondary);
+  padding: 4px 12px;
+  border-radius: 2px;
+}
+
+.header__bottom nav button:hover {
+  color: var(--color-street);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.header__bottom nav button:active {
+  transform: translateY(1px);
+}
+
+/* 2. BOTTOM BAR "REGISTER" BUTTON
+   This is your sub-layer CTA. It needs to look more structural. */
+.header__top button {
+  background-color: var(--color-civic-blue);
+  color: var(--color-street);
+  padding: 6px 20px;
+  border: 1px solid var(--color-grid-line);
+  box-shadow: 2px 2px 0px var(--color-blueprint-blue);
+  font-weight: 600;
+}
+
+.header__top button:hover {
+  background-color: var(--color-primary);
+  border-color: var(--color-secondary);
+  box-shadow: 4px 4px 0px var(--color-blueprint-blue);
+  transform: translate(-1px, -1px);
+}
+
+.header__top button:active {
+  box-shadow: 0px 0px 0px var(--color-blueprint-blue);
+  transform: translate(1px, 1px);
+}
+
+/* 3. LAYOUT SPECIFICS FOR THE DOUBLE BAR */
+.header__container {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-background);
+}
+
+.header__top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-inline: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--color-blueprint-blue);
+  color: var(--color-neutral-light);
 }
 
-header li {
-  display: inline;
-  list-style: none;
+.header__bottom {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background-color: var(--color-blueprint-blue); /* Slightly darker sub-bar */
+  border-bottom: 2px solid var(--color-civic-blue);
 }

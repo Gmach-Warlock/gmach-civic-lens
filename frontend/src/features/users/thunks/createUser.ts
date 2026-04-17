@@ -1,12 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { UserInterface } from "../../../app/interfaces/userInterfaces";
 
-const createUserUrl = "http://localhost:4000/api/users/create";
+const createUserUrl = import.meta.env.VITE_API_URL;
 
 export const createUser = createAsyncThunk(
   "users/createUser",
   async (user: UserInterface, thunkApi) => {
     try {
+      console.log(createUserUrl);
       const newUser = user;
       const response = await fetch(createUserUrl, {
         method: "post",

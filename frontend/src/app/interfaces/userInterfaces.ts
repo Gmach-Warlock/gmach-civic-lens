@@ -1,61 +1,64 @@
-export interface UserRequest {
+import type { LoadingStateType } from "../types/usersTypes";
+
+export interface UserActivityInterface {
+  requests: UserRequestInterface[];
+  comments: UserCommentInterface[];
+}
+
+export interface UserGeneralInfoInterface {
+  fullname: string;
+  username: string;
+  email: string;
+  password?: string;
+}
+
+export interface UserMetaInfoInterface {
+  createdAt: string;
+  lastLogin: string;
+  isAdmin: boolean;
+}
+
+export interface UserRequestInterface {
   id: string;
   title: string;
-  status: "pending" | "in-progress" | "resolved" | "closed";
+  status: LoadingStateType;
   createdAt: Date;
   description: string;
 }
 
-export interface UserComment {
+export interface UserCommentInterface {
   id: string;
-  requestId: string; // The ID of the post they commented on
+  requestId: string;
   content: string;
   createdAt: Date;
 }
 
 export interface UserInterface {
-  // Primary account details
-  general: {
-    fullName: string;
-    username: string;
-    email: string;
-    password?: string;
-    avatarUrl?: string; // Helpful for civic sites to build trust
-  };
-
-  // Tracking history and site engagement
-  activity: {
-    requests: UserRequest[];
-    comments: UserComment[];
-  };
-
-  // Database/System-level timestamps
-  meta: {
-    createdAt: Date;
-    lastLogin: Date;
-    isAdmin: boolean;
-  };
+  general: UserGeneralInfoInterface;
+  activity: UserActivityInterface;
+  loadingState: BaseFetchStatusInterface;
+  meta: UserMetaInfoInterface;
 }
 
-export interface BaseFetchStatus {
-  loading: boolean;
-  isSuccess: boolean;
-  error: string | null;
-  isIdle: boolean;
+export interface BaseFetchStatusInterface {
+  state: LoadingStateType;
+  message: string;
 }
 
-// 1. Descriptive User Fetch Interface
-export interface FetchUsersInterface extends BaseFetchStatus {
+export interface FetchUsersInterface extends BaseFetchStatusInterface {
   users: {
-    registrationSuccess: boolean; // Specific to your "forced login" flow
-    lastFetchedUser?: string; // To track who was just looked up
+    registrationSuccess: boolean;
+    lastFetchedUser?: string;
   };
 }
 
-// 2. Descriptive Issue Fetch Interface
-export interface FetchIssueInterface extends BaseFetchStatus {
+export interface FetchIssueInterface extends BaseFetchStatusInterface {
   issues: {
-    isUploadingImage: boolean; // Specific to civic reporting (e.g., photo of a pothole)
-    totalResultsFound: number; // For your list view pagination
+    isUploadingImage: boolean;
+    totalResultsFound: number;
   };
+}
+
+export interface FetchResourceInterface<T> extends BaseFetchStatusInterface {
+  data: T | null;
 }

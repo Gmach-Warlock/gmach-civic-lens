@@ -1,15 +1,18 @@
-import type { FetchIssueInterface } from "../../app/interfaces/userInterfaces";
+import type {
+  BaseFetchStatusInterface,
+  FetchIssueInterface,
+} from "../../app/interfaces/userInterfaces";
 
-const createInitialFetch = () => ({
-  loading: false,
-  isSuccess: false,
-  error: null,
+// ✅ Correct: The variable is a function that RETURNS a BaseFetchStatus
+const createInitialLoadingState = (): BaseFetchStatusInterface => ({
+  state: "loading",
+  message: "",
 });
 
-// Use it like this:
 export const initialIssueState: FetchIssueInterface = {
-  ...createInitialFetch(),
-  isUploadingImage: false,
-  totalResultsFound: 0,
-  isIdle: true,
+  ...createInitialLoadingState(), // Now this spreads the object correctly
+  issues: {
+    isUploadingImage: false,
+    totalResultsFound: 0,
+  },
 };

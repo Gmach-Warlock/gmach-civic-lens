@@ -1,5 +1,13 @@
 :root {
   --font-coco-raffine: "cofo-raffine", sans-serif;
+  --font-inter: "Inter", sans-serif;
+
+  /* base values for shading and highlighting */
+  --primary-hs: 212, 50%;
+  --secondary-hs: 212, 100%;
+  --accent-hs: 39, 50%;
+  --background-hs: 212, 27%;
+  --neutral-hs: 38, 47%;
 
   /* color theme complimentary palette */
   --color-primary: hsl(212, 50%, 34%);

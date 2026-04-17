@@ -1,17 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type {
-  UserInterface,
-  FetchUsersInterface,
-} from "../../app/interfaces/userInterfaces";
+import type { UserInterface } from "../../app/interfaces/userInterfaces";
 import { createUser } from "./thunks/createUser";
-import { initialIssueState } from "../../assets/users/usersAssets";
+import { createInitialUsersState } from "../../app/utils/factory/stateFactories";
 
-const initialUserState: UserInterface & FetchUsersInterface = {
-  general: { fullName: "", username: "", email: "" },
-  activity: { requests: [], comments: [] },
-  meta: { createdAt: new Date(), lastLogin: new Date(), isAdmin: false },
-  ...initialIssueState, // Spread it here
-};
+const initialUserState: UserInterface = createInitialUsersState();
 
 const usersSlice = createSlice({
   name: "users",
@@ -19,8 +11,8 @@ const usersSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(createUser.fulfilled, (state) => {
-      state.loading = false; // Use a semicolon here
-      state.isSuccess = true;
+      state.loadingState.state = "succeeded";
+      state.loadingState.message = `User created successfully at ${new Date().toLocaleString()}`;
     });
   },
 });

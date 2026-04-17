@@ -24,7 +24,7 @@ class UsersController {
       res.status(400).json({ error: error.message });
     }
   }
-  static async login(req, res) {
+  static async loginUser(req, res) {
     try {
       const { username, password } = req.body;
 
@@ -46,7 +46,7 @@ class UsersController {
 
       res.status(200).json({
         message: "Login successful",
-        token: token, // This is the 'hall pass' the frontend will save
+        token: token,
       });
     } catch (error) {
       res.status(500).json({ error: error.message });

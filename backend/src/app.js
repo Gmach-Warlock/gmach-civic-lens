@@ -3,7 +3,13 @@ const cors = require("cors");
 const app = express();
 const routes = require("./routes/index");
 
-app.use(cors());
+const corsOptions = {
+  origin: "http://localhost:5173",
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 app.use("/api", routes);
@@ -13,14 +19,3 @@ app.get("/", (req, res) => {
 });
 
 module.exports = app;
-
-/* import { randomBytes } from "crypto"; */
-
-/**
- * Replaces the old 'possible' string loop with a
- * cryptographically secure hex generator.
- */
-/* export const generateSecureID = (length: number = 16): string => {
-  // 16 bytes = 32 hex characters
-  return randomBytes(length).toString('hex');
-}; */
