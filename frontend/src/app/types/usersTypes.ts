@@ -1,1 +1,1 @@
-export type LoadingStateType = "idle" | "loading" | "failed" | "succeeded";
+export type LoadingStateType = "idle" | "loading" | "rejected" | "fulfilled";

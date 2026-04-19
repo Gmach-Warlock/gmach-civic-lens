@@ -3,3 +3,49 @@ body {
   background-color: black;
   color: white;
 }
+
+.form__group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form__group label {
+  color: var(--color-primary);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  font-family: var(--font-inter);
+}
+
+.form__group input {
+  background: hsla(0, 0%, 100%, 0.05);
+  border: 1px solid hsla(212, 100%, 92%, 0.2);
+  border-radius: 8px;
+  padding: 0.75rem;
+  color: white;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.form__group input:focus {
+  border-color: var(--color-secondary);
+}
+
+.page__card {
+  background: hsla(var(--primary-hs), 98%, 0.7);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+
+  border: 1px solid hsla(212, 100%, 92%, 0.2);
+  border-radius: 16px;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.form__row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}

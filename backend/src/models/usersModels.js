@@ -42,6 +42,10 @@ User.init(
         notEmpty: true,
       },
     },
+    address: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   },
   {
     sequelize: db,

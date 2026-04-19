@@ -1,20 +1,20 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { UserInterface } from "../../../app/interfaces/userInterfaces";
 
-const createUserUrl = import.meta.env.VITE_API_URL;
+const createUserUrl = "http://localhost:4000/api/users/create";
 
 export const createUser = createAsyncThunk(
-  "users/createUser",
+  "user/createUser",
   async (user: UserInterface, thunkApi) => {
     try {
-      console.log(createUserUrl);
-      const newUser = user;
+      console.log("Sending to:", createUserUrl);
+
       const response = await fetch(createUserUrl, {
-        method: "post",
+        method: "POST",
         headers: {
-          contentType: "application/json",
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(newUser),
+        body: JSON.stringify(user),
       });
 
       if (!response.ok) {
@@ -23,10 +23,14 @@ export const createUser = createAsyncThunk(
       }
 
       const data = await response.json();
-      console.log(data);
+      console.log("data is ", data);
+
       return data;
     } catch (err) {
-      console.error(err);
+      if (err instanceof Error) {
+        return thunkApi.rejectWithValue(err.message);
+      }
+      return thunkApi.rejectWithValue("An unexpected error occurred");
     }
   },
 );

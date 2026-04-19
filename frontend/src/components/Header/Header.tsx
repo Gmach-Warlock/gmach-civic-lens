@@ -16,7 +16,6 @@ export default function Header() {
   };
 
   const handleLoadRegisterPage = () => {
-    console.log("testing");
     navigate("/register");
   };
 

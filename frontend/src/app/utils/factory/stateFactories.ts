@@ -8,20 +8,27 @@ export const createInitialLoadingState = (): BaseFetchStatusInterface => ({
   message: "",
 });
 
-export const createInitialUsersState = (): UserInterface => ({
-  general: {
-    fullname: "",
-    username: "",
-    email: "",
+export const createInitialUserState = (): UserInterface => ({
+  user: {
+    general: {
+      firstName: "",
+      lastName: "",
+      username: "",
+      email: "",
+      password: "",
+      address: "",
+    },
+    meta: {
+      createdAt: "",
+      lastLogin: "",
+      isAdmin: false,
+      token: "",
+    },
   },
   activity: {
     requests: [],
     comments: [],
   },
-  meta: {
-    createdAt: "",
-    lastLogin: "",
-    isAdmin: false,
-  },
+
   loadingState: createInitialLoadingState(),
 });
