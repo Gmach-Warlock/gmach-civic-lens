@@ -1,3 +1,7 @@
 .cta {
   z-index: var(--z-middleground);
 }
+
+.btn--cta {
+  background-color: var(--color-safety-orange);
+}

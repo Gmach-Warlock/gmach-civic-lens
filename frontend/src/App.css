@@ -9,6 +9,8 @@
   --accent-hs: 39, 50%;
   --background-hs: 212, 27%;
   --neutral-hs: 38, 47%;
+  --civic-hs: 214, 49%;
+  --safety-hs: 33, 100%;
 
   /* color theme complimentary palette */
   --color-primary: hsl(212, 50%, 34%);
@@ -34,7 +36,7 @@
   --color-civic-blue: hsl(213, 49%, 34%);
   --color-safety-orange: hsl(33, 100%, 50%);
 
-  --glassmorphism: hsla(212, 100%, 80%, 0.7);
+  --glassmorphism: hsla(212, 100%, 60%, 0.3);
   --shadow-low: 0 2px 4px rgba(0, 0, 0, 0.1); /* For z-base */
   --shadow-mid: 0 10px 20px rgba(0, 0, 0, 0.15); /* For z-middleground */
   --shadow-high: 0 20px 40px rgba(0, 0, 0, 0.2); /* For z-overlay */

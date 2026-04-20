@@ -5,7 +5,7 @@
   height: 30%;
   width: 100%;
   position: relative;
-  background-color: var(--color-primary);
+  background-color: var(--glassmorphism);
   overflow: hidden;
 }
 

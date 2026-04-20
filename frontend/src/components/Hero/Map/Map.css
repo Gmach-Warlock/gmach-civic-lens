@@ -1,0 +1,158 @@
+.map {
+  width: 40rem;
+  height: 20rem;
+  background-color: #1a4a7a;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+  background-size: 20px 20px;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 2px solid #fff;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  display: grid;
+  grid-template-columns: repeat(40, 1fr);
+  grid-template-rows: repeat(20, 1fr);
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 1000; /* Keeps it in front for now */
+}
+
+.map::after {
+  content: "MAP OVERLAY B-01 (DRAFT)";
+  color: rgba(255, 255, 255, 0.5);
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.8rem;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+.map span {
+  opacity: 0.5;
+  color: white;
+}
+
+.map__lake {
+  width: 7rem;
+  height: 4.7rem;
+  border-top-left-radius: 45%;
+  border-top-right-radius: 55%;
+  border-bottom-left-radius: 40%;
+  border-bottom-right-radius: 60%;
+  background-color: var(--color-water);
+  grid-row-start: 6;
+  grid-column-start: 4;
+}
+
+.map__main-street {
+  height: 3rem;
+  grid-row: 4 / 6;
+  grid-column: 1 / -1;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-top: 1px dashed white;
+  border-bottom: 1px dashed white;
+  z-index: 1;
+}
+
+.map__cross-street {
+  grid-column: 10 / 12;
+  grid-row: 1 / -1;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-left: 1px dashed white;
+  border-right: 1px dashed white;
+  z-index: 1;
+  width: 3rem;
+  height: 100%;
+}
+
+.map__building1 {
+  height: 5rem;
+  border-radius: var(--rounded-sm);
+  grid-row: 1 / 5;
+  grid-column: 13 / 16;
+  background-color: rgba(255, 255, 255, 0.4);
+  border: 1px solid white;
+}
+
+.map__building2 {
+  height: 4rem;
+  border-radius: var(--rounded-sm);
+  grid-row: 8 / 10;
+  grid-column: 7 / 9;
+  background-color: rgba(255, 255, 255, 0.4);
+  border: 1px solid white;
+}
+
+.map__lake {
+  grid-row: 7 / 10;
+  grid-column: 2 / 6;
+  background-color: hsl(212, 72%, 59%);
+  border-radius: 50% 40% 60% 30%;
+  opacity: 0.8;
+  z-index: 2;
+}
+
+.map__tree {
+  grid-row: 3;
+  grid-column: 17;
+  width: 15px;
+  height: 15px;
+  background-color: #7ed321;
+  border-radius: 50%;
+  justify-self: center;
+}
+
+.map__problem {
+  grid-row: 7 / 8;
+  grid-column: 14 / 15;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 0.75rem;
+  color: var(--color-report-alert);
+}
+
+.map__problem-marker {
+  grid-column: 21; /* Specific spot on your new dense grid */
+  grid-row: 11;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 10;
+}
+
+.marker__icon {
+  background-color: #ff3b3b; /* Problem Red */
+  color: white;
+  font-weight: bold;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 0 15px rgba(255, 59, 59, 0.6);
+}
+
+/* The "Ping" Effect */
+.marker__ping {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: #ff3b3b;
+  border-radius: 50%;
+  animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ping {
+  75%,
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
