@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import "./Title.css";
 
 export default function Title() {
   const scope = useRef<HTMLDivElement>(null);
@@ -56,32 +57,27 @@ export default function Title() {
           "scanStart",
         )
 
-        // Phase A: The Overshoot (Tilt forward)
         .to(".img--magnifying-glass", {
           x: "+=40",
-          rotation: 15, // Angled "forward" as it passes the S
+          rotation: 15,
           duration: 0.5,
           ease: "power2.out",
         })
 
-        // Phase B: The Rebound & Tuck (Mirror the angle)
         .to(".img--magnifying-glass", {
           x: () => {
             const lettersWidth =
               scope.current?.querySelector(".hero__letters")?.clientWidth || 0;
             return lettersWidth - 0;
           },
-          // No Y change - keeping it linear
-          rotation: -15, // Mirrored angle (resting position)
+          rotation: -15,
           scale: 0.85,
           duration: 0.7,
           ease: "power2.inOut",
           onStart: () => {
-            // Slide behind precisely as the direction changes
             gsap.set(".img--magnifying-glass", { zIndex: 1 });
           },
         })
-        // Final Reflection
         .to(
           ".reflection-streak",
           {
@@ -98,9 +94,9 @@ export default function Title() {
   const handleSkip = () => tl.current?.progress(1);
 
   return (
-    <div className="hero__container" ref={scope}>
-      <div className="hero__title">
-        <button type="button" className="skip-btn" onClick={handleSkip}>
+    <div className="title__container" ref={scope}>
+      <div className="title">
+        <button type="button" className="btn btn--skip" onClick={handleSkip}>
           Skip
         </button>
         <div className="hero__letters">

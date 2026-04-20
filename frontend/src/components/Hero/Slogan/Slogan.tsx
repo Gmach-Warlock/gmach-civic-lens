@@ -2,7 +2,7 @@ import "./Slogan.css";
 
 export default function Slogan() {
   return (
-    <div>
+    <div className="slogan">
       <span>See the problem. </span>
       <span>Say the word.</span>
     </div>

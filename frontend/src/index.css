@@ -1,3 +1,9 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
   font-family: var(--font-coco-raffine);
   background-color: black;
@@ -48,4 +54,56 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
+}
+
+button {
+  cursor: pointer;
+  font-family: var(--font-inter);
+  transition:
+    transform 0.1s ease,
+    filter 0.2s ease;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: white;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.antialiased {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.btn {
+  background-color: var(--color-civic-blue);
+  color: var(--color-street);
+  padding: 6px 20px;
+  border: 1px solid var(--color-grid-line);
+  border-radius: var(--rounded-md);
+  box-shadow: 2px 2px 0px var(--color-blueprint-blue);
+  font-weight: 600;
 }

@@ -1,6 +1,7 @@
 :root {
   --font-coco-raffine: "cofo-raffine", sans-serif;
   --font-inter: "Inter", sans-serif;
+  --font-overpass: "Overpass", sans-serif;
 
   /* base values for shading and highlighting */
   --primary-hs: 212, 50%;
@@ -31,7 +32,14 @@
   --color-grid-line: hsl(0, 0%, 86%);
   --color-report-alert: hsl(0, 100%, 66%);
   --color-civic-blue: hsl(213, 49%, 34%);
+  --color-safety-orange: hsl(33, 100%, 50%);
 
+  --glassmorphism: hsla(212, 100%, 80%, 0.7);
+  --shadow-low: 0 2px 4px rgba(0, 0, 0, 0.1); /* For z-base */
+  --shadow-mid: 0 10px 20px rgba(0, 0, 0, 0.15); /* For z-middleground */
+  --shadow-high: 0 20px 40px rgba(0, 0, 0, 0.2); /* For z-overlay */
+
+  /* Font Sizes */
   --text-sm: 0.85rem;
   --text-md: 1.125rem;
   --text-lg: 1.25rem;
@@ -39,4 +47,31 @@
   --text-2xl: 2rem;
   --text-3xl: 3rem;
   --text-4xl: 4rem;
+  --text-sign: 2.5rem;
+
+  /* Spacing Scale */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+
+  /* Standard Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Border radius' */
+  --rounded-sm: 0.25rem;
+  --rounded-md: 0.5rem;
+  --rounded-lg: 1rem;
+
+  /* Positioning */
+  --z-below: -10;
+  --z-base: 0;
+  --z-middleground: 100;
+  --z-foreground: 200;
+  --z-overlay: 500;
+  --z-debug: 9999;
 }
