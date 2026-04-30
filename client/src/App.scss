@@ -1,0 +1,29 @@
+@use "styles/abstracts/animations";
+@use "styles/abstracts/mixins";
+@use "styles/abstracts/variables";
+
+@use "styles/base/reset";
+@use "styles/base/responsive";
+@use "styles/base/tailwindy";
+@use "styles/base//typography";
+@use "styles/base/utilities";
+
+@use "styles/components/buttons";
+@use "styles/components/cards";
+@use "styles/components/forms";
+@use "styles/components/headings";
+@use "styles/components/images";
+@use "styles/components/inputs";
+@use "styles/components/overlays";
+
+@use "styles/layout/columns";
+@use "styles/layout//containers";
+@use "styles/layout/grid";
+@use "styles/layout/navigation";
+@use "styles/layout//rows";
+@use "styles/layout/scrollbars";
+@use "styles/layout/wrappers";
+
+@use "styles/pages//config";
+@use "styles/pages/confirm";
+@use "styles/pages/home";

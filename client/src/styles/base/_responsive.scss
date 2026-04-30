@@ -1,0 +1,39 @@
+@use "sass:map";
+
+/* Responsive Utilities */
+@media (max-width: 768px) {
+  .hide-mobile {
+    display: none;
+  }
+}
+@media (min-width: 769px) {
+  .hide-desktop {
+    display: none;
+  }
+}
+
+$breakpoints: (
+  "sm": 576px,
+  "md": 768px,
+  "lg": 992px,
+);
+
+@mixin mq($size) {
+  @media (min-width: map.get($breakpoints, $size)) {
+    @content;
+  }
+}
+
+.hide-desktop {
+  @include mq("md") {
+    display: none;
+  }
+}
+
+.card {
+  width: 100%; // Mobile default
+
+  @include mq("md") {
+    width: 50%; // Desktop adjustment
+  }
+}

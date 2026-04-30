@@ -1,0 +1,96 @@
+/* Data Driven */
+[data-loading="true"] {
+  pointer-events: none;
+  opacity: 0.7;
+  cursor: wait;
+  position: relative;
+}
+
+[data-loading="true"]::after {
+  content: "";
+}
+
+/* Glow and Accent */
+.glow-accent {
+  text-shadow:
+    0 0 5px hsla(var(--accent-hs), var(--lightness-base), 0.8),
+    0 0 10px hsla(var(--accent-hs), var(--lightness-base), 0.5);
+}
+
+.border-glow {
+  box-shadow: 0 0 15px hsla(var(--primary-hs), var(--lightness-base), 0.3);
+  border: 1px solid hsla(var(--primary-hs), var(--lightness-high), 0.5);
+}
+
+/* Info */
+.-info__icon {
+  cursor: var(--cursor-info);
+}
+
+/* Interactive Components */
+.interactive {
+  cursor: var(--cursor-action);
+  transition:
+    transform var(--transition-fast),
+    filter var(--transition-fast),
+    box-shadow var(--transition-fast);
+  -webkit-user-select: none;
+  user-select: none;
+}
+.interactive:hover {
+  transform: translateY(-2px) scale(var(--hover-scale));
+  filter: brightness(var(--filter-brightness));
+}
+.interactive:active {
+  transform: translateY(0) scale(0.98);
+  filter: brightness(0.9);
+}
+
+/* States */
+.active {
+  color: hsl(var(--accent-hs), var(--lightness-high));
+  border: 2px solid hsl(var(--accent-hs), var(--lightness-base));
+  transform: scale(var(--hover-scale));
+  filter: brightness(var(--filter-brightness));
+  text-shadow: var(--shadow-text) white;
+  transition: all var(--transition-fast);
+}
+.nav-link.active {
+  background: var(--gradient-linear-stacked-pill-hover);
+  color: white;
+  border-radius: var(--rounded-md);
+  box-shadow: var(--shadow-sm)
+    hsla(var(--accent-hs), var(--lightness-shadow), 0.5);
+}
+.disabled,
+[disabled] {
+  opacity: 0.5;
+  pointer-events: none;
+  filter: grayscale(1);
+  cursor: var(--cursor-disabled);
+}
+.error {
+  border-color: hsl(0, 100%, 50%);
+  animation: pulse-red 2s infinite;
+}
+.focus-visible {
+  outline: 3px solid hsl(var(--accent-hs), var(--lightness-base));
+  outline-offset: 2px;
+}
+.pending {
+  cursor: wait;
+  opacity: 0.7;
+  /* Re-using your pulse animation logic */
+}
+
+/* types */
+.type-is-critical {
+  --type-accent: 0, 100%;
+  animation: pulse-red 2s infinite;
+}
+.type-label {
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: var(--shadow-text) hsla(var(--type-accent), 100%, 0.8);
+  color: var(--color-secondary);
+}

@@ -1,0 +1,20 @@
+.wrapper--xs {
+  flex-wrap: wrap;
+  padding: var(--space-xs);
+  margin: var(--space-xs);
+}
+.wrapper--sm {
+  flex-wrap: wrap;
+  padding: var(--space-sm);
+  margin: var(--space-sm);
+}
+.wrapper--md {
+  flex-wrap: wrap;
+  padding: var(--space-md);
+  margin: var(--space-md);
+}
+.wrapper--lg {
+  flex-wrap: wrap;
+  padding: var(--space-lg);
+  margin: var(--space-lg);
+}

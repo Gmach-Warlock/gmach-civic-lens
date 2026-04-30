@@ -1,0 +1,31 @@
+.hero {
+  height: 100vh;
+  background-color: var(--color-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: start;
+}
+
+.caution-tape {
+  background-color: var(---color-safety-orange);
+  color: black;
+  bottom: 4rem;
+  font-family: var(--font-overpass);
+  text-transform: uppercase;
+  font-weight: 900;
+  padding: 20px;
+  border: 4px solid black;
+  transform: rotate(-2deg);
+}
+
+.btn--cta {
+  margin: 2rem;
+}
+
+.overlay {
+  width: 100%;
+  height: 100%;
+  background-color: hsla(0, 0%, 0%, 0.5);
+  z-index: 1000;
+}

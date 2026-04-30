@@ -1,0 +1,135 @@
+@keyframes blowIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-200px) skewX(-30deg);
+  }
+  60% {
+    transform: translateX(20px) skewX(-20deg);
+  }
+  80% {
+    transform: translateX(-5px) skewX(10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) skewX(0deg);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes glare-swipe {
+  0% {
+    left: -150%;
+    background: linear-gradient(
+      to right,
+      transparent,
+      hsla(var(--active-hs), 0.6),
+      transparent
+    );
+  }
+  50% {
+    background: linear-gradient(to right, transparent, hsla(0, 0%, 100%, 0.5));
+  }
+  100% {
+    left: 150%;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse-red {
+  0% {
+    box-shadow: inset 0 0 10px hsla(0, 100%, 50%, 0);
+  }
+  50% {
+    box-shadow: inset 0 0 20px hsla(0, 100%, 50%, 0.5);
+  }
+  100% {
+    box-shadow: inset 0 0 10px hsla(0, 100%, 50%, 0);
+  }
+}
+
+// pokemon animations
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+@keyframes earthquake {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(-8px, 4px);
+  }
+  50% {
+    transform: translate(8px, -4px);
+  }
+  75% {
+    transform: translate(-4px, 2px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .anim-blow-in {
+    animation: blowIn 1.2s 0.5s ease-out forwards;
+  }
+  .anim-fade-in {
+    animation: fadeIn var(--transition-normal) forwards;
+  }
+  .anim-glare-swipe {
+    animation: glare-swipe 2s ease-in-out 1s forwards;
+  }
+  .anim-pulse-red {
+    animation: pulse-red 2s infinite;
+  }
+  .anim-slide-up {
+    animation: slideUp var(--transition-normal) var(--transition-slow) forwards;
+    opacity: 0;
+  }
+  .pending {
+    animation: fade-in 1s infinite alternate;
+  }
+
+  // pokemon animations
+  .anim-shake {
+    animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  }
+  .anim-earthquake {
+    animation: earthquake 0.3s ease-out;
+  }
+}

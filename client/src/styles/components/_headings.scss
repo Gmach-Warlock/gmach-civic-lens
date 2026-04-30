@@ -1,0 +1,22 @@
+.heading--clipped {
+  text-shadow: var(--shadow-lg) hsl(var(--primary-hs), var(--lightness-shadow));
+  background: var(--gradient-text-pro);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: hsla(
+    var(--secondary-hs),
+    var(--lightness-base),
+    var(--glass-opacity-clip)
+  );
+}
+.heading--blocked {
+  font-weight: 900;
+  text-shadow:
+    1px 1px 0px hsl(var(--primary-hs), var(--lightness-shadow)),
+    2px 2px 0px hsl(var(--primary-hs), var(--lightness-shadow)),
+    var(--shadow-sm-block) hsl(var(--primary-hs), var(--lightness-shadow));
+
+  transition: transform var(--transition-fast);
+  -webkit-text-stroke: 1px hsl(var(--primary-hs), var(--lightness-shadow));
+  paint-order: stroke fill;
+}

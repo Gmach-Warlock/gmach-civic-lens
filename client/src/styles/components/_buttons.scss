@@ -1,0 +1,43 @@
+button {
+  /*   background-color: hsla(
+    var(--secondary-hs),
+    var(--lightness-base),
+    var(--glass-opacity-high)
+  ); */
+  background-image: var(--gradient-linear-stacked-pill);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  transition: all var(--transition-fast);
+  width: max-content;
+  margin-inline: auto;
+  color: white;
+  font-family: var(--font-button);
+  font-size: var(--text-button);
+  border-radius: var(--rounded-sm);
+  padding-inline: var(--space-md);
+  padding-block: var(--space-xs);
+  transition: all var(--transition-fast);
+  cursor: var(--hover-cursor);
+
+  &:hover {
+    background-image: var(--gradient-linear-stacked-pill-hover);
+    filter: var(--filter-brightness);
+    transform: var(--hover-scale);
+  }
+
+  &:active {
+    border: var(--glass-border);
+    transform: scale(0.98);
+  }
+}
+
+button:hover {
+  background-image: var(--gradient-linear-stacked-pill-hover);
+  filter: var(--filter-brightness);
+  transform: var(--hover-scale);
+}
+
+button:active {
+  border: var(--glass-border);
+  transform: scale(0.98);
+}

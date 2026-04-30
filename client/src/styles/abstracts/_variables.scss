@@ -1,0 +1,225 @@
+:root {
+  /* Font Families */
+  --font-main: "cofo-raffine", sans-serif;
+  --font-second: "Inter", sans-serif;
+  --font-button: var(--font-main);
+  --font-form: "Inter", sans-serif;
+  --font-link: "Inter", sans-serif;
+  --font-overpass: "Overpass", sans-serif;
+  --font-coco-raffine: "cofo-raffine", sans-serif;
+  --font-inter: "Inter", sans-serif;
+
+  /* Color Bases */
+  --primer-hs: 0, 0%;
+  --primary-hs: 212, 50%;
+  --secondary-hs: 212, 100%;
+  --accent-hs: 39, 50%;
+  --background-hs: 212, 27%;
+  --neutral-hs: 38, 47%;
+  --civic-hs: 214, 49%;
+  --safety-hs: 33, 100%;
+  --alert-hs: 0, 100%;
+
+  /* Colors */
+  --color-primary: hsl(212, 50%, 34%);
+  --color-secondary: hsl(212, 100%, 92%);
+  --color-accent: hsl(39, 50%, 34%);
+  --color-background: hsl(212, 27%, 20%);
+  --color-dark: hsl(215, 25%, 8%);
+  --color-neutral-light: hsl(38, 47%, 70%);
+  --color-neutral-dark: hsl(210, 12%, 30%);
+
+  /* Map Colors */
+  --color-grid-grey: hsl(0, 0%, 90%);
+  --color-landmass: hsl(0, 0%, 96%);
+  --color-blueprint-blue: hsl(209, 30%, 24%);
+  --color-water: hsl(212, 72%, 59%);
+  --color-river-deep: hsl(193, 35%, 67%);
+  --color-park-green: hsl(89, 73%, 48%);
+  --color-woodland: hsl(155, 35%, 75%);
+  --color-street: hsl(0, 0%, 100%);
+  --color-block: hsl(0, 0%, 95%);
+  --color-grid-line: hsl(0, 0%, 86%);
+  --color-report-alert: hsl(0, 100%, 62%);
+  --color-civic-blue: hsl(213, 49%, 34%);
+  --color-safety-orange: hsl(33, 100%, 50%);
+
+  /* Font Sizes */
+  --text-sm: 0.85rem;
+  --text-md: 1.125rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2rem;
+  --text-3xl: 3rem;
+  --text-4xl: 4rem;
+  --text-h1: var(--text-3xl);
+  --text-h2: var(--text-2xl);
+  --text-h3: var(--text-xl);
+  --text-button: 1rem;
+  --text-sign: 2.5rem;
+
+  /* Spacing Scale */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-forty: 40%;
+  --space-half: 50%;
+  --space-three-quarters: 75%;
+  --space-full: 100%;
+  --space-full-height: 100vh;
+  --space-full-width: 100vw;
+  --space-container-tight: 800px;
+  --space-img: 5rem;
+  --space-battle-height: 80vh;
+  --space-battle-width: 100%;
+
+  /* Standard Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Border radius' */
+  --rounded-xs: 0.125rem;
+  --rounded-sm: 0.25rem;
+  --rounded-md: 0.5rem;
+  --rounded-lg: 0.75rem;
+  --rounded-xl: 1rem;
+
+  /* Styling */
+  --filter-brightness: 1.1;
+  --hover-scale: 1.05;
+
+  /* Cursors */
+  --cursor-action: pointer;
+  --cursor-inspect: zoom-in;
+  --cursor-grab: hand;
+  --cursor-disabled: not-allowed;
+  --cursor-info: help;
+
+  /* Layering */
+  --z-below: -10;
+  --z-base: 0;
+  --z-middleground: 100;
+  --z-foreground: 200;
+  --z-ping: 300;
+  --z-overlay: 500;
+  --z-debug: 9999;
+
+  /* Glassmorphism */
+  --glass-blur: 10px;
+  --glass-lightness: 60%;
+  --glass-opacity-low: 0.2;
+  --glass-opacity-mid: 0.6;
+  --glass-opacity-clip: 0.7;
+  --glass-opacity-high: 0.9;
+  --glass-border: 1px solid
+    hsla(
+      var(--type-accent, var(--primary-hs)),
+      var(--lightness-glass),
+      var(--glass-opacity-mid)
+    );
+
+  /* Lightness */
+  --lightness-white: 100%;
+  --lightness-high: 80%;
+  --lightness-gradient-top: 75%;
+  --lightness-gradient-bottom: 35%;
+  --lightness-glass: 70%;
+  --lightness-base: 50%;
+  --lightness-low: 30%;
+  --lightness-shadow: 10%;
+  --lightness-black: 0%;
+
+  /* Shadow Params */
+  --shadow-sm: 2px 2px 4px;
+  --shadow-md: 4px 4px 8px;
+  --shadow-lg: 5px 5px 10px;
+  --shadow-xl: 10px 10px 15px;
+  --shadow-sm-block: 2px 2px;
+  --shadow-md-block: 4px 4px;
+  --shadow-lg-block: 5px 5px;
+  --shadow-xl-block: 10px 10px;
+  --shadow-sm-narrow: 1px 2px 4px;
+  --shadow-md-narrow: 2px 4px 8px;
+  --shadow-lg-narrow: 3px 5px 10px;
+  --shadow-xl-narrow: 5px 10px 15px;
+
+  --shadow-inset: -1px -1px 2px;
+  --shadow-text: 0px 0px 8px;
+  --shadow-button: 0px 4px 8px;
+
+  /* Compound Shadow variables */
+  --shadow-low: 0 2px 4px hsla(0, 0%, 0%, 0.1);
+  --shadow-mid: 0 10px 20px hsla(0, 0%, 0%, 0.15);
+  --shadow-high: 0 20px 40px hsla(0, 0%, 0%, 0.2);
+  --shadow-inset-field:
+    inset var(--shadow-sm)
+      hsla(0, 0%, var(--lightness-black), var(--glass-opacity-low)),
+    inset var(--shadow-inset) hsla(0, 0%, var(--lightness-white), 0.1);
+  --box-shadow-button: inset var(--shadow-button)
+    hsla(var(--secondary-hs), var(--lightness-black), var(--glass-opacity-low));
+
+  /* Gradients */
+  --gradient-linear-basic: linear-gradient(
+    to bottom,
+    hsl(var(--secondary-hs), var(--lightness-gradient-top)),
+    hsl(var(--secondary-hs), var(--lightness-gradient-bottom))
+  );
+  --gradient-linear-line50: linear-gradient(
+    to bottom,
+    hsl(var(--secondary-hs), var(--lightness-gradient-top)) 50%,
+    hsl(var(--secondary-hs), var(--lightness-gradient-bottom)) 50%
+  );
+  --gradient-text-pro: linear-gradient(
+    to bottom,
+    hsl(var(--secondary-hs), 90%) 0%,
+    hsl(var(--secondary-hs), 70%) 45%,
+    hsl(var(--secondary-hs), 45%) 55%,
+    hsl(var(--secondary-hs), 25%) 100%
+  );
+  --gradient-linear-stacked-pill:
+    linear-gradient(
+      to bottom,
+      hsla(
+          var(--secondary-hs),
+          var(--lightness-gradient-top),
+          var(--glass-opacity-mid)
+        )
+        50%,
+      hsla(
+          var(--secondary-hs),
+          var(--lightness-gradient-bottom),
+          var(--glass-opacity-mid)
+        )
+        50%
+    ),
+    var(--gradient-linear-basic);
+  --gradient-linear-stacked-pill-hover:
+    linear-gradient(
+      to bottom,
+      hsla(
+          var(--accent-hs),
+          var(--lightness-gradient-top),
+          var(--glass-opacity-mid)
+        )
+        50%,
+      hsla(
+          var(--accent-hs),
+          var(--lightness-gradient-bottom),
+          var(--glass-opacity-mid)
+        )
+        50%
+    ),
+    var(--gradient-linear-basic);
+
+  /* Screen Sizes (Breakpoints) */
+  --screen-xs: 30em; /* 480px  | Mobile Landscape / Large Phones */
+  --screen-sm: 40em; /* 640px  | Phablets / Small Tablets */
+  --screen-md: 48em; /* 768px  | Tablets (Portrait) */
+  --screen-lg: 64em; /* 1024px | Laptops / Desktop / Tablet (Landscape) */
+  --screen-xl: 75em; /* 1200px | Standard Desktop Max */
+  --screen-2xl: 96em; /* 1536px | Ultra-wide / 2K Monitors */
+}

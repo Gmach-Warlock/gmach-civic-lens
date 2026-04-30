@@ -1,0 +1,21 @@
+.grid-auto-fit {
+  --min-col-size: 300px;
+
+  display: grid;
+  gap: var(--space-md);
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(var(--min-col-size), 100%), 1fr)
+  );
+}
+.grid-12-flat {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--space-md);
+}
+.grid-12-full {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(12, 1fr);
+  gap: var(--space-md);
+}

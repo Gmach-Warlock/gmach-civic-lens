@@ -1,0 +1,28 @@
+body {
+  background-color: var(--color-background);
+  color: var(--color-primary);
+  font-family: var(--font-main);
+  text-align: center;
+}
+h1 {
+  font-size: var(--text-h1);
+}
+h2 {
+  font-size: var(--text-h2);
+}
+h3 {
+  font-size: var(--text-h3);
+}
+
+h2,
+h3 {
+  padding: var(--space-md);
+}
+li {
+  list-style-type: none;
+}
+
+abbr {
+  cursor: help;
+  text-decoration: underline dotted;
+}

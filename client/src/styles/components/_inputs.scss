@@ -1,0 +1,24 @@
+input {
+  padding: var(--space-xs);
+  margin-block: var(--space-xs);
+}
+
+input[type="text"] {
+  background-color: hsl(var(--primary-hs), 95%);
+  border: 2px solid hsl(var(--primary-hs), var(--lightness-shadow));
+  box-shadow: var(--shadow-inset-field);
+
+  padding-inline: var(--space-sm);
+  padding-block: var(--space-xs);
+  border-radius: var(--rounded-sm);
+
+  color: var(--color-primary);
+  font-family: var(--font-primary);
+  transition: border-color var(--transition-fast);
+}
+
+input[type="text"]:focus {
+  outline: none;
+  border-color: hsl(var(--secondary-hs), 50%);
+  background-color: hsl(0, 0%, 100%);
+}
