@@ -28,7 +28,8 @@ export interface UserMetaInfoInterface {
   createdAt: string;
   lastLogin: string;
   isAdmin: boolean;
-  token: string;
+  accessToken: string;
+  refreshToken: string;
 }
 
 export interface UserRequestInterface {
@@ -54,8 +55,9 @@ export interface UserInterface {
   activity: UserActivityInterface;
   loadingState: BaseFetchStatusInterface;
 }
+
 export interface UserState {
-  user: UserData | null; // This is where the nesting happens!
+  user: UserData | null;
   loadingState: BaseFetchStatusInterface;
   activity: UserActivityInterface;
   token: string | null;

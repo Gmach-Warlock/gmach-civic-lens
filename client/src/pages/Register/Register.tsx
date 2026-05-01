@@ -70,16 +70,13 @@ export default function Register() {
 
   const user = useAppSelector(selectUser);
   const token = useAppSelector(selectToken);
-  const formClassName = `register__form ${
-    user ? "register__form--success" : ""
-  }`;
   return (
     <div className="register__page">
-      <div className="page__card">
+      <div className="card--form ">
         <h2 className="register__title">
           {token ? `Welcome, ${user.general.firstName}!` : "Create Account"}
         </h2>
-        <form onSubmit={handleSubmit} className={formClassName}>
+        <form onSubmit={handleSubmit} className={`register__form `}>
           <div className="form__row">
             <div className="form__group">
               <label htmlFor="firstName">First Name</label>

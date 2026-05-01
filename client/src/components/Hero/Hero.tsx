@@ -6,6 +6,8 @@ import Slogan from "./Slogan/Slogan";
 import Title from "./Title/Title";
 
 export default function Hero() {
+  console.log("Hero component function executed");
+
   return (
     <div className="hero">
       <Title />
