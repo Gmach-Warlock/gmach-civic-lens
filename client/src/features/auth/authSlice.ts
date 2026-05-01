@@ -5,7 +5,7 @@ import { loginUser } from "./thunks/loginUser";
 import { createInitialUserState } from "../../app/utils/factory/stateFactories";
 import { verifyToken } from "./thunks/verifyToken";
 
-const initialUserState: UserInterface = {
+const initialAuthState: UserInterface = {
   ...createInitialUserState(),
   user: {
     ...createInitialUserState().user,
@@ -17,9 +17,9 @@ const initialUserState: UserInterface = {
   },
 };
 
-const userSlice = createSlice({
-  name: "user",
-  initialState: initialUserState,
+const authSlice = createSlice({
+  name: "auth",
+  initialState: initialAuthState,
   reducers: {
     logoutUser: () => {
       localStorage.removeItem("token");
@@ -61,5 +61,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { logoutUser } = userSlice.actions;
-export default userSlice.reducer;
+export const { logoutUser } = authSlice.actions;
+export default authSlice.reducer;

@@ -3,7 +3,7 @@ import { useAppSelector } from "../../app/hooks/generalHooks";
 import {
   selectAccessToken,
   selectUser,
-} from "../../features/user/selectors/userSelectors";
+} from "../../features/auth/selectors/authSelectors";
 import "./Dashboard.css";
 
 export default function Dashboard() {

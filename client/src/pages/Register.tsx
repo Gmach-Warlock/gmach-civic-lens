@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks/generalHooks";
-import { createUser } from "../features/user/thunks/createUser";
+import { createUser } from "../features/auth/thunks/createUser";
 import type { UserInterface } from "../app/interfaces/userInterfaces";
 import { useNavigate } from "react-router";
 import {
   selectAccessToken,
   selectUser,
-} from "../features/user/selectors/userSelectors";
+} from "../features/auth/selectors/authSelectors";
 
 export default function Register() {
   const [formData, setFormData] = useState({

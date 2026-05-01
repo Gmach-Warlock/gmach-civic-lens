@@ -4,8 +4,8 @@ import { useAppDispatch, useAppSelector } from "../app/hooks/generalHooks";
 import {
   selectAccessToken,
   selectUser,
-} from "../features/user/selectors/userSelectors";
-import { loginUser } from "../features/user/thunks/loginUser";
+} from "../features/auth/selectors/authSelectors";
+import { loginUser } from "../features/auth/thunks/loginUser";
 
 export default function Login() {
   const [formData, setFormData] = useState({

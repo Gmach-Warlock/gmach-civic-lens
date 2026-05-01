@@ -1,12 +1,12 @@
 import type { RootState } from "../../../app/store/store";
 
-export const selectUser = (state: RootState) => state.user.user;
+export const selectUser = (state: RootState) => state.auth.user;
 
 export const selectAccessToken = (state: RootState) =>
-  state.user.user.meta.accessToken;
+  state.auth.user.meta.accessToken;
 
 export const selectRefreshToken = (state: RootState) =>
-  state.user.user.meta.refreshToken;
+  state.auth.user.meta.refreshToken;
 
 export const selectUsername = (state: RootState) =>
-  state.user.user.general.username;
+  state.auth.user.general.username;

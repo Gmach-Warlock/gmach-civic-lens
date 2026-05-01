@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { LoginFetchStateInterface } from "../../../app/interfaces/userInterfaces";
 
-const loginUserUrl = "http://localhost:4000/api/users/login";
+const loginUserUrl = `${import.meta.env.VITE_SERVER_URL}${import.meta.env.VITE_LOGIN_USER_PATH}`;
 
 export const loginUser = createAsyncThunk(
   "user/loginUser",

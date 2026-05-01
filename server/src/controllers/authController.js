@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
 const formatUserResponse = require("../utils/formatUserResponse");
 
-class UsersController {
+class AuthController {
   static async createUser(req, res) {
     try {
       const { general } = req.body.user;
@@ -102,4 +102,4 @@ class UsersController {
   }
 }
 
-module.exports = UsersController;
+module.exports = AuthController;
