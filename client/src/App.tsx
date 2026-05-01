@@ -5,10 +5,11 @@ import {
   RouterProvider,
 } from "react-router";
 import Root from "./Root";
-import Home from "./pages/Home/Home";
-import Register from "./pages/Register/Register";
+import Home from "./pages/Home";
+import Register from "./pages/Register";
 import Dashboard from "./components/Dashboard/Dashboard";
-import Login from "./pages/Login/Login";
+import Login from "./pages/Login";
+import Report from "./pages/Report";
 import "./App.scss";
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/report" element={<Report />} />
       </Route>,
     ),
   );

@@ -24,6 +24,9 @@
 @use "styles/layout/scrollbars";
 @use "styles/layout/wrappers";
 
-@use "styles/pages//config";
-@use "styles/pages/confirm";
+@use "styles/pages/config";
+@use "styles/pages/general";
 @use "styles/pages/home";
+@use "styles/pages/login";
+@use "styles/pages/register";
+@use "styles/pages/report";

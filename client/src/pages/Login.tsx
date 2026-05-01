@@ -1,12 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import { useAppDispatch, useAppSelector } from "../../app/hooks/generalHooks";
-import "./Login.css";
+import { useAppDispatch, useAppSelector } from "../app/hooks/generalHooks";
 import {
-  selectToken,
+  selectAccessToken,
   selectUser,
-} from "../../features/user/selectors/userSelectors";
-import { loginUser } from "../../features/user/thunks/loginUser";
+} from "../features/user/selectors/userSelectors";
+import { loginUser } from "../features/user/thunks/loginUser";
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -37,13 +36,13 @@ export default function Login() {
   };
 
   const user = useAppSelector(selectUser);
-  const token = useAppSelector(selectToken);
-  const formClassName = `login__form ${token ? "login__form--success" : ""}`;
+  const accessToken = useAppSelector(selectAccessToken);
+  const formClassName = `login__form ${accessToken ? "login__form--success" : ""}`;
   return (
     <div className="login page">
       <div className="page__card">
         <h2 className="page__title">
-          {token ? `Welcome, ${user.general.firstName}!` : "Login "}
+          {accessToken ? `Welcome, ${user.general.firstName}!` : "Login "}
         </h2>
         <form onSubmit={handleSubmit} className={formClassName}>
           <div className="form__row"></div>
@@ -78,7 +77,7 @@ export default function Login() {
             Register
           </button>
         </form>
-        {token && (
+        {accessToken && (
           <div className="success-overlay">
             <p>Your account is ready.</p>
             <button type="button" onClick={() => navigate("/dashboard")}>

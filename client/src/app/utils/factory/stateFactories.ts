@@ -22,7 +22,8 @@ export const createInitialUserState = (): UserInterface => ({
       createdAt: "",
       lastLogin: "",
       isAdmin: false,
-      token: "",
+      accessToken: "",
+      refreshToken: "",
     },
   },
   activity: {

@@ -1,4 +1,3 @@
-/* Global Button Reset & Base */
 .header__container button {
   font-family: var(--font-coco-raffine);
   font-size: var(--text-sm);
@@ -10,8 +9,6 @@
   letter-spacing: 0.05em;
 }
 
-/* 1. TOP BAR BUTTONS (The "HeaderButton" component) 
-   Should feel like secondary/utility links. */
 .header__bottom nav button {
   background: transparent;
   color: var(--color-secondary);
@@ -28,8 +25,6 @@
   transform: translateY(1px);
 }
 
-/* 2. BOTTOM BAR "REGISTER" BUTTON
-   This is your sub-layer CTA. It needs to look more structural. */
 .header__top button {
   background-color: var(--color-civic-blue);
   color: var(--color-street);
@@ -51,7 +46,6 @@
   transform: translate(1px, 1px);
 }
 
-/* 3. LAYOUT SPECIFICS FOR THE DOUBLE BAR */
 .header__container {
   display: flex;
   flex-direction: column;

@@ -28,11 +28,9 @@ class UsersController {
         { expiresIn: "1h" },
       );
 
-      const refreshToken = jwt.sign(
-        { id: user.id },
-        process.env.REFRESH_SECRET,
-        { expiresIn: "7d" },
-      );
+      const refreshToken = jwt.sign({ id: user.id }, process.env.JWT_REFRESH, {
+        expiresIn: "7d",
+      });
 
       res.status(201).json({
         message: "User created!",
@@ -60,11 +58,9 @@ class UsersController {
         JWT_SECRET,
         { expiresIn: "1h" },
       );
-      const refreshToken = jwt.sign(
-        { id: user.id },
-        process.env.REFRESH_SECRET,
-        { expiresIn: "7d" },
-      );
+      const refreshToken = jwt.sign({ id: user.id }, process.env.JWT_REFRESH, {
+        expiresIn: "7d",
+      });
       res.status(200).json({
         message: "Login successful",
         accessToken,
@@ -90,11 +86,9 @@ class UsersController {
         JWT_SECRET,
         { expiresIn: "1h" },
       );
-      const refreshToken = jwt.sign(
-        { id: user.id },
-        process.env.REFRESH_SECRET,
-        { expiresIn: "7d" },
-      );
+      const refreshToken = jwt.sign({ id: user.id }, process.env.JWT_REFRESH, {
+        expiresIn: "7d",
+      });
 
       res.status(200).json({
         message: "Token valid",

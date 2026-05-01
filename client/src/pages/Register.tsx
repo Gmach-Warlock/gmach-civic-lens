@@ -1,13 +1,12 @@
 import { useState } from "react";
-import "./Register.css";
-import { useAppDispatch, useAppSelector } from "../../app/hooks/generalHooks";
-import { createUser } from "../../features/user/thunks/createUser";
-import type { UserInterface } from "../../app/interfaces/userInterfaces";
+import { useAppDispatch, useAppSelector } from "../app/hooks/generalHooks";
+import { createUser } from "../features/user/thunks/createUser";
+import type { UserInterface } from "../app/interfaces/userInterfaces";
 import { useNavigate } from "react-router";
 import {
-  selectToken,
+  selectAccessToken,
   selectUser,
-} from "../../features/user/selectors/userSelectors";
+} from "../features/user/selectors/userSelectors";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -44,7 +43,8 @@ export default function Register() {
           createdAt: new Date().toISOString(),
           lastLogin: new Date().toISOString(),
           isAdmin: false,
-          token: "",
+          accessToken: "",
+          refreshToken: "",
         },
       },
       activity: { requests: [], comments: [] },
@@ -69,12 +69,15 @@ export default function Register() {
   };
 
   const user = useAppSelector(selectUser);
-  const token = useAppSelector(selectToken);
+  const accessToken = useAppSelector(selectAccessToken);
+
   return (
     <div className="register__page">
       <div className="card--form ">
         <h2 className="register__title">
-          {token ? `Welcome, ${user.general.firstName}!` : "Create Account"}
+          {accessToken
+            ? `Welcome, ${user.general.firstName}!`
+            : "Create Account"}
         </h2>
         <form onSubmit={handleSubmit} className={`register__form `}>
           <div className="form__row">
@@ -160,7 +163,7 @@ export default function Register() {
             Register
           </button>
         </form>
-        {token && (
+        {accessToken && (
           <div className="success-overlay">
             <p>Your account is ready.</p>
             <button type="button" onClick={() => navigate("/dashboard")}>
