@@ -1,9 +1,8 @@
-import Cta from "./Cta/Cta";
-import "./Hero.css";
-import Map from "./Map/Map";
-import Sign from "./Sign/Sign";
-import Slogan from "./Slogan/Slogan";
-import Title from "./Title/Title";
+import Cta from "./Cta";
+import Map from "./Map";
+import Sign from "./Sign";
+import Slogan from "./Slogan";
+import Title from "./Title";
 
 export default function Hero() {
   console.log("Hero component function executed");

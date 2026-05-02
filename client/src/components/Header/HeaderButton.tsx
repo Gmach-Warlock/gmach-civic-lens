@@ -2,8 +2,7 @@ import { useNavigate } from "react-router";
 import type {
   FetchResourceInterface,
   UserInterface,
-} from "../../../app/interfaces/authInterfaces";
-import "./HeaderButton.css";
+} from "../../app/interfaces/authInterfaces";
 
 interface HeaderButtonProps {
   auth: FetchResourceInterface<UserInterface>;

@@ -4,7 +4,6 @@ import {
   selectAccessToken,
   selectUser,
 } from "../../features/auth/selectors/authSelectors";
-import "./Dashboard.css";
 
 export default function Dashboard() {
   const user = useAppSelector(selectUser);

@@ -21,8 +21,16 @@ h3 {
 li {
   list-style-type: none;
 }
-
+a {
+  text-decoration: none;
+  color: inherit;
+}
 abbr {
   cursor: help;
   text-decoration: underline dotted;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: white;
 }

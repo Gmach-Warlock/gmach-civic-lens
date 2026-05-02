@@ -1,5 +1,3 @@
-import "./Sign.css";
-
 export default function Sign() {
   return (
     <div className="sign">

@@ -1,20 +1,30 @@
-.wrapper--xs {
+.wrapper {
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  display: flex;
   flex-wrap: wrap;
-  padding: var(--space-xs);
-  margin: var(--space-xs);
-}
-.wrapper--sm {
-  flex-wrap: wrap;
-  padding: var(--space-sm);
-  margin: var(--space-sm);
-}
-.wrapper--md {
-  flex-wrap: wrap;
-  padding: var(--space-md);
-  margin: var(--space-md);
-}
-.wrapper--lg {
-  flex-wrap: wrap;
-  padding: var(--space-lg);
-  margin: var(--space-lg);
+
+  &--xs {
+    max-width: 40ch;
+    padding: var(--space-xs);
+    margin: var(--space-xs);
+  }
+
+  &--sm {
+    max-width: 60ch;
+    padding: var(--space-sm);
+    margin: var(--space-sm);
+  }
+
+  &--md {
+    max-width: 100ch;
+    padding: var(--space-md);
+    margin: var(--space-md);
+  }
+
+  &--lg {
+    max-width: 140ch;
+    padding: var(--space-lg);
+    margin: var(--space-lg);
+  }
 }

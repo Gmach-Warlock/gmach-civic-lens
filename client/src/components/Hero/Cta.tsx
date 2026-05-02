@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router";
-import { useAppSelector } from "../../../app/hooks/generalHooks";
-import { selectAccessToken } from "../../../features/auth/selectors/authSelectors";
-import "./Cta.css";
+import { useAppSelector } from "../../app/hooks/generalHooks";
+import { selectAccessToken } from "../../features/auth/selectors/authSelectors";
 
 export default function Cta() {
   const accessToken = useAppSelector(selectAccessToken);

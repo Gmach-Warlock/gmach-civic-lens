@@ -10,7 +10,7 @@ const createInitialLoadingState = (): BaseFetchStatusInterface => ({
 });
 
 export const initialIssueState: FetchIssueInterface = {
-  ...createInitialLoadingState(), // Now this spreads the object correctly
+  ...createInitialLoadingState(),
   issues: {
     isUploadingImage: false,
     totalResultsFound: 0,

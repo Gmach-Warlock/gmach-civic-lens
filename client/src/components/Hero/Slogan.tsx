@@ -1,5 +1,3 @@
-import "./Slogan.css";
-
 export default function Slogan() {
   return (
     <div className="slogan">

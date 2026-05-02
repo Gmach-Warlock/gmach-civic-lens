@@ -1,10 +1,9 @@
-import "./Header.css";
-import HeaderButton from "./HeaderButton/HeaderButton";
+import { useNavigate } from "react-router";
 import type {
   FetchResourceInterface,
   UserInterface,
 } from "../../app/interfaces/authInterfaces";
-import { useNavigate } from "react-router";
+import HeaderButton from "./HeaderButton";
 
 export default function Header() {
   const navigate = useNavigate();

@@ -1,5 +1,3 @@
-import "./Cone.css";
-
 export default function TrafficCone() {
   return (
     <div className="cone__container">

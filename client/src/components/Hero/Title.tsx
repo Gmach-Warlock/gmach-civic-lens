@@ -1,7 +1,6 @@
 import { useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import "./Title.css";
 
 export default function Title() {
   const scope = useRef<HTMLDivElement>(null);
