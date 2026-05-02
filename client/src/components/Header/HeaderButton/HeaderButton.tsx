@@ -2,7 +2,7 @@ import { useNavigate } from "react-router";
 import type {
   FetchResourceInterface,
   UserInterface,
-} from "../../../app/interfaces/userInterfaces";
+} from "../../../app/interfaces/authInterfaces";
 import "./HeaderButton.css";
 
 interface HeaderButtonProps {
@@ -24,7 +24,7 @@ export default function HeaderButton({ auth }: HeaderButtonProps) {
   }
 
   if (auth.data) {
-    return <button type="button">{auth.data.user.general.username}</button>;
+    return <button type="button">{auth.data.general.username}</button>;
   }
 
   return (

@@ -1,11 +1,11 @@
+import type { AuthStateInterface } from "../../app/interfaces/authInterfaces";
 import { createSlice } from "@reduxjs/toolkit";
-import type { UserInterface } from "../../app/interfaces/userInterfaces";
 import { createUser } from "./thunks/createUser";
 import { loginUser } from "./thunks/loginUser";
 import { createInitialUserState } from "../../app/utils/factory/stateFactories";
 import { verifyToken } from "./thunks/verifyToken";
 
-const initialAuthState: UserInterface = {
+const initialAuthState: AuthStateInterface = {
   ...createInitialUserState(),
   user: {
     ...createInitialUserState().user,

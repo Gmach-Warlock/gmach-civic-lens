@@ -1,14 +1,14 @@
 import type {
+  AuthStateInterface,
   BaseFetchStatusInterface,
-  UserInterface,
-} from "../../interfaces/userInterfaces";
+} from "../../interfaces/authInterfaces";
 
 export const createInitialLoadingState = (): BaseFetchStatusInterface => ({
   state: "loading",
   message: "",
 });
 
-export const createInitialUserState = (): UserInterface => ({
+export const createInitialUserState = (): AuthStateInterface => ({
   user: {
     general: {
       firstName: "",
@@ -17,6 +17,7 @@ export const createInitialUserState = (): UserInterface => ({
       email: "",
       password: "",
       address: "",
+      zipCode: 0,
     },
     meta: {
       createdAt: "",
@@ -25,6 +26,7 @@ export const createInitialUserState = (): UserInterface => ({
       accessToken: "",
       refreshToken: "",
     },
+    comments: [],
   },
   activity: {
     requests: [],

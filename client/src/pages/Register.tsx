@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks/generalHooks";
 import { createUser } from "../features/auth/thunks/createUser";
-import type { UserInterface } from "../app/interfaces/userInterfaces";
+import type { AuthStateInterface } from "../app/interfaces/authInterfaces";
 import { useNavigate } from "react-router";
 import {
   selectAccessToken,
@@ -15,7 +15,8 @@ export default function Register() {
     username: "",
     email: "",
     password: "",
-    address: "", // Added to state
+    address: "",
+    zipCode: 0,
   });
 
   const dispatch = useAppDispatch();
@@ -29,7 +30,7 @@ export default function Register() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const newUserObject: UserInterface = {
+    const newAuthStateObject: AuthStateInterface = {
       user: {
         general: {
           firstName: `${formData.firstName}`.trim(),
@@ -38,6 +39,7 @@ export default function Register() {
           email: formData.email,
           password: formData.password,
           address: formData.address,
+          zipCode: formData.zipCode,
         },
         meta: {
           createdAt: new Date().toISOString(),
@@ -46,12 +48,13 @@ export default function Register() {
           accessToken: "",
           refreshToken: "",
         },
+        comments: [],
       },
       activity: { requests: [], comments: [] },
       loadingState: { state: "idle", message: "" },
     };
     try {
-      await dispatch(createUser(newUserObject)).unwrap();
+      await dispatch(createUser(newAuthStateObject.user)).unwrap();
 
       setFormData({
         firstName: "",
@@ -60,6 +63,7 @@ export default function Register() {
         email: "",
         password: "",
         address: "",
+        zipCode: 0,
       });
 
       console.log("Success! Form cleared.");
@@ -145,7 +149,18 @@ export default function Register() {
               required
             />
           </div>
-
+          <div className="form__group">
+            <label htmlFor="zipCode">Zip Code</label>
+            <input
+              type="number"
+              id="zipCode"
+              name="zipCode"
+              value={formData.zipCode}
+              onChange={handleChange}
+              placeholder="123 Civic Way"
+              required
+            />
+          </div>
           <div className="form__group">
             <label htmlFor="password">Password</label>
             <input

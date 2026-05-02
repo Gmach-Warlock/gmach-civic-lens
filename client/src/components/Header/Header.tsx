@@ -3,7 +3,7 @@ import HeaderButton from "./HeaderButton/HeaderButton";
 import type {
   FetchResourceInterface,
   UserInterface,
-} from "../../app/interfaces/userInterfaces";
+} from "../../app/interfaces/authInterfaces";
 import { useNavigate } from "react-router";
 
 export default function Header() {

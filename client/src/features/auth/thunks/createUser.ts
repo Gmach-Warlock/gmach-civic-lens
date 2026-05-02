@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { UserInterface } from "../../../app/interfaces/userInterfaces";
+import type { UserInterface } from "../../../app/interfaces/authInterfaces";
 
 const createUserUrl = `${import.meta.env.VITE_SERVER_URL}${import.meta.env.VITE_CREATE_USER_PATH}`;
 

@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import type { LoginFetchStateInterface } from "../../../app/interfaces/userInterfaces";
+import type { LoginFetchStateInterface } from "../../../app/interfaces/authInterfaces";
 
 const loginUserUrl = `${import.meta.env.VITE_SERVER_URL}${import.meta.env.VITE_LOGIN_USER_PATH}`;
 

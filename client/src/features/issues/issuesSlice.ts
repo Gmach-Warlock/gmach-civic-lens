@@ -1,55 +1,40 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { createIssue } from "./thunks/createIssue";
+import { getIssues } from "./thunks/getIssues";
+import type { IssuesStateInterface } from "../../app/interfaces/issuesInterfaces";
 
-export interface IssueInterface {
-  meta: {
-    id: string;
-    authorId: string;
-    authorName: string;
-    createdAt: string;
-    updatedAt: string;
-  };
+const initialIssuesState: IssuesStateInterface = {
   general: {
-    title: string;
-    description: string;
-    category: "infrastructure" | "safety" | "sanitation" | "other";
-  };
-  location: {
-    zip: number;
-    address?: string;
-    coords?: { lat: number; lng: number };
-  };
-  status: {
-    current: "tbd" | "active" | "finished" | "reoccurring" | "waiting";
-    urgency: "low" | "medium" | "high";
-    lastActionDate: string;
-  };
-  social: {
-    upvotes: number;
-    tags: string[];
-  };
-}
-
-export interface IssuesState {
-  items: IssueInterface[];
-  loading: boolean;
-  error: string | null;
-  selectedIssueId: string | null;
-  entities: { [id: string]: IssueInterface };
-  ids: string[];
-  status: "idle" | "loading" | "succeeded" | "failed";
-}
-
-export interface IssuesInterface {
-  issues: IssueInterface[];
-}
-
-const initialIssuesState = {};
+    issues: [],
+    selectedIssueId: null,
+    entities: null,
+    ids: [],
+  },
+  meta: {
+    accessToken: "",
+    refreshToken: "",
+    lastFetch: "",
+  },
+  state: {
+    loading: false,
+    loadingState: "idle",
+    message: null,
+  },
+};
 
 const issuesSlice = createSlice({
   name: "issues",
   initialState: initialIssuesState,
-  reducers: {
-    getAllIssue: () => {},
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(createIssue.fulfilled, (state, action) => {
+      console.log(action.payload);
+      state.general.issues = action.payload.data;
+    });
+    builder.addCase(getIssues.fulfilled, (state, action) => {
+      console.log(action.payload);
+      state.general.issues = action.payload.data;
+    });
   },
 });
 

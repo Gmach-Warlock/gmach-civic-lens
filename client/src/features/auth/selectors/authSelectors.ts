@@ -10,3 +10,6 @@ export const selectRefreshToken = (state: RootState) =>
 
 export const selectUsername = (state: RootState) =>
   state.auth.user.general.username;
+
+export const selectUserZipCode = (state: RootState) =>
+  state.auth.user.general.zipCode;

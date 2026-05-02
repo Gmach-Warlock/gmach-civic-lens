@@ -5,16 +5,6 @@ export interface UserActivityInterface {
   comments: UserCommentInterface[];
 }
 
-export interface UserData {
-  id: number;
-  username: string;
-  email: string;
-  name: string;
-  address: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
 export interface UserGeneralInfoInterface {
   firstName: string;
   lastName: string;
@@ -22,6 +12,7 @@ export interface UserGeneralInfoInterface {
   email: string;
   password: string;
   address: string;
+  zipCode: number;
 }
 
 export interface UserMetaInfoInterface {
@@ -35,58 +26,49 @@ export interface UserMetaInfoInterface {
 export interface UserRequestInterface {
   id: string;
   title: string;
-  status: LoadingStateType;
-  createdAt: Date;
+  createdAt: string;
   description: string;
+  location: string;
 }
 
 export interface UserCommentInterface {
   id: string;
   requestId: string;
   content: string;
-  createdAt: Date;
+  createdAt: string;
 }
 
 export interface UserInterface {
-  user: {
-    general: UserGeneralInfoInterface;
-    meta: UserMetaInfoInterface;
-  };
-  activity: UserActivityInterface;
-  loadingState: BaseFetchStatusInterface;
+  general: UserGeneralInfoInterface;
+  meta: UserMetaInfoInterface;
+  comments: UserCommentInterface[];
 }
-
-export interface UserState {
-  user: UserData | null;
-  loadingState: BaseFetchStatusInterface;
+export interface AuthStateInterface {
+  user: UserInterface;
   activity: UserActivityInterface;
-  token: string | null;
+  loadingState: BaseFetchStatusInterface;
 }
 
 export interface LoginFetchStateInterface {
   username: string;
   password: string;
 }
-
 export interface BaseFetchStatusInterface {
   state: LoadingStateType;
   message: string;
 }
-
 export interface FetchUsersInterface extends BaseFetchStatusInterface {
   users: {
     registrationSuccess: boolean;
     lastFetchedUser?: string;
   };
 }
-
 export interface FetchIssueInterface extends BaseFetchStatusInterface {
   issues: {
     isUploadingImage: boolean;
     totalResultsFound: number;
   };
 }
-
 export interface FetchResourceInterface<T> extends BaseFetchStatusInterface {
   data: T | null;
 }
