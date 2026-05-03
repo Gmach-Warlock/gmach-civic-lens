@@ -4,6 +4,7 @@ import type {
   UserInterface,
 } from "../../app/interfaces/authInterfaces";
 import HeaderButton from "./HeaderButton";
+import Heading from "../atoms/Heading";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -31,6 +32,12 @@ export default function Header() {
           Register
         </button>
       </div>
+      <Heading
+        size={1}
+        style="blocked"
+        color="neutral-light"
+        content="This is a Test!"
+      />
     </header>
   );
 }

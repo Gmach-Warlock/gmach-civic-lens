@@ -1,8 +1,8 @@
-import Cta from "./Cta";
-import Map from "./Map";
-import Sign from "./Sign";
-import Slogan from "./Slogan";
-import Title from "./Title";
+import Title from "../organisms/Title";
+import Slogan from "../organisms/Slogan";
+import Cta from "../organisms/Cta";
+import Sign from "../organisms/Sign";
+import Map from "../organisms/Map";
 
 export default function Hero() {
   console.log("Hero component function executed");
@@ -10,6 +10,7 @@ export default function Hero() {
   return (
     <div className="hero">
       <Title />
+
       <Slogan />
       <Cta />
       <Sign />

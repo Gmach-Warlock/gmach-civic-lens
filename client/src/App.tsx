@@ -7,7 +7,7 @@ import {
 import Root from "./Root";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
-import Dashboard from "./components/Dashboard/Dashboard";
+import Dashboard from "./components/layout/Dashboard";
 import Login from "./pages/Login";
 import Report from "./pages/Report";
 import "./App.scss";
@@ -33,6 +33,3 @@ function App() {
 }
 
 export default App;
-
-/* Step 1 - Get the process id using port number. C:\> netstat -ano | findstr "PID :PortNumber" List of processes using a particular port.
-Step 2 - Kill the process using PID. C:\> taskkill /PID pidNumber /F. Terminating a process by PID. */

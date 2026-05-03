@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import Hero from "../components/Hero/Hero";
 import { verifyToken } from "../features/auth/thunks/verifyToken";
 import { useAppDispatch } from "../app/hooks/generalHooks";
+import Hero from "../components/layout/Hero";
 
 export default function Home() {
   const dispatch = useAppDispatch();
