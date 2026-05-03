@@ -7,7 +7,7 @@ import {
 import Root from "./Root";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
-import Dashboard from "./components/organisms/ui/Dashboard";
+import Dashboard from "./components/organisms/sections/Dashboard";
 import Login from "./pages/Login";
 import Report from "./pages/Report";
 import "./App.scss";
@@ -21,8 +21,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/report" element={<Report />} />
-      </Route>,
-    ),
+      </Route>
+    )
   );
 
   return (

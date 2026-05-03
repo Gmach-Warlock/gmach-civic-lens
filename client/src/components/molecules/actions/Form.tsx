@@ -15,10 +15,10 @@ export interface FormProps extends ComponentPropsWithoutRef<"form"> {
   inputs?: InputObject[];
 }
 
-function Form({ formType, isRegistering = false }: FormProps) {
+function Form({ formType, isRegistering = false, ...props }: FormProps) {
   const renderFormMap = {
     auth: () => (
-      <form action="">
+      <form {...props} action="">
         <div className="auth__username field ">
           <Input type="text" name="username" />
 
@@ -33,7 +33,7 @@ function Form({ formType, isRegistering = false }: FormProps) {
       </form>
     ),
     issue: () => (
-      <form action="">
+      <form {...props} action="">
         <div className="auth__username field ">
           <Input type="text" name="username" />
           {isRegistering && <Input type="email" name="email" />}
@@ -43,7 +43,7 @@ function Form({ formType, isRegistering = false }: FormProps) {
       </form>
     ),
     comment: () => (
-      <form action="">
+      <form {...props} action="">
         <div className="auth__username field ">
           <Input type="text" name="username" />
           {isRegistering && <Input type="email" name="email" />}

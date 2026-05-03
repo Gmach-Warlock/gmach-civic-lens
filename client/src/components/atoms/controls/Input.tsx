@@ -34,11 +34,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           name={bemName}
           title={bemName}
           placeholder={placeholder}
-          className={`${baseClass} ${typeModifier} ${nameModifier} ${className ?? ""}`}
+          className={`${baseClass} ${typeModifier} ${nameModifier} ${
+            className ?? ""
+          }`}
         />
       </div>
     );
-  },
+  }
 );
 
 Input.displayName = "Input";
