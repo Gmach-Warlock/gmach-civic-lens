@@ -1,3 +1,5 @@
+import type { ComponentPropsWithoutRef, CSSProperties } from "react";
+
 export type HeadingSize = 1 | 2 | 3 | 4 | 5 | 6;
 export type HeadingStyle = "basic" | "blocked" | "clipped";
 export type HeadingColor =
@@ -7,25 +9,26 @@ export type HeadingColor =
   | "background"
   | "neutral-light"
   | "neutral-dark";
-export interface HeadingProps {
+
+export interface HeadingProps extends ComponentPropsWithoutRef<"h1"> {
   size: HeadingSize;
-  style: HeadingStyle;
+  headingStyle: HeadingStyle;
   color: HeadingColor;
-  content: string;
 }
 
-export default function Heading({ size, style, color, content }: HeadingProps) {
-  const tags = {
-    1: "h1",
-    2: "h2",
-    3: "h3",
-    4: "h4",
-    5: "h5",
-    6: "h6",
-  } as const;
+export default function Heading({
+  size,
+  headingStyle,
+  color,
+  children,
+  className = "",
+  style,
+  ...props
+}: HeadingProps) {
+  const Tag = `h${size}` as const;
 
-  const Tag = tags[size];
-  const className = `heading heading--${style} heading--color-${color}`;
+  const mergedClassName =
+    `heading heading--${headingStyle} heading--color-${color} ${className}`.trim();
 
   const hsMap: Record<HeadingColor, string> = {
     primary: "var(--primary-hs)",
@@ -33,15 +36,17 @@ export default function Heading({ size, style, color, content }: HeadingProps) {
     accent: "var(--accent-hs)",
     background: "var(--background-hs)",
     "neutral-light": "var(--neutral-hs)",
-    "neutral-dark": "var(--neutral-hs)", // Added missing ")" here
+    "neutral-dark": "var(--neutral-hs)",
+  };
+
+  const mergedStyle: CSSProperties = {
+    ...style,
+    ["--current-hs" as string]: hsMap[color],
   };
 
   return (
-    <Tag
-      className={className}
-      style={{ "--current-hs": hsMap[color] } as React.CSSProperties}
-    >
-      {content}
+    <Tag {...props} className={mergedClassName} style={mergedStyle}>
+      {children}
     </Tag>
   );
 }

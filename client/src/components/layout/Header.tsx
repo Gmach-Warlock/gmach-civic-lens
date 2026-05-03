@@ -34,7 +34,7 @@ export default function Header() {
       </div>
       <Heading
         size={1}
-        style="blocked"
+        headingStyle="blocked"
         color="neutral-light"
         content="This is a Test!"
       />

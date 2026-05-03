@@ -2,8 +2,8 @@
   display: block;
   width: var(--space-img);
   height: auto;
-}
 
-.img__is-expanded:hover {
-  cursor: zoom-out;
+  &__is-expanded:hover {
+    cursor: zoom-out;
+  }
 }
