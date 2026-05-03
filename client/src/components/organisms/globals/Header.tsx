@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router";
+
 import type {
   FetchResourceInterface,
   UserInterface,
-} from "../../app/interfaces/authInterfaces";
-import HeaderButton from "./HeaderButton";
-import Heading from "../atoms/Heading";
+} from "../../../app/interfaces/authInterfaces";
+import HeaderButton from "../../atoms/controls/HeaderButton";
+import Heading from "../../atoms/elements/Heading";
 
 export default function Header() {
   const navigate = useNavigate();

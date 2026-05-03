@@ -7,7 +7,7 @@ import {
 import Root from "./Root";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
-import Dashboard from "./components/layout/Dashboard";
+import Dashboard from "./components/organisms/ui/Dashboard";
 import Login from "./pages/Login";
 import Report from "./pages/Report";
 import "./App.scss";

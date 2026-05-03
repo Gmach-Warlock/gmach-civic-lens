@@ -22,3 +22,21 @@ input[type="text"]:focus {
   border-color: hsl(var(--secondary-hs), 50%);
   background-color: hsl(0, 0%, 100%);
 }
+
+.input-field {
+  padding: 10px;
+  border: 1px solid var(--border-color);
+
+  &--password {
+    font-family: monospace;
+  }
+
+  &--number {
+    text-align: right;
+  }
+
+  &--search-bar {
+    border-radius: 50px;
+    background-color: hsl(0, 0%, 94%);
+  }
+}

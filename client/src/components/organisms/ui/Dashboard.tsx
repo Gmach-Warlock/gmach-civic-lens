@@ -1,9 +1,9 @@
 import { useNavigate } from "react-router";
-import { useAppSelector } from "../../app/hooks/generalHooks";
+import { useAppSelector } from "../../../app/hooks/generalHooks";
 import {
   selectAccessToken,
   selectUser,
-} from "../../features/auth/selectors/authSelectors";
+} from "../../../features/auth/selectors/authSelectors";
 
 export default function Dashboard() {
   const user = useAppSelector(selectUser);

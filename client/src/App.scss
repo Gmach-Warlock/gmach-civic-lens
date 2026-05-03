@@ -5,34 +5,33 @@
 @use "styles/base/reset";
 @use "styles/base/responsive";
 @use "styles/base/tailwindy";
-@use "styles/base//typography";
+@use "styles/base/typography";
 @use "styles/base/utilities";
 
-@use "styles/components/atoms/buttons";
-@use "styles/components/atoms/headings";
-@use "styles/components/atoms/images";
-@use "styles/components/atoms/inputs";
+@use "styles/components/atoms/controls/buttons";
+@use "styles/components/atoms/controls/inputs";
+@use "styles/components/atoms/elements/headings";
+@use "styles/components/atoms/elements/images";
+@use "styles/components/atoms/elements/slogan";
+@use "styles/components/atoms/elements/title";
+@use "styles/components/atoms/objects/cone";
+@use "styles/components/atoms/objects/map";
+@use "styles/components/atoms/objects/sign";
 
-@use "styles/components/molecules/cards";
-@use "styles/components/molecules/forms";
-@use "styles/components/molecules/overlays";
+@use "styles/components/molecules/actions/cta";
+@use "styles/components/molecules/actions/forms";
+@use "styles/components/molecules/cards/cards";
+@use "styles/components/molecules/layout/columns";
+@use "styles/components/molecules/layout/containers";
+@use "styles/components/molecules/layout/grid";
+@use "styles/components/molecules/layout/rows";
+@use "styles/components/molecules/layout/scrollbars";
+@use "styles/components/molecules/layout/wrappers";
+@use "styles/components/molecules/popups/overlays";
 
-@use "styles/components/organisms/cone";
-@use "styles/components/organisms/cta";
-@use "styles/components/organisms/map";
-@use "styles/components/organisms/sign";
-@use "styles/components/organisms/slogan";
-@use "styles/components/organisms/title";
-
-@use "styles/layout/columns";
-@use "styles/layout/containers";
-@use "styles/layout/grid";
-@use "styles/layout/header";
-@use "styles/layout/hero";
-@use "styles/layout/navigation";
-@use "styles/layout/rows";
-@use "styles/layout/scrollbars";
-@use "styles/layout/wrappers";
+@use "styles/components/organisms/globals/header";
+@use "styles/components/organisms/layout/navigation";
+@use "styles/components/organisms/sections/hero";
 
 @use "styles/pages/config";
 @use "styles/pages/general";
