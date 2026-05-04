@@ -2,7 +2,7 @@ import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
 interface ContainerProps extends ComponentPropsWithoutRef<"div"> {
   children: ReactNode;
-  variant?: "narrow" | "wide" | "fluid";
+  variant?: "narrow" | "wide" | "fluid" | "main" | "page";
 }
 
 function Container({

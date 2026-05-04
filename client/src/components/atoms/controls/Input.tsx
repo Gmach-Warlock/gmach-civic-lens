@@ -10,8 +10,6 @@ interface InputProps extends ComponentPropsWithoutRef<"input"> {
 const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ type = "text", name, label, placeholder, className, ...props }, ref) => {
     const generatedId = useId();
-
-    // BEM Naming Strategy
     const bemName = `${name}--${type}`;
     const uniqueId = props.id || `${bemName}--${generatedId}`;
     const baseClass = "input-field";

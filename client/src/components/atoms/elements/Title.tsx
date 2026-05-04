@@ -8,7 +8,6 @@ export default function Title() {
 
   useGSAP(
     () => {
-      // 1. Initial State
       gsap.set(".img--magnifying-glass", {
         display: "block",
         opacity: 0,
@@ -21,14 +20,12 @@ export default function Title() {
       tl.current = gsap.timeline();
 
       tl.current
-        // Entrance
         .to(".img--magnifying-glass", {
           opacity: 1,
           x: -60,
           duration: 0.5,
           ease: "power1.out",
         })
-        // The Scan (linear y, linear x)
         .to(
           ".letter",
           {

@@ -1,18 +1,27 @@
-.row--between {
+.row {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.row--centered {
-  display: flex;
-  justify-content: center;
   align-items: center;
   text-align: center;
-  gap: var(--space-xs);
-}
-.row--between-start {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  text-align: center;
+
+  &--around {
+    justify-content: space-around;
+  }
+
+  &--between {
+    justify-content: space-between;
+  }
+  &--centered {
+    justify-content: center;
+  }
+  &--end {
+    justify-content: flex-end;
+    text-align: end;
+  }
+  &--evenly {
+    justify-content: space-evenly;
+  }
+  &--start {
+    justify-content: flex-start;
+    text-align: start;
+  }
 }
