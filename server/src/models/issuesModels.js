@@ -21,12 +21,25 @@ Issue.init(
         notEmpty: true,
       },
     },
+    author: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "anonymous",
+      validate: {
+        notEmpty: true,
+      },
+    },
     description: {
       type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
     },
     category: {
       type: DataTypes.STRING,
     },
+
     status: {
       type: DataTypes.STRING,
       defaultValue: "open",
