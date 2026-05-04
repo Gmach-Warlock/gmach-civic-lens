@@ -147,6 +147,13 @@
   margin-block-start: var(--space-md);
 }
 
+.debug {
+  z-index: var(--z-debug);
+  outline: 2px solid lime !important;
+  min-height: 50px;
+  min-width: 100px;
+}
+
 $spaces: (
   1: var(--space-xs),
   2: var(--space-sm),

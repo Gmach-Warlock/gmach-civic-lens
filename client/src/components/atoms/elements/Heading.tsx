@@ -1,7 +1,7 @@
 import type { ComponentPropsWithoutRef, CSSProperties } from "react";
 
 export type HeadingSize = 1 | 2 | 3 | 4 | 5 | 6;
-export type HeadingStyle = "basic" | "blocked" | "clipped";
+export type HeadingStyle = "basic" | "blocked" | "clipped" | "pill";
 export type HeadingColor =
   | "primary"
   | "secondary"
@@ -28,7 +28,7 @@ export default function Heading({
   const Tag = `h${size}` as const;
 
   const mergedClassName =
-    `heading heading--${headingStyle} heading--color-${color} ${className}`.trim();
+    `heading heading--${headingStyle} heading--color-${color} debug ${className}`.trim();
 
   const hsMap: Record<HeadingColor, string> = {
     primary: "var(--primary-hs)",
@@ -45,8 +45,10 @@ export default function Heading({
   };
 
   return (
-    <Tag {...props} className={mergedClassName} style={mergedStyle}>
-      {children}
-    </Tag>
+    <>
+      <Tag {...props} className={mergedClassName} style={mergedStyle}>
+        {children || props.content}
+      </Tag>
+    </>
   );
 }

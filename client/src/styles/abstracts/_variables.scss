@@ -98,6 +98,7 @@
   --cursor-grab: hand;
   --cursor-disabled: not-allowed;
   --cursor-info: help;
+  --cursor-hover-cursor: hand;
 
   /* Layering */
   --z-below: -10;
@@ -166,32 +167,32 @@
   /* Gradients */
   --gradient-linear-basic: linear-gradient(
     to bottom,
-    hsl(var(--secondary-hs), var(--lightness-gradient-top)),
-    hsl(var(--secondary-hs), var(--lightness-gradient-bottom))
+    hsl(var(--current-hs), var(--lightness-gradient-top)),
+    hsl(var(--current-hs), var(--lightness-gradient-bottom))
   );
   --gradient-linear-line50: linear-gradient(
     to bottom,
-    hsl(var(--secondary-hs), var(--lightness-gradient-top)) 50%,
-    hsl(var(--secondary-hs), var(--lightness-gradient-bottom)) 50%
+    hsl(var(--current-hs), var(--lightness-gradient-top)) 50%,
+    hsl(var(--current-hs), var(--lightness-gradient-bottom)) 50%
   );
   --gradient-text-pro: linear-gradient(
     to bottom,
-    hsl(var(--secondary-hs), 90%) 0%,
-    hsl(var(--secondary-hs), 70%) 45%,
-    hsl(var(--secondary-hs), 45%) 55%,
-    hsl(var(--secondary-hs), 25%) 100%
+    hsl(var(--current-hs), 90%) 0%,
+    hsl(var(--current-hs), 70%) 45%,
+    hsl(var(--current-hs), 45%) 55%,
+    hsl(var(--current-hs), 25%) 100%
   );
   --gradient-linear-stacked-pill:
     linear-gradient(
       to bottom,
       hsla(
-          var(--secondary-hs),
+          var(--primary-hs),
           var(--lightness-gradient-top),
           var(--glass-opacity-mid)
         )
         50%,
       hsla(
-          var(--secondary-hs),
+          var(--primary-hs),
           var(--lightness-gradient-bottom),
           var(--glass-opacity-mid)
         )

@@ -1,13 +1,12 @@
 button {
-  /*   background-color: hsla(
-    var(--secondary-hs),
-    var(--lightness-base),
-    var(--glass-opacity-high)
-  ); */
-  background-image: var(--gradient-linear-stacked-pill);
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-  backdrop-filter: blur(var(--glass-blur));
-  transition: all var(--transition-fast);
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: var(--cursor-action);
+}
+
+.btn {
   width: max-content;
   margin-inline: auto;
   color: white;
@@ -18,6 +17,9 @@ button {
   padding-inline: var(--space-md);
   padding-block: var(--space-xs);
   transition: all var(--transition-fast);
+  background-image: var(--gradient-linear-stacked-pill);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
   cursor: var(--hover-cursor);
 
   &:hover {
@@ -30,15 +32,18 @@ button {
     border: var(--glass-border);
     transform: scale(0.98);
   }
-}
 
-button:hover {
-  background-image: var(--gradient-linear-stacked-pill-hover);
-  filter: var(--filter-brightness);
-  transform: var(--hover-scale);
-}
+  &--register {
+    font-weight: 900;
+    background-image: none;
+    background-color: var(--color-secondary);
+    color: var(--color-primary);
+    padding: 4px 12px;
+    border-radius: 2px;
 
-button:active {
-  border: var(--glass-border);
-  transform: scale(0.98);
+    &:hover {
+      color: var(--color-street);
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
 }

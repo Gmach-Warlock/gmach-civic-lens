@@ -5,7 +5,6 @@ import type {
   UserInterface,
 } from "../../../app/interfaces/authInterfaces";
 import HeaderButton from "../../atoms/controls/HeaderButton";
-import Heading from "../../atoms/elements/Heading";
 
 export default function Header() {
   const navigate = useNavigate();
@@ -28,17 +27,16 @@ export default function Header() {
           <HeaderButton auth={authState} />
         </nav>
       </div>
+
       <div className="header__bottom">
-        <button type="button" onClick={handleLoadRegisterPage}>
+        <button
+          type="button"
+          onClick={handleLoadRegisterPage}
+          className="btn btn--register"
+        >
           Register
         </button>
       </div>
-      <Heading
-        size={1}
-        headingStyle="blocked"
-        color="neutral-light"
-        content="This is a Test!"
-      />
     </header>
   );
 }

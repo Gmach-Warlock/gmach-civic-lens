@@ -1,6 +1,5 @@
 import { forwardRef, useId, type ComponentPropsWithoutRef } from "react";
-
-export type InputType = "text" | "number" | "email" | "password" | "radio";
+import type { InputType } from "../../../app/types/componentTypes";
 
 interface InputProps extends ComponentPropsWithoutRef<"input"> {
   type?: InputType; // Now optional!
@@ -19,7 +18,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const typeModifier = `input-field--${type}`;
     const nameModifier = `input-field--${name}`;
     return (
-      <div className="input-group">
+      <div className="form__group">
         {label && (
           <label htmlFor={uniqueId} className="input-label">
             {label}
@@ -31,7 +30,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           id={uniqueId}
           type={type}
-          name={bemName}
+          name={name}
           title={bemName}
           placeholder={placeholder}
           className={`${baseClass} ${typeModifier} ${nameModifier} ${
@@ -40,7 +39,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         />
       </div>
     );
-  }
+  },
 );
 
 Input.displayName = "Input";

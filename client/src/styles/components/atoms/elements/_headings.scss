@@ -1,4 +1,6 @@
 .heading {
+  font-weight: 900;
+
   &--color-primary {
     --local-hs: var(--primary-hs);
     color: var(--color-primary);
@@ -29,16 +31,44 @@
   }
 
   &--clipped {
-    text-shadow: var(--shadow-lg)
-      hsl(var(--primary-hs), var(--lightness-shadow));
-    background: var(--gradient-text-pro);
+    background: linear-gradient(
+      to bottom,
+      hsl(var(--current-hs), 90%) 0%,
+      hsl(var(--current-hs), 70%) 45%,
+      hsl(var(--current-hs), 45%) 55%,
+      hsl(var(--current-hs), 25%) 100%
+    );
     -webkit-background-clip: text;
     background-clip: text;
-    -webkit-text-fill-color: hsl(var(--current-hs), 50%);
+    -webkit-text-fill-color: transparent;
   }
-
+  &--pill {
+    background:
+      linear-gradient(
+        to bottom,
+        hsla(
+            var(--current-hs),
+            var(--lightness-gradient-top),
+            var(--glass-opacity-mid)
+          )
+          50%,
+        hsla(
+            var(--current-hs),
+            var(--lightness-gradient-bottom),
+            var(--glass-opacity-mid)
+          )
+          50%
+      ),
+      linear-gradient(
+        to bottom,
+        hsl(var(--current-hs), var(--lightness-gradient-top)),
+        hsl(var(--current-hs), var(--lightness-gradient-bottom))
+      );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
   &--blocked {
-    font-weight: 900;
     text-shadow:
       1px 1px 0px hsl(var(--primary-hs), var(--lightness-shadow)),
       2px 2px 0px hsl(var(--primary-hs), var(--lightness-shadow)),
@@ -46,9 +76,9 @@
     transition: transform var(--transition-fast);
     -webkit-text-stroke: 1px hsl(var(--local-hs), var(--lightness-shadow));
     paint-order: stroke fill;
+  }
 
-    &:hover {
-      transform: scale(var(--hover-scale));
-    }
+  &:hover {
+    transform: scale(var(--hover-scale));
   }
 }
