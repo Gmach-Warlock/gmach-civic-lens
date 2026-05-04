@@ -8,8 +8,15 @@ class AuthController {
   static async createUser(req, res) {
     try {
       const { general } = req.body.user;
-      const { username, email, password, firstName, lastName, address } =
-        general;
+      const {
+        username,
+        email,
+        password,
+        firstName,
+        lastName,
+        address,
+        zipCode,
+      } = general;
 
       const saltedPassword = await bcrypt.hash(password, 12);
 
@@ -19,6 +26,7 @@ class AuthController {
         email,
         password: saltedPassword,
         address,
+        zipCode,
       });
 
       const formatted = formatUserResponse(newUser);

@@ -16,7 +16,7 @@ export default function Register() {
     email: "",
     password: "",
     address: "",
-    zipCode: 0,
+    zipCode: "",
   });
 
   const dispatch = useAppDispatch();
@@ -63,7 +63,7 @@ export default function Register() {
         email: "",
         password: "",
         address: "",
-        zipCode: 0,
+        zipCode: "",
       });
 
       console.log("Success! Form cleared.");

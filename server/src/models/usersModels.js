@@ -46,6 +46,10 @@ User.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
+    zipCode: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   },
   {
     sequelize: db,

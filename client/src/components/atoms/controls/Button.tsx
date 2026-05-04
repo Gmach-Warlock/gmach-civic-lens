@@ -9,6 +9,10 @@ export interface ButtonProps extends ComponentPropsWithoutRef<"button"> {
   name: string;
   content: string;
   variant?: ButtonVariant;
+  authProperties?: {
+    hasToken: boolean;
+    isRegistering: boolean;
+  };
 }
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -19,10 +23,29 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       name,
       variant = "primary",
       className,
+      authProperties,
       ...props
     },
     ref,
   ) => {
+    const getButtonText = () => {
+      if (variant === "auth" && authProperties) {
+        const authMap = {
+          logout: "Logout",
+          register: "Create Account",
+          login: "Login",
+        };
+
+        if (authProperties.hasToken) return authMap.logout;
+        if (authProperties.isRegistering) return authMap.register;
+        return authMap.login;
+      }
+
+      return content || "Submit";
+    };
+
+    const finalContent = getButtonText();
+
     return (
       <button
         ref={ref}
@@ -32,7 +55,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         id={props.id ?? name}
         {...props}
       >
-        {content}
+        {finalContent}
       </button>
     );
   },

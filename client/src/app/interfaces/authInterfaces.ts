@@ -12,7 +12,7 @@ export interface UserGeneralInfoInterface {
   email: string;
   password: string;
   address: string;
-  zipCode: number;
+  zipCode: string;
 }
 
 export interface UserMetaInfoInterface {
