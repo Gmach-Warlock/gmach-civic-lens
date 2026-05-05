@@ -6,7 +6,7 @@ import Input from "../../atoms/controls/Input";
 import { createUser } from "../../../features/auth/thunks/createUser";
 import Button from "../../atoms/controls/Button";
 
-function Form({ formType, isRegistering = false, ...props }: FormProps) {
+function Form({ formType, ...props }: FormProps) {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -132,29 +132,36 @@ function Form({ formType, isRegistering = false, ...props }: FormProps) {
           placeholder="••••••••"
           required
         />
-        <Button name="register button" content="Resgister" />
+        <Button name="register button" content="Register" />
         <button type="submit" className="register__button">
           Register
         </button>
       </form>
     ),
     issue: () => (
-      <form {...props} action="">
-        <div className="issue">
-          <Input type="text" name="username" />
-          {isRegistering && <Input type="email" name="email" />}
-          <Input type="password" name="password" />
-          <button type="submit">{isRegistering ? "Register" : "Login"}</button>
-        </div>
+      <form action="" onSubmit={handleSubmit} className="issue__form form">
+        <h2>Report an issue in your area</h2>
+
+        <Input name="title" label="Please input Title of Issue" />
+        <Input
+          name="description"
+          label="Please give a brief description of the problem."
+        />
+        <Input
+          name="location_name"
+          label="Please give use the location of the Issue"
+        />
+        <Button
+          name="issue-submit"
+          content="Submit"
+          className="btn--submit-form"
+        />
       </form>
     ),
     comment: () => (
       <form {...props} action="">
         <div className="auth__username field ">
-          <Input type="text" name="username" />
-          {isRegistering && <Input type="email" name="email" />}
-          <Input type="password" name="password" />
-          <button type="submit">{isRegistering ? "Register" : "Login"}</button>
+          <Input name="comment_name" />
         </div>
       </form>
     ),
