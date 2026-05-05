@@ -1,9 +1,7 @@
 require("dotenv").config();
 
-console.log("DEBUG: DB_NAME is", process.env.DB_NAME);
-
 const { Sequelize } = require("sequelize");
-console.log("Connecting to:", process.env.DATABASE_URL);
+console.log("Connecting to:", process.env.DB_NAME);
 const db = process.env.DATABASE_URL
   ? new Sequelize(process.env.DATABASE_URL, {
       logging: false,

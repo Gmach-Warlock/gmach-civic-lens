@@ -80,7 +80,11 @@ export default function Login() {
         {accessToken && (
           <div className="success-overlay">
             <p>Your account is ready.</p>
-            <button type="button" onClick={() => navigate("/dashboard")}>
+            <button
+              type="button"
+              className="btn btn--success"
+              onClick={() => navigate("/dashboard")}
+            >
               Go to Dashboard
             </button>
           </div>

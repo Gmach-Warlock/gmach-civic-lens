@@ -13,26 +13,6 @@
   color: var(--color-primary);
 }
 
-.login__button {
-  background-color: var(--color-primary);
-  color: white;
-  border: none;
-  padding: 1rem;
-  border-radius: 8px;
-  font-weight: bold;
-  font-size: var(--text-md);
-  cursor: pointer;
-  margin-top: 1rem;
-  transition:
-    transform 0.2s ease,
-    filter 0.2s ease;
-}
-
-.login__button:hover {
-  filter: brightness(1.1);
-  transform: translateY(-2px);
-}
-
 /* --- Success Transitions --- */
 
 .login__form {
@@ -65,17 +45,6 @@
   color: var(--color-primary);
   font-size: var(--text-lg);
   margin-bottom: 1.5rem;
-}
-
-.btn--login {
-  background-color: var(--color-primary);
-  color: white;
-  border: none;
-  padding: 0.8rem 2rem;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.3s ease;
 }
 
 @keyframes fadeIn {

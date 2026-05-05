@@ -3,11 +3,13 @@ import type {
   ButtonType,
   ButtonVariant,
 } from "../../../app/types/componentTypes";
+import { useAppSelector } from "../../../app/hooks/generalHooks";
+import { selectAccessToken } from "../../../features/auth/selectors/authSelectors";
 
 export interface ButtonProps extends ComponentPropsWithoutRef<"button"> {
   type?: ButtonType;
   name: string;
-  content: string;
+  content?: string;
   variant?: ButtonVariant;
   authProperties?: {
     hasToken: boolean;
@@ -28,6 +30,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref,
   ) => {
+    const accessToken = useAppSelector(selectAccessToken);
     const getButtonText = () => {
       if (variant === "auth" && authProperties) {
         const authMap = {
@@ -36,7 +39,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           login: "Login",
         };
 
-        if (authProperties.hasToken) return authMap.logout;
+        if (accessToken) return authMap.logout;
         if (authProperties.isRegistering) return authMap.register;
         return authMap.login;
       }

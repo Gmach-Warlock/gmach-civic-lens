@@ -19,7 +19,7 @@ export interface IssueInterface {
     category: CategoryType;
   };
   location: {
-    zip: number;
+    zipCode: string;
     address?: string;
     coords?: { lat: number; lng: number };
   };
