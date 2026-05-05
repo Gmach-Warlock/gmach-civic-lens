@@ -32,8 +32,8 @@ const issuesSlice = createSlice({
       state.general.issues = action.payload.data;
     });
     builder.addCase(getIssues.fulfilled, (state, action) => {
-      console.log(action.payload);
-      state.general.issues = action.payload.data;
+      console.log(action.payload.issues);
+      state.general.issues = action.payload.issues;
     });
   },
 });

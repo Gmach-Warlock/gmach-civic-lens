@@ -21,6 +21,7 @@ input[type="text"]:focus {
   outline: none;
   border-color: hsl(var(--secondary-hs), 50%);
   background-color: hsl(0, 0%, 100%);
+  color: var(--color-primary);
 }
 
 .input-field {

@@ -6,6 +6,7 @@ import {
   selectUser,
 } from "../features/auth/selectors/authSelectors";
 import { loginUser } from "../features/auth/thunks/loginUser";
+import Button from "../components/atoms/controls/Button";
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -73,22 +74,8 @@ export default function Login() {
             />
           </div>
 
-          <button type="submit" className="btn btn--login">
-            Register
-          </button>
+          <Button name="login__submit" content="Login" />
         </form>
-        {accessToken && (
-          <div className="success-overlay">
-            <p>Your account is ready.</p>
-            <button
-              type="button"
-              className="btn btn--success"
-              onClick={() => navigate("/dashboard")}
-            >
-              Go to Dashboard
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );

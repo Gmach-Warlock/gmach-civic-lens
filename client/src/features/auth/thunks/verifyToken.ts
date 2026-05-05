@@ -5,13 +5,16 @@ export const verifyToken = createAsyncThunk(
   "user/verifyToken",
   async (_, { rejectWithValue }) => {
     try {
-      const vefifyTokenUrl = `${import.meta.env.VITE_SERVER_URL}${import.meta.env.VITE_VERIFY_TOKEN_PATH}`;
-      const token = localStorage.getItem("token");
-      if (!token) throw new Error("No token found!");
+      const verifyTokenUrl = `${import.meta.env.VITE_SERVER_URL}${import.meta.env.VITE_VERIFY_TOKEN_PATH}`;
+      console.log("url to verify is ", verifyTokenUrl);
 
-      const response = await axios.get(vefifyTokenUrl, {
+      const token = localStorage.getItem("access-token");
+      console.log("token is ", token);
+      if (!token) throw new Error("No token found!");
+      const response = await axios.get(verifyTokenUrl, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      console.log("data is ", response.data);
       return response.data;
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {

@@ -28,7 +28,7 @@ export default function Heading({
   const Tag = `h${size}` as const;
 
   const mergedClassName =
-    `heading heading--${headingStyle} heading--color-${color} debug ${className}`.trim();
+    `heading heading--${headingStyle} heading--color-${color} ${className}`.trim();
 
   const hsMap: Record<HeadingColor, string> = {
     primary: "var(--primary-hs)",

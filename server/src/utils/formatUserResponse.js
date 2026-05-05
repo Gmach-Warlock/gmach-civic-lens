@@ -20,4 +20,8 @@ const formatUserResponse = (user) => {
   };
 };
 
+const formatIssuesResponse = (issues) => {
+  return {};
+};
+
 module.exports = formatUserResponse;
