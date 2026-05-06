@@ -19,11 +19,13 @@ export interface IssueInterface {
     category: CategoryType;
   };
   location: {
-    zipCode: string;
     address?: string;
+    city: string;
+    zipCode: string;
     coords?: { lat: number; lng: number };
   };
   status: {
+    isOpen: boolean;
     current: StatusType;
     urgency: UrgencyType;
     lastActionDate: string;

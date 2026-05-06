@@ -3,10 +3,12 @@ const Issue = require("../models/issuesModels");
 class IssuesController {
   static async getAllIssues(req, res) {
     try {
-      const issues = await Issue.findAll();
+      const rawIssues = await Issue.findAll();
+      const formattedIssues = formatIssuesResponse(rawIssues);
+
       res.status(200).json({
-        count: issues.length,
-        issues: issues,
+        count: formattedIssues.length,
+        issues: formattedIssues,
       });
     } catch (error) {
       res.status(500).json({ error: error.message });

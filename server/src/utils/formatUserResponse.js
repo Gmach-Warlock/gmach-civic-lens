@@ -1,4 +1,3 @@
-// Helper to format the user data for Redux
 const formatUserResponse = (user) => {
   const [firstName, ...lastNameParts] = (user.name || "").split(" ");
   return {

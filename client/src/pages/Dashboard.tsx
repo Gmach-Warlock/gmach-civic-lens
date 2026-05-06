@@ -41,7 +41,7 @@ export default function Dashboard() {
         size={3}
         color="primary"
         headingStyle="basic"
-        content="Here are the current issues."
+        content="Here are the Current Issues."
       />
 
       <button type="button" className="btn btn--report" onClick={handleClick}>
