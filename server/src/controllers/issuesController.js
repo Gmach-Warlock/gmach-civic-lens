@@ -1,4 +1,5 @@
-const Issue = require("../models/issuesModels");
+const db = require("../models");
+const Issue = db.Issue;
 
 class IssuesController {
   static async getAllIssues(req, res) {
@@ -26,6 +27,8 @@ class IssuesController {
     }
   }
   static async getIssueById(req, res) {
+    console.log("Searching for ID:", req.params.id);
+    console.log("Issue Model defined?:", !!Issue);
     try {
       const issue = await Issue.findByPk(req.params.id);
       if (!issue) {

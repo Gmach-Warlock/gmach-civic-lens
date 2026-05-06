@@ -1,14 +1,15 @@
 require("dotenv").config();
 const app = require("./src/app");
-const db = require("./src/config/database");
+const db = require("./src/models");
 
 const PORT = process.env.PORT || 4000;
 let server;
 
-db.authenticate()
+db.sequelize
+  .authenticate()
   .then(() => {
     console.log("Database connection established.");
-    return db.sync({ alter: true });
+    return db.sequelize.sync({ force: true });
   })
   .then(() => {
     console.log("Database synced successfully.");
@@ -28,7 +29,7 @@ process.on("SIGINT", async () => {
       console.log("HTTP server closed.");
 
       try {
-        await db.close();
+        await db.sequelize.close();
         console.log("Database connection closed safely.");
         process.exit(0);
       } catch (err) {

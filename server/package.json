@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node --input-type=commonjs server.js",
     "dev": "nodemon --exec \"node --input-type=commonjs\" server.js",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll --runInBand"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

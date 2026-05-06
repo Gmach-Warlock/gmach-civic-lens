@@ -1,13 +1,15 @@
 const request = require("supertest");
-const { Issue } = require("../src/models/issuesModels");
-const db = require("../src/config/database");
+const db = require("../src/models");
+const Issue = db.Issue;
 
 describe("Issue Model TDD = Database Integration", () => {
   beforeEach(async () => {
     try {
-      await db.query("TRUNCATE TABLE issues RESTART IDENTITY CASCADE", {
-        type: db.QueryTypes.RAW,
-      });
+      // Use the string "RAW" to avoid the undefined QueryTypes error
+      await db.sequelize.query(
+        "TRUNCATE TABLE issues RESTART IDENTITY CASCADE",
+        { type: "RAW" },
+      );
     } catch (error) {
       console.error("Cleanup Error:", error.message);
       throw error;
@@ -15,7 +17,9 @@ describe("Issue Model TDD = Database Integration", () => {
   });
 
   afterAll(async () => {
-    await db.close();
+    if (db.sequelize) {
+      await db.sequelize.close();
+    }
   });
 
   test("should create a new issue in the database", async () => {
@@ -25,9 +29,13 @@ describe("Issue Model TDD = Database Integration", () => {
       category: "UI",
     };
 
-    const newIssue = await Issue.create(data);
+    const newIssue = await db.Issue.create(data);
 
     expect(newIssue).toHaveProperty("id");
     expect(newIssue.title).toBe(data.title);
   });
+});
+
+afterAll(async () => {
+  await db.sequelize.close(); // Close the "Engine"
 });

@@ -1,61 +1,64 @@
 const { DataTypes, Model } = require("sequelize");
 const db = require("../config/database");
 
-class User extends Model {
-  async markAsDuplicate() {
-    this.status = "duplicate";
-    return await this.save();
-  }
+module.exports = (sequelize, DataTypes) => {
+  class User extends Model {}
 
-  static async getByCategory(cat) {
-    return await this.findAll({ where: { category: cat } });
-  }
-}
-
-User.init(
-  {
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
+  User.init(
+    {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+        allowNull: false,
+      },
+      firstName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: { notEmpty: true },
+      },
+      lastName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: { notEmpty: true },
+      },
+      username: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+        unique: true,
+        validate: { notEmpty: true },
+      },
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+        validate: { isEmail: true, notEmpty: true },
+      },
+      password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: { notEmpty: true },
+      },
+      address: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      city: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: { notEmpty: true },
+      },
+      zipCode: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
     },
-    username: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
+    {
+      sequelize: db,
+      modelName: "User",
+      tableName: "users",
+      underscored: true,
     },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
-    },
-    address: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    zipCode: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-  },
-  {
-    sequelize: db,
-    modelName: "User",
-    tableName: "users",
-    underscored: true,
-  },
-);
-module.exports = User;
+  );
+  return User;
+};

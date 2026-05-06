@@ -8,6 +8,8 @@ const formatUserResponse = (user) => {
         username: user.username,
         email: user.email,
         address: user.address,
+        city: user.city,
+        zipCode: user.zipCode,
       },
       meta: {
         createdAt: user.createdAt,

@@ -33,6 +33,13 @@ export interface IssueInterface {
   social: {
     upvotes: number;
     tags: string[];
+    comments: {
+      id: string;
+      authorId: string;
+      authorName: string;
+      content: string;
+      createdAt: string;
+    }[];
   };
 }
 
