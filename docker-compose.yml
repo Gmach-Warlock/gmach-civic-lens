@@ -1,28 +1,35 @@
 services:
   db:
-    image: postgres:18
+    image: postgres:15
     container_name: pern_db
     restart: always
     environment:
-      POSTGRES_USER: drill_sergeant
-      POSTGRES_PASSWORD: priVatePile*1O1
-      POSTGRES_DB: civiclens
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=civiclens
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    # We tell Docker exactly where the file is relative to the YAML
+    env_file:
+      - ./server/.env
+
   server:
     build: ./server
     container_name: pern_server
     ports:
       - "4000:4000"
+    environment:
+      - DB_HOST=db
     env_file:
       - ./server/.env
     depends_on:
       - db
     volumes:
       - ./server:/app
-      - /a;;/node_modules
+      - /app/node_modules
+
   client:
     build: ./client
     container_name: pern_client
@@ -33,5 +40,6 @@ services:
     volumes:
       - "./client:/app"
       - /app/node_modules
-  volumes:
-    postres_data:
+
+volumes:
+  postgres_data:

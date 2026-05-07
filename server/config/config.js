@@ -1,21 +1,30 @@
 const path = require("path");
-// This literally says: "Start here, go up one, find .env"
-require("dotenv").config({ path: path.join(__dirname, "..", ".env") });
+const fs = require("fs");
 
-// This will tell us exactly where Node is looking
-console.log("Looking for .env at:", path.join(__dirname, "..", ".env"));
-console.log("Found DB_USER:", process.env.DB_USER);
+// Go up ONE level: from server/config -> server
+const envPath = path.join(__dirname, "..", ".env");
+
+if (fs.existsSync(envPath)) {
+  console.log("✅ .env file found in the server folder!");
+} else {
+  console.log("❌ .env NOT found at:", envPath);
+}
+
+require("dotenv").config({ path: envPath });
+
+// Log the correct variable name from your .env
+console.log("Found DB_USERNAME:", process.env.DB_USERNAME);
 
 module.exports = {
   development: {
-    username: process.env.DB_USER,
+    username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: "civiclens",
     host: "127.0.0.1",
     dialect: "postgres",
   },
   test: {
-    username: process.env.DB_USER,
+    username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: "civiclens_test",
     host: "127.0.0.1",
