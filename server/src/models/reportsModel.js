@@ -26,7 +26,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         allowNull: true,
         defaultValue: null,
-        validate: { notEmpty: true },
       },
       description: {
         type: DataTypes.TEXT,
@@ -38,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: "open",
       },
       severity: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.ENUM("low", "medium", "high"),
       },
       imageUrl: {
         type: DataTypes.STRING,
@@ -51,6 +50,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       locationName: {
         type: DataTypes.STRING,
+        allowNull: true,
       },
     },
     {

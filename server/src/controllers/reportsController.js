@@ -5,10 +5,11 @@ class ReportsController {
   static async createReport(req, res) {
     try {
       const report = await Report.create(req.body);
-      res.status(201).json({
-        message: "Report created successfully",
-        data: report,
-      });
+
+      if (!report)
+        throw new Error("Report creaion failed! Please check the input data.");
+
+      return res.status(201).json(report);
     } catch (error) {
       res.status(400).json({ error: error.message });
     }

@@ -1,15 +1,15 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { UserInterface } from "../../../app/interfaces/authInterfaces";
 
-const createUserUrl = `${import.meta.env.VITE_SERVER_URL}${import.meta.env.VITE_CREATE_USER_PATH}`;
+const registerUserUrl = `${import.meta.env.VITE_SERVER_URL}${import.meta.env.VITE_REGISTER_USER_PATH}`;
 
-export const createUser = createAsyncThunk(
+export const registerUser = createAsyncThunk(
   "user/createUser",
   async (user: UserInterface, thunkApi) => {
     try {
-      console.log("Sending to:", createUserUrl);
+      console.log("Sending to:", registerUserUrl);
 
-      const response = await fetch(createUserUrl, {
+      const response = await fetch(registerUserUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

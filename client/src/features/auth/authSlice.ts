@@ -1,6 +1,6 @@
 import type { AuthStateInterface } from "../../app/interfaces/authInterfaces";
 import { createSlice } from "@reduxjs/toolkit";
-import { createUser } from "./thunks/createUser";
+import { registerUser } from "./thunks/registerUser";
 import { loginUser } from "./thunks/loginUser";
 import { createInitialUserState } from "../../app/utils/factory/stateFactories";
 import { verifyToken } from "./thunks/verifyToken";
@@ -27,7 +27,7 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(createUser.fulfilled, (state, action) => {
+    builder.addCase(registerUser.fulfilled, (state, action) => {
       const { accessToken, refreshToken, user } = action.payload;
       state.loadingState.state = "idle";
       state.user = user;

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks/generalHooks";
-import { createUser } from "../features/auth/thunks/createUser";
+import { registerUser } from "../features/auth/thunks/registerUser";
 import type { AuthStateInterface } from "../app/interfaces/authInterfaces";
 import { useNavigate } from "react-router";
 import {
@@ -16,6 +16,7 @@ export default function Register() {
     email: "",
     password: "",
     address: "",
+    city: "",
     zipCode: "",
   });
 
@@ -39,6 +40,7 @@ export default function Register() {
           email: formData.email,
           password: formData.password,
           address: formData.address,
+          city: formData.city,
           zipCode: formData.zipCode,
         },
         meta: {
@@ -54,7 +56,7 @@ export default function Register() {
       loadingState: { state: "idle", message: "" },
     };
     try {
-      await dispatch(createUser(newAuthStateObject.user)).unwrap();
+      await dispatch(registerUser(newAuthStateObject.user)).unwrap();
 
       setFormData({
         firstName: "",
@@ -63,6 +65,7 @@ export default function Register() {
         email: "",
         password: "",
         address: "",
+        city: "",
         zipCode: "",
       });
 

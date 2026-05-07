@@ -1,20 +1,38 @@
 import { useState } from "react";
 import type { FormProps } from "../../../app/interfaces/componentInterfaces";
-import { useAppDispatch } from "../../../app/hooks/generalHooks";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../app/hooks/generalHooks";
 import type { AuthStateInterface } from "../../../app/interfaces/authInterfaces";
 import Input from "../../atoms/controls/Input";
-import { createUser } from "../../../features/auth/thunks/createUser";
+import { registerUser } from "../../../features/auth/thunks/registerUser";
 import Button from "../../atoms/controls/Button";
+import type { IssueInterface } from "../../../app/interfaces/issuesInterfaces";
+import { selectUser } from "../../../features/auth/selectors/authSelectors";
+import type { CategoryType } from "../../../app/types/issuesTypes";
 
 function Form({ formType, ...props }: FormProps) {
+  const user = useAppSelector(selectUser);
+
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    username: "",
-    email: "",
-    password: "",
-    address: "",
-    zipCode: "",
+    auth: {
+      firstName: "",
+      lastName: "",
+      username: "",
+      email: "",
+      password: "",
+      address: "",
+      city: "",
+      zipCode: "",
+    },
+    issues: {
+      title: "",
+      description: "",
+      category: "",
+      locationName: "",
+      comment: "",
+    },
   });
 
   const dispatch = useAppDispatch();
@@ -30,13 +48,14 @@ function Form({ formType, ...props }: FormProps) {
     const newAuthStateObject: AuthStateInterface = {
       user: {
         general: {
-          firstName: `${formData.firstName}`.trim(),
-          lastName: `${formData.lastName}`.trim(),
-          username: formData.username,
-          email: formData.email,
-          password: formData.password,
-          address: formData.address,
-          zipCode: formData.zipCode,
+          firstName: `${formData.auth.firstName}`.trim(),
+          lastName: `${formData.auth.lastName}`.trim(),
+          username: formData.auth.username,
+          email: formData.auth.email,
+          password: formData.auth.password,
+          address: formData.auth.address,
+          city: formData.auth.city,
+          zipCode: formData.auth.zipCode,
         },
         meta: {
           createdAt: new Date().toISOString(),
@@ -50,17 +69,60 @@ function Form({ formType, ...props }: FormProps) {
       activity: { requests: [], comments: [] },
       loadingState: { state: "idle", message: "" },
     };
+
+    const newIssueObject: IssueInterface = {
+      meta: {
+        id: "",
+        authorId: "",
+        authorName: user.general.username,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      },
+      general: {
+        title: formData.issues.title,
+        description: formData.issues.description,
+        category: formData.issues.category as CategoryType,
+      },
+      location: {
+        address: formData.issues.locationName,
+        city: formData.issues.locationName,
+        zipCode: "",
+        coords: { lat: 0, lng: 0 },
+      },
+      status: {
+        isOpen: true,
+        current: "tbd",
+        urgency: "low",
+        lastActionDate: new Date().toISOString(),
+      },
+      social: {
+        upvotes: 0,
+        tags: [],
+        comments: [],
+      },
+    };
+
     try {
-      await dispatch(createUser(newAuthStateObject.user)).unwrap();
+      await dispatch(registerUser(newAuthStateObject.user)).unwrap();
 
       setFormData({
-        firstName: "",
-        lastName: "",
-        username: "",
-        email: "",
-        password: "",
-        address: "",
-        zipCode: "",
+        auth: {
+          firstName: "",
+          lastName: "",
+          username: "",
+          email: "",
+          password: "",
+          address: "",
+          city: "",
+          zipCode: "",
+        },
+        issues: {
+          title: "",
+          description: "",
+          category: "",
+          locationName: "",
+          comment: "",
+        },
       });
 
       console.log("Success! Form cleared.");
@@ -76,7 +138,7 @@ function Form({ formType, ...props }: FormProps) {
           <Input
             label="First Name"
             name="firstName"
-            value={formData.firstName}
+            value={formData.auth.firstName}
             onChange={handleChange}
             placeholder="Jane"
             required
@@ -84,7 +146,7 @@ function Form({ formType, ...props }: FormProps) {
           <Input
             label="Last Name"
             name="lastName"
-            value={formData.lastName}
+            value={formData.auth.lastName}
             onChange={handleChange}
             placeholder="Doe"
             required
@@ -93,7 +155,7 @@ function Form({ formType, ...props }: FormProps) {
         <Input
           label="Username"
           name="username"
-          value={formData.username}
+          value={formData.auth.username}
           onChange={handleChange}
           placeholder="Enter your username"
           required
@@ -102,23 +164,30 @@ function Form({ formType, ...props }: FormProps) {
           label="Email"
           type="email"
           name="email"
-          value={formData.email}
+          value={formData.auth.email}
           onChange={handleChange}
-          placeholder="civic@lens.com"
+          placeholder="Enter your email"
           required
         />
         <Input
           label="Address"
           name="address"
-          value={formData.address}
+          value={formData.auth.address}
           onChange={handleChange}
-          placeholder="123 Civic Way"
+          placeholder="Enter your address"
           required
+        />
+        <Input
+          label="City"
+          name="city"
+          value={formData.auth.city}
+          onChange={handleChange}
+          placeholder="Enter City"
         />
         <Input
           label="Zip Code"
           name="zipCode"
-          value={formData.zipCode}
+          value={formData.auth.zipCode}
           onChange={handleChange}
           placeholder="Enter Zip Code"
           required
@@ -127,7 +196,7 @@ function Form({ formType, ...props }: FormProps) {
           label="Password"
           type="password"
           name="password"
-          value={formData.password}
+          value={formData.auth.password}
           onChange={handleChange}
           placeholder="••••••••"
           required
@@ -147,12 +216,15 @@ function Form({ formType, ...props }: FormProps) {
           name="description"
           label="Please give a brief description of the problem."
         />
-        <Input
-          name="location_name"
-          label="Please give use the location of the Issue"
-        />
+        <select name="category" id="category" title="category">
+          <option value="infrastructure">Infrastructure</option>
+          <option value="sanitation">Sanitation</option>
+          <option value="safety">Safety</option>
+          <option value="other">Other</option>
+        </select>
+        <Input name="city" label="Please give use the city of the Issue" />
         <Button
-          name="issue-submit"
+          name="issueSubmit"
           content="Submit"
           className="btn--submit-form"
         />

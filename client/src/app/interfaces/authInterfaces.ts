@@ -12,6 +12,7 @@ export interface UserGeneralInfoInterface {
   email: string;
   password: string;
   address: string;
+  city: string;
   zipCode: string;
 }
 
