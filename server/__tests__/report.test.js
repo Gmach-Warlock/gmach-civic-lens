@@ -10,6 +10,7 @@ describe("POST /api/reports", () => {
   it("should return 201 and the created report object", async () => {
     const newReport = {
       userId: "123e4567-e89b-12d3-a456-426614174000",
+      issueId: null,
       description: "Large pothole on Sunset Blvd",
       lat: 34.0928,
       lng: -118.3287,
@@ -89,4 +90,64 @@ it("should return 400 if latitude is out of range (-90 to 90)", async () => {
 
 afterAll(async () => {
   await db.sequelize.close();
+});
+
+describe("POST /api/reports - Advanced STAR Guards", () => {
+  // --- TYPE TESTING GROUP ---
+  describe("Type Validation (T)", () => {
+    it("should return 400 if userId is a boolean", async () => {
+      const response = await request(app).post("/api/reports").send({
+        userId: true, // Boolean instead of UUID string
+        description: "Testing boolean type guard",
+        lat: 34.0522,
+        lng: -118.2437,
+      });
+      expect(response.status).toBe(400);
+      expect(response.body.error).toContain("UUID");
+    });
+
+    it("should return 400 if coordinates are passed as arrays", async () => {
+      const response = await request(app)
+        .post("/api/reports")
+        .send({
+          userId: "123e4567-e89b-12d3-a456-426614174000",
+          description: "Array coordinates test",
+          lat: [34.0522], // Array instead of Number
+          lng: -118.2437,
+        });
+      expect(response.status).toBe(400);
+      expect(response.body.error).toContain("must be valid numbers");
+    });
+  });
+
+  // --- BOUNDARY / RANGE TESTING GROUP ---
+  describe("Boundary Precision (S & R)", () => {
+    it("should allow coordinates exactly on the boundary edge (-90, -180)", async () => {
+      const boundaryReport = {
+        userId: "123e4567-e89b-12d3-a456-426614174000",
+        description: "Exact south-west boundary corner of the map",
+        lat: -90.0,
+        lng: -180.0,
+        severity: "low",
+      };
+      const response = await request(app)
+        .post("/api/reports")
+        .send(boundaryReport);
+      expect(response.status).toBe(201);
+    });
+
+    it("should reject latitude marginally out of bounds (-90.0001)", async () => {
+      const outOfBounds = {
+        userId: "123e4567-e89b-12d3-a456-426614174000",
+        description: "Marginally out of bounds",
+        lat: -90.0001,
+        lng: -118.2437,
+        severity: "low",
+      };
+      const response = await request(app)
+        .post("/api/reports")
+        .send(outOfBounds);
+      expect(response.status).toBe(400);
+    });
+  });
 });

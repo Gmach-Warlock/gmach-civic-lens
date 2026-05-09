@@ -38,3 +38,5 @@ const formatIssuesResponse = (issues) => {
     }),
   };
 };
+
+module.exports = formatIssuesResponse;

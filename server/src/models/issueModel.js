@@ -24,35 +24,28 @@ module.exports = (sequelize, DataTypes) => {
       title: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate: {
-          notEmpty: true,
-        },
-      },
-      author: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        defaultValue: "anonymous",
-        validate: {
-          notEmpty: true,
-        },
+        validate: { notEmpty: true },
       },
       description: {
         type: DataTypes.TEXT,
         allowNull: false,
-        validate: {
-          notEmpty: true,
-        },
+        validate: { notEmpty: true },
       },
       category: {
         type: DataTypes.STRING,
+        allowNull: false,
       },
-
       status: {
         type: DataTypes.STRING,
         defaultValue: "open",
       },
-      location_name: {
+      urgency: {
         type: DataTypes.STRING,
+        defaultValue: "medium", // Matches your front-end UrgencyType
+      },
+      upvotes: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
       },
     },
     {
@@ -62,5 +55,17 @@ module.exports = (sequelize, DataTypes) => {
       underscored: true,
     },
   );
+
+  Issue.associate = (models) => {
+    // 1. Every issue is posted by a User
+    Issue.belongsTo(models.User, { foreignKey: "author_id", as: "author" });
+
+    // 2. An issue has one specific physical location
+    Issue.hasOne(models.Location, { foreignKey: "issue_id", as: "location" });
+
+    // 3. An issue can have many comments
+    Issue.hasMany(models.Comment, { foreignKey: "issue_id", as: "comments" });
+  };
+
   return Issue;
 };

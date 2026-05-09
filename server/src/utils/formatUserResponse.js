@@ -1,10 +1,9 @@
 const formatUserResponse = (user) => {
-  const [firstName, ...lastNameParts] = (user.name || "").split(" ");
   return {
     user: {
       general: {
-        firstName: firstName || "",
-        lastName: lastNameParts.join(" ") || "",
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
         username: user.username,
         email: user.email,
         address: user.address,

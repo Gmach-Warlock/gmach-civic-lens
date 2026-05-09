@@ -1,5 +1,6 @@
 const db = require("../models");
 const Issue = db.Issue;
+const formatIssuesResponse = require("../utils/formatIssuesResponse");
 
 class IssuesController {
   static async getAllIssues(req, res) {

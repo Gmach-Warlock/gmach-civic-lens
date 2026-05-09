@@ -1,13 +1,13 @@
 const bcrypt = require("bcrypt");
-const User = require("../models/usersModels");
+const { User } = require("../models");
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
 const formatUserResponse = require("../utils/formatUserResponse");
 
 class AuthController {
   static async createUser(req, res) {
+    console.log(req.body);
     try {
-      const { general } = req.body.user;
       const {
         username,
         email,
@@ -15,17 +15,20 @@ class AuthController {
         firstName,
         lastName,
         address,
+        city,
         zipCode,
-      } = general;
+      } = req.body;
 
       const saltedPassword = await bcrypt.hash(password, 12);
-
+      console.log(User);
       const newUser = await User.create({
-        name: `${firstName} ${lastName}`.trim(),
+        firstName,
+        lastName,
         username,
         email,
         password: saltedPassword,
         address,
+        city,
         zipCode,
       });
 
@@ -36,9 +39,13 @@ class AuthController {
         { expiresIn: "1h" },
       );
 
-      const refreshToken = jwt.sign({ id: user.id }, process.env.JWT_REFRESH, {
-        expiresIn: "7d",
-      });
+      const refreshToken = jwt.sign(
+        { id: newUser.id },
+        process.env.JWT_REFRESH,
+        {
+          expiresIn: "7d",
+        },
+      );
 
       res.status(201).json({
         message: "User created!",
