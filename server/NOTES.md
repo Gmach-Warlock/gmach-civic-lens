@@ -1,3 +1,5 @@
+## Star principles
+
 The "S.T.A.R." Pattern for Edge Cases
 When you look at a piece of data (like latitude or description), run it through these four filters:
 
@@ -86,3 +88,19 @@ Test: Longitude at 180.0001 (Should FAIL).
 Test: Send SQL injection syntax in the description (e.g., "'; DROP TABLE reports; --"). Your database should safely parameterize this and save it as literal text, rather than executing it.
 
 Test: Send HTML/Script tags in the description (e.g., "<script>alert('hack')</script>"). This proves your app handles unsanitized input safely.
+
+## Block first test blueprint
+
+describe("POST /api/issues", () => {
+// Rail 1: The Validation Check (Expected: 400 Bad Request)
+it("should return 400 if required fields are missing", async () => { ... });
+
+// Rail 2: The Not Found Check (Expected: 404 Not Found - if applicable)
+it("should return 404 if associated resource doesn't exist", async () => { ... });
+
+// Rail 3: The Disaster Check (Expected: 500 Server Error)
+it("should return 500 if the database crashes", async () => { ... });
+
+// Rail 4: The Happy Path (Expected: 200/201 Success)
+it("should successfully create the resource and return data", async () => { ... });
+});

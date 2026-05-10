@@ -1,6 +1,7 @@
 const db = require("../models");
 const { Issue, Location, Comment, User } = db;
 const formatIssuesResponse = require("../utils/formatIssuesResponse");
+const { uuidRegex } = require("../utils/validation");
 
 const issueAssociations = [
   {
@@ -135,10 +136,18 @@ class IssuesController {
     console.log("Searching for ID:", req.params.id);
     console.log("Issue Model defined?:", !!Issue);
     try {
-      const issue = await Issue.findByPk(req.params.id);
+      const { id } = req.params;
+      if (!id || !uuidRegex.test(id)) {
+        return res.status(400).json({
+          message: "Please provide a valid issue id",
+        });
+      }
+
+      const issue = await Issue.findByPk(id);
       if (!issue) {
         return res.status(404).json({ message: "Issue not found" });
       }
+
       res.status(200).json({ issue });
     } catch (error) {
       res.status(500).json({ error: error.message });

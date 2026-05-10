@@ -65,7 +65,7 @@ describe("Issue Model TDD = Database Integration", () => {
       description: "The neon lights are flickering too fast.",
       category: "UI",
       lat: 34.0522,
-      lng: -8.2437, // Changed from -118.2437 to -8.2437 to fit your current DECIMAL(10, 8) constraint!
+      lng: -8.2437,
     };
 
     const response = await request(app).post("/api/issues").send(validIssue);
@@ -86,5 +86,5 @@ describe("Issue Model TDD = Database Integration", () => {
 });
 
 afterAll(async () => {
-  await db.sequelize.close(); // Close the "Engine"
+  await db.sequelize.close();
 });

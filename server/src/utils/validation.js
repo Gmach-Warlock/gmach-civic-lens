@@ -1,6 +1,6 @@
 // src/utils/validation.js
 const uuidRegex =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 /**
  * 1. North American Phone Number (10-digit)
  * Matches: 123-456-7890, 1234567890, (123) 456-7890, 123.456.7890

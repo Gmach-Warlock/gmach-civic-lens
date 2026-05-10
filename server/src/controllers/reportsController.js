@@ -50,6 +50,10 @@ class ReportsController {
       return res.status(400).json({ error: error.message });
     }
   }
+
+  static async getAllReports(req, res) {}
+
+  static async getReportById(req, res) {}
 }
 
 module.exports = ReportsController;
