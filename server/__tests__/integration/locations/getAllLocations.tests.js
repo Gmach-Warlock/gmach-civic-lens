@@ -1,6 +1,6 @@
 const request = require("supertest");
-const app = require("../src/app");
-const db = require("../src/models");
+const app = require("../../../src/app");
+const db = require("../../../src/models");
 const location = db.Location;
 
 describe("GET all locations", () => {

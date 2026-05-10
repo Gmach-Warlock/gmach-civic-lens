@@ -1,5 +1,6 @@
 const db = require("../models");
 const Report = db.Report;
+const { uuidRegex } = require("../utils/validation");
 
 class ReportsController {
   static async createReport(req, res) {
@@ -17,8 +18,7 @@ class ReportsController {
       }
 
       // UUID Format Guard (Type)
-      const uuidRegex =
-        /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
       if (!uuidRegex.test(userId)) {
         throw new Error("userId must be a valid UUID.");
       }

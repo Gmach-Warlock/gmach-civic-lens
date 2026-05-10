@@ -1,3 +1,6 @@
+"use strict";
+const { Model } = require("sequelize");
+
 module.exports = (sequelize, DataTypes) => {
   const Location = sequelize.define(
     "Location",
@@ -7,40 +10,38 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
-      address: {
-        type: DataTypes.STRING,
-        allowNull: true,
-      },
-      city: {
-        type: DataTypes.STRING,
+      lat: {
+        type: DataTypes.DECIMAL(10, 8),
         allowNull: false,
+        validate: {
+          min: -90,
+          max: 90,
+        },
       },
-      zipCode: {
-        type: DataTypes.STRING,
+      lng: {
+        type: DataTypes.DECIMAL(10, 8),
         allowNull: false,
-        field: "zip_code",
+        validate: {
+          min: -180,
+          max: 180,
+        },
       },
-      latitude: {
-        type: DataTypes.DECIMAL(9, 6),
-        allowNull: true,
-      },
-      longitude: {
-        type: DataTypes.DECIMAL(9, 6),
+      locationName: {
+        type: DataTypes.STRING,
         allowNull: true,
       },
     },
     {
       tableName: "locations",
+      timestamps: true,
       underscored: true,
     },
   );
-
   Location.associate = (models) => {
     Location.belongsTo(models.Issue, {
       foreignKey: "issue_id",
-      onDelete: "CASCADE",
+      as: "issue",
     });
   };
-
   return Location;
 };

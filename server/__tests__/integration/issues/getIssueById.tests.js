@@ -1,6 +1,6 @@
 const request = require("supertest");
-const app = require("../src/app");
-const db = require("../src/models");
+const app = require("../../../src/app");
+const db = require("../../../src/models");
 
 describe("GET issue by ID", () => {
   beforeAll(async () => {
