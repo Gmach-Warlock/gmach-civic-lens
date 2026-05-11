@@ -53,7 +53,36 @@ class ReportsController {
 
   static async getAllReports(req, res) {}
 
-  static async getReportById(req, res) {}
+  static async getReportById(req, res) {
+    try {
+      const { id } = req.params;
+
+      // 1. Validation Check (Rail 1)
+      if (!id || !uuidRegex.test(id)) {
+        return res.status(400).json({
+          message: "Please provide a valid report id", // Matches test expectations
+        });
+      }
+
+      // 2. Fetch the report (Rail 4)
+      const report = await Report.findByPk(id);
+
+      // 3. Not Found Check (Rail 2)
+      if (!report) {
+        return res.status(404).json({
+          message: "Report not found",
+        });
+      }
+
+      // 4. Success Response
+      return res.status(200).json({ report });
+    } catch (error) {
+      // 5. Database/Unexpected Errors (Rail 3)
+      return res.status(500).json({
+        error: error.message,
+      });
+    }
+  }
 }
 
 module.exports = ReportsController;

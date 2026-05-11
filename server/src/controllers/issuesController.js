@@ -70,7 +70,7 @@ class IssuesController {
     try {
       const { title, description, category, lat, lng } = req.body;
 
-      // --- GUARD LAYER 1: Existence (Crucial: Added "return" to stop execution!) ---
+      // --- GUARD LAYER 1: Existence (Matches the exact test message!) ---
       if (!title || !description || !category) {
         return res.status(400).json({
           message: "All fields (title, description, category) are required.",
@@ -98,34 +98,34 @@ class IssuesController {
       console.log("Received issue data: ", req.body);
 
       // 1. Create the base issue
-      // We explicitly pass the expected fields rather than the raw req.body for safety
       const issue = await Issue.create({
         title: title.trim(),
         description: description.trim(),
         category: category.trim(),
-        authorId: req.user?.id || null, // Capture logged-in user if available!
+        author_id: req.user?.id || null, // Matches the foreignKey 'author_id' in your model
       });
 
       // 2. If coordinates are provided, create the associated Location!
+      // Using 'lat' and 'lng' to match your database validation rules
       if (lat !== undefined && lng !== undefined) {
         await Location.create({
           lat,
           lng,
-          issueId: issue.id, // Linking it back to our new issue!
+          issue_id: issue.id, // Links it back to the newly created issue
         });
       }
 
-      // 3. THE BOSS MOVE: Reload the issue with all associated tables joined!
+      // 3. Reload with associations
       await issue.reload({
         include: issueAssociations,
       });
 
-      // 4. Format and return the perfectly unified object!
+      // 4. Format and return
       const formatted = formatIssuesResponse(issue);
 
       res.status(201).json({
         message: "Issue created successfully",
-        ...formatted, // Spreads the { issues: [...] } array cleanly!
+        ...formatted,
       });
     } catch (error) {
       console.error("DEBUG CREATE ISSUE ERROR:", error);
