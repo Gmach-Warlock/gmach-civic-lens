@@ -51,7 +51,14 @@ class ReportsController {
     }
   }
 
-  static async getAllReports(req, res) {}
+  static async getAllReports(req, res) {
+    try {
+      const reports = await Report.findAll();
+      return res.status(200).json({ reports });
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  }
 
   static async getReportById(req, res) {
     try {

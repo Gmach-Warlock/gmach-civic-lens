@@ -52,6 +52,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      isAdmin: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+        field: "is_admin", // Explicitly maps camelCase to snake_case in your PG database
+      },
     },
     {
       sequelize: db,

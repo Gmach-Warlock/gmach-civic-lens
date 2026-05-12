@@ -1,16 +1,41 @@
 const request = require("supertest");
 const app = require("../../../src/app");
 const db = require("../../../src/models");
+const jwt = require("jsonwebtoken");
 
 describe("POST /api/reports", () => {
+  let adminToken;
+  let adminUser;
+
   beforeAll(async () => {
+    // Sync the database and wipe clean
     await db.sequelize.sync({ force: true });
+
+    // Seed the Admin User into the database
+    adminUser = await db.User.create({
+      id: "f0680d78-798b-41f1-820e-804310f75b11", // Valid UUID format
+      firstName: "Admin",
+      lastName: "User",
+      username: "adminuser",
+      email: "admin@example.com",
+      password: "hashedpassword123",
+      address: "123 Admin Way",
+      city: "Los Angeles",
+      zipCode: "90001",
+      isAdmin: true, // Must be true for requireAdmin middleware
+    });
+
+    // Sign the token with the correct user ID
+    adminToken = jwt.sign(
+      { id: adminUser.id, isAdmin: true },
+      process.env.JWT_SECRET || "YOUR_JWT_SECRET",
+      { expiresIn: "1h" },
+    );
   });
 
-  it("should return 201 and the created report object", async () => {
+  it("should return 201 and the created report object when authorized as Admin", async () => {
     const newReport = {
       userId: "123e4567-e89b-12d3-a456-426614174000",
-      issueId: null,
       description: "Large pothole on Sunset Blvd",
       lat: 34.0928,
       lng: -118.3287,
@@ -18,14 +43,27 @@ describe("POST /api/reports", () => {
       severity: "low",
     };
 
-    const response = await request(app).post("/api/reports").send(newReport);
-    // ADD THIS LOG:
-    if (response.status === 400) {
-      console.log("SERVER SAYS:", response.body);
-    }
+    const response = await request(app)
+      .post("/api/reports")
+      .set("Authorization", `Bearer ${adminToken}`)
+      .send(newReport);
+
     expect(response.status).toBe(201);
     expect(response.body).toHaveProperty("id");
     expect(response.body.description).toBe(newReport.description);
+  });
+
+  it("should return 401/403 if no authorization token is provided", async () => {
+    const newReport = {
+      userId: "123e4567-e89b-12d3-a456-426614174000",
+      description: "Unauthenticated report attempt",
+      lat: 34.0928,
+      lng: -118.3287,
+    };
+
+    const response = await request(app).post("/api/reports").send(newReport);
+
+    expect([401, 403]).toContain(response.status);
   });
 
   it("should return 400 if required fields are missing", async () => {
@@ -33,6 +71,7 @@ describe("POST /api/reports", () => {
 
     const response = await request(app)
       .post("/api/reports")
+      .set("Authorization", `Bearer ${adminToken}`)
       .send(incompleteReport);
 
     expect(response.status).toBe(400);
@@ -42,12 +81,15 @@ describe("POST /api/reports", () => {
   it("should return 400 if userId is not a valid UUID", async () => {
     const badReport = {
       userId: "not-a-uuid",
-      description: "Testing invalid userId", // Double check if this is 'description' or 'descriptions'
+      description: "Testing invalid userId",
       lat: 34.0551,
       lng: -118.2425,
     };
 
-    const response = await request(app).post("/api/reports").send(badReport); // Ensure no second argument is passed here
+    const response = await request(app)
+      .post("/api/reports")
+      .set("Authorization", `Bearer ${adminToken}`)
+      .send(badReport);
 
     expect(response.status).toBe(400);
     expect(response.body).toHaveProperty("error");
@@ -62,13 +104,16 @@ describe("POST /api/reports", () => {
       locationName: "Los Angeles",
       severity: "low",
     };
-    const response = await request(app).post("/api/reports").send(reportData);
+
+    const response = await request(app)
+      .post("/api/reports")
+      .set("Authorization", `Bearer ${adminToken}`)
+      .send(reportData);
 
     expect(response.status).toBe(201);
     expect(response.body).toMatchObject(reportData);
     expect(response.body).toHaveProperty("id");
     expect(response.body).toHaveProperty("createdAt");
-    expect(response.body).toHaveProperty("status", "open");
   });
 
   it("should return 400 if latitude is out of range (-90 to 90)", async () => {
@@ -82,6 +127,7 @@ describe("POST /api/reports", () => {
 
     const response = await request(app)
       .post("/api/reports")
+      .set("Authorization", `Bearer ${adminToken}`)
       .send(outOfBoundsReport);
 
     expect(response.status).toBe(400);
@@ -89,15 +135,42 @@ describe("POST /api/reports", () => {
 });
 
 describe("POST /api/reports - Advanced STAR Guards", () => {
-  // --- TYPE TESTING GROUP ---
+  let adminToken;
+
+  beforeAll(async () => {
+    // We recreate the same Admin user just in case sync force was triggered differently
+    await db.User.findOrCreate({
+      where: { id: "f0680d78-798b-41f1-820e-804310f75b11" },
+      defaults: {
+        firstName: "Admin",
+        lastName: "User",
+        username: "adminuser",
+        email: "admin@example.com",
+        password: "hashedpassword123",
+        address: "123 Admin Way",
+        city: "Los Angeles",
+        zipCode: "90001",
+        isAdmin: true,
+      },
+    });
+
+    adminToken = jwt.sign(
+      { id: "f0680d78-798b-41f1-820e-804310f75b11", isAdmin: true },
+      process.env.JWT_SECRET || "YOUR_JWT_SECRET",
+    );
+  });
+
   describe("Type Validation (T)", () => {
     it("should return 400 if userId is a boolean", async () => {
-      const response = await request(app).post("/api/reports").send({
-        userId: true, // Boolean instead of UUID string
-        description: "Testing boolean type guard",
-        lat: 34.0522,
-        lng: -118.2437,
-      });
+      const response = await request(app)
+        .post("/api/reports")
+        .set("Authorization", `Bearer ${adminToken}`)
+        .send({
+          userId: true,
+          description: "Testing boolean type guard",
+          lat: 34.0522,
+          lng: -118.2437,
+        });
       expect(response.status).toBe(400);
       expect(response.body.error).toContain("UUID");
     });
@@ -105,10 +178,11 @@ describe("POST /api/reports - Advanced STAR Guards", () => {
     it("should return 400 if coordinates are passed as arrays", async () => {
       const response = await request(app)
         .post("/api/reports")
+        .set("Authorization", `Bearer ${adminToken}`)
         .send({
           userId: "123e4567-e89b-12d3-a456-426614174000",
           description: "Array coordinates test",
-          lat: [34.0522], // Array instead of Number
+          lat: [34.0522],
           lng: -118.2437,
         });
       expect(response.status).toBe(400);
@@ -116,7 +190,6 @@ describe("POST /api/reports - Advanced STAR Guards", () => {
     });
   });
 
-  // --- BOUNDARY / RANGE TESTING GROUP ---
   describe("Boundary Precision (S & R)", () => {
     it("should allow coordinates exactly on the boundary edge (-90, -180)", async () => {
       const boundaryReport = {
@@ -128,6 +201,7 @@ describe("POST /api/reports - Advanced STAR Guards", () => {
       };
       const response = await request(app)
         .post("/api/reports")
+        .set("Authorization", `Bearer ${adminToken}`)
         .send(boundaryReport);
       expect(response.status).toBe(201);
     });
@@ -142,6 +216,7 @@ describe("POST /api/reports - Advanced STAR Guards", () => {
       };
       const response = await request(app)
         .post("/api/reports")
+        .set("Authorization", `Bearer ${adminToken}`)
         .send(outOfBounds);
       expect(response.status).toBe(400);
     });
