@@ -33,26 +33,6 @@ describe("POST /api/reports", () => {
     );
   });
 
-  it("should return 201 and the created report object when authorized as Admin", async () => {
-    const newReport = {
-      userId: "123e4567-e89b-12d3-a456-426614174000",
-      description: "Large pothole on Sunset Blvd",
-      lat: 34.0928,
-      lng: -118.3287,
-      locationName: "Hollywood",
-      severity: "low",
-    };
-
-    const response = await request(app)
-      .post("/api/reports")
-      .set("Authorization", `Bearer ${adminToken}`)
-      .send(newReport);
-
-    expect(response.status).toBe(201);
-    expect(response.body).toHaveProperty("id");
-    expect(response.body.description).toBe(newReport.description);
-  });
-
   it("should return 401/403 if no authorization token is provided", async () => {
     const newReport = {
       userId: "123e4567-e89b-12d3-a456-426614174000",
@@ -131,6 +111,26 @@ describe("POST /api/reports", () => {
       .send(outOfBoundsReport);
 
     expect(response.status).toBe(400);
+  });
+
+  it("should return 201 and the created report object when authorized as Admin", async () => {
+    const newReport = {
+      userId: "123e4567-e89b-12d3-a456-426614174000",
+      description: "Large pothole on Sunset Blvd",
+      lat: 34.0928,
+      lng: -118.3287,
+      locationName: "Hollywood",
+      severity: "low",
+    };
+
+    const response = await request(app)
+      .post("/api/reports")
+      .set("Authorization", `Bearer ${adminToken}`)
+      .send(newReport);
+
+    expect(response.status).toBe(201);
+    expect(response.body).toHaveProperty("id");
+    expect(response.body.description).toBe(newReport.description);
   });
 });
 

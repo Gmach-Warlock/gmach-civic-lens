@@ -45,7 +45,7 @@ const urlRegex = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/;
  * Safety guard to prevent basic Cross-Site Scripting (XSS) in user descriptions.
  * Rejects strings that contain HTML tags (<...>) or script blocks.
  */
-const noHtmlRegex = /<[^>]*>/g;
+const noHtmlRegex = /<[^>]*>/;
 
 // Export all of them using CommonJS
 module.exports = {

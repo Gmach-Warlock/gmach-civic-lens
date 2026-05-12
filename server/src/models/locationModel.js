@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
       },
       lat: {
-        type: DataTypes.DECIMAL(10, 8),
+        type: DataTypes.DECIMAL(11, 8),
         allowNull: false,
         validate: {
           min: -90,
@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       lng: {
-        type: DataTypes.DECIMAL(10, 8),
+        type: DataTypes.DECIMAL(11, 8),
         allowNull: false,
         validate: {
           min: -180,

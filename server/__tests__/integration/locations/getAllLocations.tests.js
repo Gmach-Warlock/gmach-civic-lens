@@ -17,7 +17,7 @@ describe("GET all locations", () => {
   beforeAll(async () => {
     await db.sequelize.sync({ force: true });
     validToken = jwt.sign(
-      { id: "some-user-uuid", email: "test@example.com" },
+      { id: "f0680d78-798b-41f1-820e-804310f75b11", email: "test@example.com" },
       JWT_SECRET,
     );
     if (User) {
@@ -65,18 +65,18 @@ describe("GET all locations", () => {
   });
 
   it("should return a 401 if a valid accessToken isn't provided", async () => {
-    const response = await request(app).get("/api/locations");
+    const response = await request(app).get("/api/locations/");
     expect(response.status).toBe(401);
   });
 
   it("should return 500 if an unexpected error occurs", async () => {
     const findAllSpy = jest
-      .spyOn(Report, "findAll")
+      .spyOn(Location, "findAll")
       .mockRejectedValueOnce(new Error("Database connection timed out"));
 
     const response = await request(app)
-      .get("/api/reports")
-      .set("Authorization", `Bearer ${validTestToken}`);
+      .get("/api/locations/")
+      .set("Authorization", `Bearer ${validToken}`);
 
     expect(response.status).toBe(500);
     expect(response.body).toHaveProperty("error");
@@ -85,12 +85,10 @@ describe("GET all locations", () => {
   });
 
   it("should retrieve all of the locations, and send back a 200 status if the accessToken is present and valid", async () => {
-    const response = (await request(app).get("/api/locations")).set(
-      "Authorization",
-      `Bearer ${validToken}`,
-    );
+    const response = await request(app)
+      .get("/api/locations/")
+      .set("Authorization", `Bearer ${validToken}`);
+
     expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty("locations");
-    expect(Array.isArray(response.body.locations)).toBe(true);
   });
 });

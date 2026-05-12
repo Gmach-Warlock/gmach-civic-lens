@@ -4,6 +4,8 @@ const { requireUser } = require("../middleware/auth");
 
 locationsRouter.use(requireUser);
 
-locationsRouter.get("/", requireUser, locationsController.getAllLocations);
+locationsRouter.get("/", locationsController.getAllLocations);
+locationsRouter.post("/", locationsController.createLocation);
+locationsRouter.get("/:id", locationsController.getLocationById);
 
 module.exports = locationsRouter;
