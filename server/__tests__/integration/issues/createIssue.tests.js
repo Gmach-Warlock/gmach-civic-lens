@@ -4,7 +4,7 @@ const db = require("../../../src/models");
 const jwt = require("jsonwebtoken");
 const { Issue, User } = db;
 
-const JWT_SECRET = process.env.JWT_SECRET || "your_test_jwt_secret";
+const JWT_SECRET = process.env.JWT_SECRET;
 const TEST_USER_ID = "b0000000-0000-4000-8000-000000000000";
 
 describe("Issue Model TDD = Database Integration", () => {

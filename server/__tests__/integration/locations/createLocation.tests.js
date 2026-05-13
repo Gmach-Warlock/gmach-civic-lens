@@ -49,7 +49,7 @@ describe("createLocation Route", () => {
       .send(validLocationPayload);
 
     expect(response.status).toBe(401);
-    expect(response.body.error).toBe("Authentication token required");
+    expect(response.body.error).toBe("Authentication token required.");
   });
 
   it("should return 400 if the required inputs are missing", async () => {
