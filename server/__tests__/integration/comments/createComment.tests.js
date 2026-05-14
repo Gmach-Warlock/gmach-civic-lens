@@ -21,6 +21,18 @@ describe("createComment route", () => {
   beforeAll(async () => {
     await db.sequelize.sync({ force: false });
 
+    // Clear data safely using Sequelize hooks which handles table names perfectly
+    if (Comment)
+      await Comment.destroy({ truncate: { cascade: true }, force: true });
+    if (Issue)
+      await Issue.destroy({ truncate: { cascade: true }, force: true });
+    if (User) await User.destroy({ truncate: { cascade: true }, force: true });
+
+    if (Issue)
+      await Issue.destroy({ where: { id: MOCK_ISSUE_ID } }).catch(() => null);
+    if (User)
+      await User.destroy({ where: { id: TEST_USER_ID } }).catch(() => null);
+
     validTestToken = jwt.sign(
       { id: TEST_USER_ID, email: "testuser@civiclens.com" },
       JWT_SECRET,

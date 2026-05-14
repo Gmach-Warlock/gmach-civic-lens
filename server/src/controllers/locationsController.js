@@ -1,5 +1,6 @@
 const db = require("../models");
-const { zipCodeRegex, noHtmlRegex } = require("../utils/validation");
+// Pull out your global validation regexes
+const { zipCodeRegex, noHtmlRegex, uuidRegex } = require("../utils/validation");
 const locationModel = db.Location;
 
 class LocationsController {
@@ -104,6 +105,92 @@ class LocationsController {
       });
     } catch (error) {
       console.log("🔥 Controller Caught Exception Structure:", error);
+      return res.status(500).json({ error: error.message });
+    }
+  }
+  static async updateLocation(req, res) {
+    try {
+      const { id } = req.params;
+      const { lat, lng, locationName } = req.body;
+
+      // 1. GUARD LAYER: Validate UUID Format (Now works because uuidRegex is global!)
+      if (!id || !uuidRegex.test(id)) {
+        return res.status(400).json({
+          message: "Please provide a valid location id",
+        });
+      }
+
+      // 2. GUARD LAYER: Validate Coordinate Existence
+      if (lat === undefined || lng === undefined) {
+        return res.status(400).json({
+          message: "Latitude and longitude are required fields.",
+        });
+      }
+
+      // 3. GUARD LAYER: Validate Planetary Boundaries
+      const latitude = Number(lat);
+      const longitude = Number(lng);
+
+      if (
+        isNaN(latitude) ||
+        latitude < -90 ||
+        latitude > 90 ||
+        isNaN(longitude) ||
+        longitude < -180 ||
+        longitude > 180
+      ) {
+        return res.status(400).json({
+          message: "Coordinates are out of acceptable geographic boundaries.",
+        });
+      }
+
+      // 4. GUARD LAYER: Fetch Entity (Changed from Location to locationModel)
+      const location = await locationModel.findByPk(id);
+      if (!location) {
+        return res.status(404).json({
+          message: "Location record not found",
+        });
+      }
+
+      // 5. ACTUATION: Update Coordinates and Details
+      await location.update({
+        lat: latitude,
+        lng: longitude,
+        locationName: locationName
+          ? locationName.trim()
+          : location.locationName,
+      });
+
+      // Return the updated location entry
+      return res.status(200).json(location);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  }
+  static async deleteLocation(req, res) {
+    try {
+      const { id } = req.params;
+
+      // 1. GUARD LAYER: Validate UUID Format
+      if (!id || !uuidRegex.test(id)) {
+        return res.status(400).json({
+          message: "Please provide a valid location id",
+        });
+      }
+
+      // 2. GUARD LAYER: Fetch Entity
+      const location = await locationModel.findByPk(id);
+      if (!location) {
+        return res.status(404).json({
+          message: "Location record not found",
+        });
+      }
+
+      // 3. ACTUATION: Hard delete
+      await location.destroy();
+
+      return res.status(204).send();
+    } catch (error) {
       return res.status(500).json({ error: error.message });
     }
   }

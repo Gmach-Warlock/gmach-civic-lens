@@ -1,0 +1,142 @@
+const request = require("supertest");
+const jwt = require("jsonwebtoken");
+const app = require("../../../src/app");
+const db = require("../../../src/models");
+const { User, Issue, Comment } = db;
+
+const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
+const AUTHOR_USER_ID = "b0000000-0000-4000-8000-000000000001";
+const STRANGER_USER_ID = "b0000000-0000-4000-8000-000000000002";
+const MOCK_ISSUE_ID = "c0000000-0000-4000-8000-000000000000";
+const MOCK_COMMENT_ID = "d0000000-0000-4000-8000-000000000000";
+
+describe("DELETE /api/comments/:id (deleteComment)", () => {
+  let authorToken;
+  let strangerToken;
+
+  beforeAll(async () => {
+    await db.sequelize.sync({ force: false });
+
+    // Isolate test sandbox state
+    if (Comment)
+      await Comment.destroy({ truncate: { cascade: true }, force: true }).catch(
+        () => null,
+      );
+    if (Issue)
+      await Issue.destroy({ truncate: { cascade: true }, force: true }).catch(
+        () => null,
+      );
+    if (User)
+      await User.destroy({ truncate: { cascade: true }, force: true }).catch(
+        () => null,
+      );
+
+    authorToken = jwt.sign(
+      { id: AUTHOR_USER_ID, email: "commenter@civiclens.com" },
+      JWT_SECRET,
+    );
+    strangerToken = jwt.sign(
+      { id: STRANGER_USER_ID, email: "stranger@civiclens.com" },
+      JWT_SECRET,
+    );
+
+    // Seed Users
+    await User.create({
+      id: AUTHOR_USER_ID,
+      firstName: "Comment",
+      lastName: "Author",
+      username: "commentauthor",
+      city: "Los Angeles",
+      email: "commenter@civiclens.com",
+      password: "securepassword123",
+    });
+
+    await User.create({
+      id: STRANGER_USER_ID,
+      firstName: "Random",
+      lastName: "User",
+      username: "randomcommenter",
+      city: "Los Angeles",
+      email: "stranger@civiclens.com",
+      password: "securepassword123",
+    });
+
+    // Seed Parent Issue
+    await Issue.create({
+      id: MOCK_ISSUE_ID,
+      title: "Pothole on 5th Ave",
+      description: "Massive crater damaging wheels.",
+      category: "Infrastructure",
+      author_id: AUTHOR_USER_ID,
+    });
+  });
+
+  beforeEach(async () => {
+    // Fresh comment state before each test run
+    if (Comment) {
+      await Comment.destroy({
+        where: { id: MOCK_COMMENT_ID },
+        force: true,
+      }).catch(() => null);
+      await Comment.create({
+        id: MOCK_COMMENT_ID,
+        content: "This comment is slated for removal.",
+        issue_id: MOCK_ISSUE_ID,
+        author_id: AUTHOR_USER_ID,
+      });
+    }
+  });
+
+  afterAll(async () => {
+    await db.sequelize.close();
+  });
+
+  it("should return 401 if the authentication token is completely missing", async () => {
+    const response = await request(app).delete(
+      `/api/comments/${MOCK_COMMENT_ID}`,
+    );
+    expect(response.status).toBe(401);
+  });
+
+  it("should return 400 if the provided comment ID format is invalid", async () => {
+    const response = await request(app)
+      .delete("/api/comments/invalid-uuid-format")
+      .set("Authorization", `Bearer ${authorToken}`);
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe("Please provide a valid comment id");
+  });
+
+  it("should return 404 if the target comment does not exist", async () => {
+    const missingUuid = "f0000000-0000-4000-8000-000000000000";
+    const response = await request(app)
+      .delete(`/api/comments/${missingUuid}`)
+      .set("Authorization", `Bearer ${authorToken}`);
+
+    expect(response.status).toBe(404);
+    expect(response.body.message).toBe("Comment not found");
+  });
+
+  it("should return 403 Star Guard error if a user tries to delete someone else's comment", async () => {
+    const response = await request(app)
+      .delete(`/api/comments/${MOCK_COMMENT_ID}`)
+      .set("Authorization", `Bearer ${strangerToken}`);
+
+    expect(response.status).toBe(403);
+    expect(response.body.message).toBe(
+      "You do not have permission to delete this comment.",
+    );
+  });
+
+  it("should successfully remove the comment from the database and return 204", async () => {
+    const response = await request(app)
+      .delete(`/api/comments/${MOCK_COMMENT_ID}`)
+      .set("Authorization", `Bearer ${authorToken}`);
+
+    expect(response.status).toBe(204);
+
+    // Ensure it's completely gone from the DB sandbox
+    const lookUp = await Comment.findByPk(MOCK_COMMENT_ID);
+    expect(lookUp).toBeNull();
+  });
+});

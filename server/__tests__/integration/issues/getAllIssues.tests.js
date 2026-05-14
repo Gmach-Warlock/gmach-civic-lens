@@ -15,7 +15,7 @@ describe("getAllIssues Route", () => {
 
   beforeAll(async () => {
     // Sync database
-    await db.sequelize.sync({ force: false });
+    await db.sequelize.sync({ force: true });
     validTestToken = jwt.sign(
       {
         id: "b0000000-0000-4000-8000-000000000000",

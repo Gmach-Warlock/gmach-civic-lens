@@ -16,6 +16,19 @@ describe("getAllComments route", () => {
   beforeAll(async () => {
     await db.sequelize.sync({ force: false });
 
+    // 1. Wipe the tables cleanly
+    if (Comment)
+      await Comment.destroy({ truncate: { cascade: true }, force: true }).catch(
+        () => null,
+      );
+    if (Issue)
+      await Issue.destroy({ truncate: { cascade: true }, force: true }).catch(
+        () => null,
+      );
+    if (User)
+      await User.destroy({ truncate: { cascade: true }, force: true }).catch(
+        () => null,
+      );
     validTestToken = jwt.sign(
       { id: TEST_USER_ID, email: "testuser@civiclens.com" },
       JWT_SECRET,

@@ -1,5 +1,6 @@
 const db = require("../models");
 const { Comment } = db;
+const { uuidRegex } = require("../utils/validation");
 
 class CommentsController {
   static async createComment(req, res) {
@@ -69,6 +70,87 @@ class CommentsController {
       return res.status(200).json({ comment });
     } catch (error) {
       return res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+  static async updateComment(req, res) {
+    try {
+      const { id } = req.params;
+      const { content } = req.body;
+
+      // 1. GUARD LAYER: Validate UUID Format
+      if (!id || !uuidRegex.test(id)) {
+        return res.status(400).json({
+          message: "Please provide a valid comment id",
+        });
+      }
+
+      // 2. GUARD LAYER: Validate Body Content Existence
+      if (!content || content.trim() === "") {
+        return res.status(400).json({
+          message: "Content is required and cannot be empty.",
+        });
+      }
+
+      // 3. GUARD LAYER: Fetch Entity
+      const comment = await Comment.findByPk(id);
+      if (!comment) {
+        return res.status(404).json({
+          message: "Comment not found",
+        });
+      }
+
+      // 4. GUARD LAYER: Star Guard Authorization Check
+      const currentUserId = req.user?.id;
+      if (!currentUserId || comment.author_id !== currentUserId) {
+        return res.status(403).json({
+          message: "You do not have permission to edit this comment.",
+        });
+      }
+
+      // 5. ACTUATION: Update Record
+      await comment.update({
+        content: content.trim(),
+      });
+
+      // Return the updated comment with a 200 OK status
+      return res.status(200).json(comment);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  }
+  static async deleteComment(req, res) {
+    try {
+      const { id } = req.params;
+
+      // 1. GUARD LAYER: Validate UUID Format
+      if (!id || !uuidRegex.test(id)) {
+        return res.status(400).json({
+          message: "Please provide a valid comment id",
+        });
+      }
+
+      // 2. GUARD LAYER: Fetch Entity
+      const comment = await Comment.findByPk(id);
+      if (!comment) {
+        return res.status(404).json({
+          message: "Comment not found",
+        });
+      }
+
+      // 3. GUARD LAYER: Star Guard Authorization Check
+      const currentUserId = req.user?.id;
+      if (!currentUserId || comment.author_id !== currentUserId) {
+        return res.status(403).json({
+          message: "You do not have permission to delete this comment.",
+        });
+      }
+
+      // 4. ACTUATION: Hard delete for comments (or soft if preferred)
+      await comment.destroy();
+
+      return res.status(204).send();
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
     }
   }
 }

@@ -155,10 +155,20 @@ class IssuesController {
   }
   static async updateIssue(req, res) {
     try {
-      const issue = await Issue.findByPk(req.params.id);
+      const { id } = req.params;
+
+      // --- GUARD LAYER: Validate UUID Format ---
+      if (!id || !uuidRegex.test(id)) {
+        return res.status(400).json({
+          message: "Please provide a valid issue id",
+        });
+      }
+
+      const issue = await Issue.findByPk(id);
       if (!issue) {
         return res.status(404).json({ message: "Issue not found" });
       }
+
       await issue.update(req.body);
       res.status(200).json(issue);
     } catch (error) {
@@ -167,14 +177,38 @@ class IssuesController {
   }
   static async deleteIssue(req, res) {
     try {
-      const issue = await Issue.findByPk(req.params.id);
+      const { id } = req.params;
+
+      // 1. GUARD LAYER: Validate UUID Format
+      if (!id || !uuidRegex.test(id)) {
+        return res.status(400).json({
+          message: "Please provide a valid issue id",
+        });
+      }
+
+      // 2. GUARD LAYER: Fetch Entity
+      const issue = await Issue.findByPk(id);
       if (!issue) {
         return res.status(404).json({ message: "Issue not found" });
       }
+
+      // 3. GUARD LAYER: Ownership/Authorization Star Guard
+      // Ensure the acting user owns this issue (or is an admin if your schema supports roles)
+      const currentUserId = req.user?.id;
+      if (!currentUserId || issue.author_id !== currentUserId) {
+        return res.status(403).json({
+          message: "You do not have permission to delete this issue.",
+        });
+      }
+
+      // 4. ACTUATION: Perform Soft Delete
+      // Because paranoid: true is set on the model, this sets deleted_at instead of running a SQL DELETE
       await issue.destroy();
-      res.status(204).send();
+
+      // 204 No Content is the standard for successful deletions
+      return res.status(204).send();
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      return res.status(500).json({ error: error.message });
     }
   }
 }

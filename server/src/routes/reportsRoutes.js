@@ -7,5 +7,7 @@ reportsRouter.use(requireUser, requireAdmin);
 reportsRouter.post("/", reportsController.createReport);
 reportsRouter.get("/", reportsController.getAllReports);
 reportsRouter.get("/:id", reportsController.getReportById);
+reportsRouter.put("/:id", reportsController.updateReport);
+reportsRouter.delete("/:id", reportsController.deleteReport);
 
 module.exports = reportsRouter;

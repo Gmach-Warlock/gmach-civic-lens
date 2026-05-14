@@ -3,7 +3,7 @@ const request = require("supertest");
 const app = require("../../../src/app");
 const db = require("../../../src/models");
 const jwt = require("jsonwebtoken");
-const { Issue, User } = db;
+const { Issue, User, Comment } = db;
 
 const JWT_SECRET = process.env.JWT_SECRET || "your_test_jwt_secret";
 const TEST_USER_ID = "b0000000-0000-4000-8000-000000000000";
@@ -14,7 +14,21 @@ describe("GET issue by ID", () => {
   let validTestToken;
 
   beforeAll(async () => {
-    await db.sequelize.sync({ force: false });
+    await db.sequelize.sync({ force: true });
+
+    // 2. Wipe tables completely using Sequelize models to clear old test artifacts
+    if (Comment)
+      await Comment.destroy({ truncate: { cascade: true }, force: true }).catch(
+        () => null,
+      );
+    if (Issue)
+      await Issue.destroy({ truncate: { cascade: true }, force: true }).catch(
+        () => null,
+      );
+    if (User)
+      await User.destroy({ truncate: { cascade: true }, force: true }).catch(
+        () => null,
+      );
 
     // 1. Generate valid token
     validTestToken = jwt.sign(

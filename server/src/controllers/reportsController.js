@@ -1,6 +1,6 @@
 const db = require("../models");
 const Report = db.Report;
-const { uuidRegex } = require("../utils/validation");
+const { uuidRegex, noHtmlRegex } = require("../utils/validation");
 
 class ReportsController {
   static async createReport(req, res) {
@@ -88,6 +88,100 @@ class ReportsController {
       return res.status(500).json({
         error: error.message,
       });
+    }
+  }
+  static async updateReport(req, res) {
+    try {
+      const { id } = req.params;
+      const { status, severity, description, lat, lng } = req.body;
+
+      // 1. GUARD: UUID Format
+      if (!id || !uuidRegex.test(id)) {
+        return res
+          .status(400)
+          .json({ message: "Please provide a valid report id" });
+      }
+
+      // 2. GUARD: Type & Range for Coordinates (if provided)
+      if (lat !== undefined || lng !== undefined) {
+        const latitude = Number(lat);
+        const longitude = Number(lng);
+
+        if (isNaN(latitude) || isNaN(longitude)) {
+          return res
+            .status(400)
+            .json({ message: "Latitude and Longitude must be valid numbers." });
+        }
+        if (latitude < -90 || latitude > 90) {
+          return res
+            .status(400)
+            .json({ message: "Latitude must be between -90 and 90." });
+        }
+        if (longitude < -180 || longitude > 180) {
+          return res
+            .status(400)
+            .json({ message: "Longitude must be between -180 and 180." });
+        }
+      }
+
+      // 3. GUARD: ENUM Validation for Severity
+      const validSeverities = ["low", "medium", "high"];
+      if (severity && !validSeverities.includes(severity)) {
+        return res.status(400).json({
+          message: "Invalid severity level. Must be low, medium, or high.",
+        });
+      }
+
+      // 4. GUARD: XSS Prevention
+      if (description && noHtmlRegex.test(description)) {
+        return res
+          .status(400)
+          .json({ error: "No code is allowed in input fields!" });
+      }
+
+      // 5. FETCH & ACTUATE
+      const report = await Report.findByPk(id);
+      if (!report) {
+        return res.status(404).json({ message: "Report not found" });
+      }
+
+      await report.update({
+        status: status || report.status,
+        severity: severity || report.severity,
+        description: description || report.description,
+        lat: lat !== undefined ? lat : report.lat,
+        lng: lng !== undefined ? lng : report.lng,
+      });
+
+      return res.status(200).json(report);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  }
+
+  static async deleteReport(req, res) {
+    try {
+      const { id } = req.params;
+
+      // 1. GUARD: UUID Format
+      if (!id || !uuidRegex.test(id)) {
+        return res
+          .status(400)
+          .json({ message: "Please provide a valid report id" });
+      }
+
+      // 2. GUARD: Fetch Entity
+      const report = await Report.findByPk(id);
+      if (!report) {
+        return res.status(404).json({ message: "Report not found" });
+      }
+
+      // 3. ACTUATION: Delete record
+      await report.destroy();
+
+      return res.status(204).send();
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
     }
   }
 }

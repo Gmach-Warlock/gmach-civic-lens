@@ -16,6 +16,13 @@ describe("getCommentById route", () => {
   beforeAll(async () => {
     await db.sequelize.sync({ force: false });
 
+    // Clear data safely using Sequelize hooks which handles table names perfectly
+    if (Comment)
+      await Comment.destroy({ truncate: { cascade: true }, force: true });
+    if (Issue)
+      await Issue.destroy({ truncate: { cascade: true }, force: true });
+    if (User) await User.destroy({ truncate: { cascade: true }, force: true });
+
     validTestToken = jwt.sign(
       { id: TEST_USER_ID, email: "testuser@civiclens.com" },
       JWT_SECRET,
