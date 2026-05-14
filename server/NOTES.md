@@ -104,3 +104,60 @@ it("should return 500 if the database crashes", async () => { ... });
 // Rail 4: The Happy Path (Expected: 200/201 Success)
 it("should successfully create the resource and return data", async () => { ... });
 });
+
+## Try catch finally trick questions
+
+function interviewTrap() {
+try {
+return "Team Try";
+} finally {
+return "Team Finally";
+}
+}
+
+console.log(interviewTrap()); // What prints?
+The Answer: It prints "Team Finally".
+
+function standardMistake() {
+try {
+throw new Error("Something went horribly wrong!");
+} finally {
+return "Everything is fine!"; // Swallows the error
+}
+}
+The Answer: This function will not throw an error. It will gracefully return "Everything is fine!". The finally block's control flow statement (return, break, or continue) completely overrides the exception thrown in the try block.
+
+3. Does finally ALWAYS run? (The Ultimate Follow-up)
+   Once you confidently explain that finally always runs, a sharp interviewer will smile and ask: "Are there any situations where finally does not run?"
+
+If you want to blow them away, say "Yes, if the process dies before the block is reached." Here are the specific ways to kill it:
+
+System Exit: If the code explicitly kills the entire application process inside the try or catch block.
+
+Java: System.exit(0);
+
+Node.js: process.exit(0);
+
+Python: os.\_exit(0)
+
+Infinite Loops / Deadlocks: If the try block hits an infinite loop (while(true)) or gets permanently stuck waiting for a thread lock, the code will never physically reach the finally block.
+
+Hardware / Power Failure: If someone pulls the plug on the server or the Operating System crashes (Kernel Panic), the runtime terminates instantly.
+
+Out of Memory (OOM) Crash: If the JVM or V8 engine runs completely out of memory and the OS forcefully terminates the process (SIGKILL).
+
+try block has a returnYesfinally runs before the function actually exits.catch block throws a new errorYesfinally runs before the error bubbles up.finally has a returnYesIt overrides any return or throw from try/catch.System.exit(0) is calledNoThe process dies instantly; nothing else executes.
+
+function ultimateInterviewQuestion() {
+try {
+throw new Error("Try Error");
+} catch (err) {
+throw new Error("Catch Error");
+} finally {
+return "Finally wins everything!";
+}
+}
+
+console.log(ultimateInterviewQuestion());
+// Output: "Finally wins everything!"
+// No errors are thrown, and both exceptions are completely swallowed!

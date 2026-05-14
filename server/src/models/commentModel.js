@@ -20,7 +20,6 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Comment.associate = (models) => {
-    // Crucial: A comment must link to both an Issue and an Author (User)
     Comment.belongsTo(models.Issue, {
       foreignKey: "issue_id",
       onDelete: "CASCADE",

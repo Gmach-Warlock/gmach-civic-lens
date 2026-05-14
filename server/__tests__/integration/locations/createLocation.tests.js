@@ -7,7 +7,6 @@ describe("createLocation Route", () => {
   let adminUser;
   let validAccessToken;
 
-  // Global clean payload to reference/modify per test
   const validLocationPayload = {
     lat: 34.0522,
     lng: -118.2437,
@@ -15,7 +14,6 @@ describe("createLocation Route", () => {
   };
 
   beforeAll(async () => {
-    // Force sync drops tables and recreates them cleanly
     await db.sequelize.sync({ force: true });
 
     adminUser = await db.User.create({
@@ -28,7 +26,6 @@ describe("createLocation Route", () => {
       address: "123 Admin Way",
       city: "Los Angeles",
       zipCode: "90001",
-      // If this is an authorization guard test, ensure this matches your logic requirements
       isAdmin: true,
     });
 
@@ -53,7 +50,6 @@ describe("createLocation Route", () => {
   });
 
   it("should return 400 if the required inputs are missing", async () => {
-    // Empty body payload to trigger required input validation
     const response = await request(app)
       .post("/api/locations/")
       .set("Authorization", `Bearer ${validAccessToken}`)
@@ -126,7 +122,6 @@ describe("createLocation Route", () => {
 
       expect(response.status).toBe(500);
     } finally {
-      // This is now guaranteed to execute even if the assertions above fail!
       dbSpy.mockRestore();
     }
   });
