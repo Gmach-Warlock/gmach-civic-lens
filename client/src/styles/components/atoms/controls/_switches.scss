@@ -1,0 +1,62 @@
+.switch {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  cursor: var(--cursor-action, pointer);
+  width: fit-content;
+
+  &__input {
+    opacity: 0;
+    position: absolute;
+    width: 0;
+    height: 0;
+  }
+
+  // The track (Scaled down from 3.5rem x 2rem)
+  &__track {
+    display: block;
+    width: 2.5rem; // Shrunk down
+    height: 1.4rem; // Shrunk down
+    background-color: var(--switch-bg-off, var(--color-neutral-dark));
+    border-radius: 100px;
+    position: relative;
+    transition: background-color var(--transition-fast, 0.25s ease);
+  }
+
+  // The thumb (Scaled down from 1.6rem x 1.6rem to fit nicely inside)
+  &__thumb {
+    display: block;
+    width: 1.1rem; // Shrunk down
+    height: 1.1rem; // Shrunk down
+    background-color: var(--switch-thumb-color, var(--color-secondary));
+    border-radius: 50%;
+    position: absolute;
+    top: 0.15rem; // Centered vertically within the 1.4rem track
+    left: 0.15rem; // Centered horizontally at start
+    transition: transform var(--transition-fast, 0.25s ease);
+    box-shadow: var(--shadow-low);
+  }
+
+  /* --- Dynamic States --- */
+
+  &__input:checked + &__track {
+    background-color: var(--switch-bg-on, var(--color-safety-orange));
+
+    .switch__thumb {
+      // Calculates the exact remaining space to slide perfectly to the right edge
+      // Track width (2.5) - Thumb width (1.1) - Left offset (0.15) = 1.25rem
+      transform: translateX(1.1rem);
+      background-color: hsl(0, 0%, 100%);
+    }
+  }
+
+  &__input:focus-visible + &__track {
+    outline: 2px solid var(--switch-focus-color, var(--color-civic-blue));
+    outline-offset: 2px;
+  }
+
+  &__input:disabled + &__track {
+    opacity: 0.6;
+    cursor: var(--cursor-disabled, not-allowed);
+  }
+}

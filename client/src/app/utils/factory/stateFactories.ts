@@ -17,6 +17,7 @@ export const createInitialUserState = (): AuthStateInterface => ({
       email: "",
       password: "",
       address: "",
+      city: "",
       zipCode: "",
     },
     meta: {

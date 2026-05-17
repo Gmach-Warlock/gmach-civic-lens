@@ -7,11 +7,80 @@ button {
 }
 
 .btn {
+  /* ==========================================================================
+     1. DEFAULT DESIGN SYSTEM TOKENS (Fallbacks)
+     ========================================================================== */
+  --btn-bg: var(--color-primary);
+  --btn-text: #ffffff;
+  --btn-border: 1px solid hsl(var(--primary-hs), 40%);
+  --btn-hover-bg: var(--color-primary);
+  --btn-hover-text: #ffffff;
+
+  /* ==========================================================================
+     2. STYLE VARIANTS (Set baseline looks for different button roles)
+     ========================================================================== */
+  /*   &--auth {
+    --btn-bg: var(--color-secondary);
+    --btn-text: var(--color-primary);
+    --btn-border: 1px solid transparent;
+  } */
+
+  &--register {
+    --btn-bg: var(--color-secondary);
+    --btn-text: var(--color-primary);
+    padding: 4px 12px;
+    font-weight: 900;
+  }
+
+  &--submit-form {
+    --btn-bg: var(--color-primary);
+    --btn-text: #ffffff;
+  }
+
+  &--success {
+    --btn-bg: var(--color-secondary);
+    --btn-text: var(--color-primary);
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+
+  /* ==========================================================================
+     3. THEME VARIATIONS (Sits BELOW variants so it can modify or adapt them)
+     ========================================================================== */
+  &--dark {
+    /* Baseline dark theme values */
+
+    /* If it's also an auth button in dark mode, change hover states */
+    &.btn--auth:hover {
+      --btn-hover-bg: rgba(255, 255, 255, 0.1);
+      --btn-hover-text: var(--color-accent);
+    }
+  }
+
+  &--light {
+    /* Force light values over variants when active */
+    --btn-bg: #ffffff;
+    --btn-text: var(--color-primary);
+    --btn-border: 1px solid var(--color-grid-line);
+    --btn-hover-bg: var(--color-secondary);
+    --btn-hover-text: var(--color-primary);
+
+    /* If it's an auth button in light mode, override hover specifically */
+    &.btn--auth:hover {
+      --btn-hover-bg: var(--color-primary);
+      --btn-hover-text: #ffffff;
+    }
+  }
+
+  /* ==========================================================================
+     4. CORE RENDER ENGINE
+     ========================================================================== */
   width: max-content;
   margin-inline: auto;
-  background-color: var(--color-primary);
-  color: white;
-  border: 1px solid hsl(var(--primary-hs), 40%);
+  background-color: var(--btn-bg);
+  color: var(--btn-text);
+  border: var(--btn-border);
   font-family: var(--font-button);
   font-size: var(--text-button);
   font-weight: 900;
@@ -24,76 +93,45 @@ button {
   cursor: var(--hover-cursor);
 
   &:hover {
-    background-color: var(--color-primary);
+    background-color: var(--btn-hover-bg);
+    color: var(--btn-hover-text);
     filter: var(--filter-brightness);
     transition: all 0.2s ease-in-out;
-    transform: scale(var(--hover-scale));
-    transform: translate(-1px, -1px);
+    transform: scale(var(--hover-scale)) translate(-1px, -1px);
   }
 
   &:active {
     border: var(--glass-border);
     transform: scale(0.98);
   }
-
-  &--auth {
-    background-color: var(--color-secondary);
-    color: var(--color-primary);
-  }
-
-  &--register {
-    font-weight: 900;
-    background-image: none;
-    background-color: var(--color-secondary);
-    color: var(--color-primary);
-    padding: 4px 12px;
-
-    &:hover {
-      color: var(--color-accent);
-      background-color: rgba(255, 255, 255, 0.1);
-    }
-  }
-
-  &--submit-form {
-    background-color: var(--color-primary);
-    color: white;
-  }
-  &--success {
-    color: var(--color-primary);
-    background-color: var(--color-secondary);
-    padding: 0.5rem 1rem;
-
-    cursor: pointer;
-    font-size: 1rem;
-    font-weight: bold;
-    transition: all 0.3s ease;
-  }
 }
 
+/* ==========================================================================
+   5. CONTEXTUAL LAYOUT UTILITIES
+   ========================================================================== */
 .header__container button {
   font-family: var(--font-coco-raffine);
-
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
-.header__top button {
-  background-color: var(--color-civic-blue);
-  color: var(--color-street);
+/* Updated to use your variable hooks instead of hardcoded colors */
+.header__top .btn {
+  --btn-bg: var(--color-civic-blue);
+  --btn-text: var(--color-street);
+  --btn-border: 1px solid var(--color-grid-line);
   padding: 6px 20px;
-  border: 1px solid var(--color-grid-line);
   box-shadow: 2px 2px 0px var(--color-blueprint-blue);
   font-weight: 600;
-}
 
-.header__top button:hover {
-  background-color: var(--color-secondary);
-  border-color: var(--color-secondary);
-  color: var(--color-primary);
-  box-shadow: 4px 4px 0px var(--color-blueprint-blue);
-}
+  &:hover {
+    --btn-hover-bg: var(--color-secondary);
+    --btn-hover-text: var(--color-primary);
+    box-shadow: 4px 4px 0px var(--color-blueprint-blue);
+  }
 
-.header__top button:active {
-  box-shadow: 0px 0px 0px var(--color-blueprint-blue);
-  transform: translate(1px, 1px);
+  &:active {
+    box-shadow: 0px 0px 0px var(--color-blueprint-blue);
+    transform: translate(1px, 1px);
+  }
 }

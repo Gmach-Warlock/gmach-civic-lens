@@ -1,0 +1,20 @@
+.form__group-row {
+  display: grid;
+  gap: 1.5rem; // Matches your standard padding/margins
+  width: 100%;
+
+  &--cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  &--cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  &--cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  // Clean responsive design: stack on mobile screens automatically
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr !important;
+  }
+}

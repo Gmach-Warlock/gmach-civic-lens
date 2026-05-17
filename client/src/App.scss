@@ -10,16 +10,20 @@
 
 @use "styles/components/atoms/controls/buttons";
 @use "styles/components/atoms/controls/inputs";
+@use "styles/components//atoms/controls/switches";
 @use "styles/components/atoms/elements/headings";
+@use "styles/components/atoms/elements/icons";
 @use "styles/components/atoms/elements/images";
 @use "styles/components/atoms/elements/slogan";
 @use "styles/components/atoms/elements/title";
+@use "styles/components//atoms/layout/form__group";
 @use "styles/components/atoms/objects/cone";
 @use "styles/components/atoms/objects/map";
 @use "styles/components/atoms/objects/sign";
 
 @use "styles/components/molecules/actions/cta";
 @use "styles/components/molecules/actions/forms";
+@use "styles/components/molecules/actions/search_bar";
 @use "styles/components/molecules/cards/cards";
 @use "styles/components/molecules/layout/columns";
 @use "styles/components/molecules/layout/containers";
@@ -39,3 +43,5 @@
 @use "styles/pages/login";
 @use "styles/pages/register";
 @use "styles/pages/report";
+
+@use "styles/themes/themes";

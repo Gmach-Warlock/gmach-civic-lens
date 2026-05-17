@@ -15,8 +15,6 @@ describe("PUT /api/reports/:id (updateReport)", () => {
     await db.sequelize.sync({ force: false });
     adminToken = jwt.sign({ id: ADMIN_ID, role: "admin" }, JWT_SECRET);
 
-    // 2. Clear existing data specifically to avoid Unique Constraints
-    // Use force: true if you have paranoid deletion enabled
     await User.destroy({ where: { id: ADMIN_ID }, force: true }).catch(
       () => null,
     );
@@ -36,13 +34,11 @@ describe("PUT /api/reports/:id (updateReport)", () => {
   });
 
   beforeEach(async () => {
-    // 1. Force a hard delete of the specific mock ID to clear any soft-deleted ghosts
     await Report.destroy({
       where: { id: MOCK_REPORT_ID },
       force: true,
     });
 
-    // 2. Now create the fresh report
     await Report.create({
       id: MOCK_REPORT_ID,
       userId: ADMIN_ID,
@@ -58,7 +54,6 @@ describe("PUT /api/reports/:id (updateReport)", () => {
     await db.sequelize.close();
   });
 
-  // --- SUCCESS CASE ---
   it("should successfully update report fields and return 200", async () => {
     const response = await request(app)
       .put(`/api/reports/${MOCK_REPORT_ID}`)
@@ -74,7 +69,6 @@ describe("PUT /api/reports/:id (updateReport)", () => {
     expect(response.body.severity).toBe("high");
   });
 
-  // --- VALIDATION: UUID FORMAT ---
   it("should return 400 if the report ID is not a valid UUID", async () => {
     const response = await request(app)
       .put("/api/reports/not-a-uuid")
@@ -158,6 +152,6 @@ describe("PUT /api/reports/:id (updateReport)", () => {
     expect(response.status).toBe(500);
     expect(response.body.error).toBe("Database connection lost");
 
-    spy.mockRestore(); // Important: Restore the model to original state
+    spy.mockRestore();
   });
 });

@@ -1,66 +1,43 @@
-import { useNavigate } from "react-router";
-import Button from "../../atoms/controls/Button";
 import {
   useAppDispatch,
   useAppSelector,
 } from "../../../app/hooks/generalHooks";
-import { selectAccessToken } from "../../../features/auth/selectors/authSelectors";
-import { logoutUser } from "../../../features/auth/authSlice";
+import { toggleTheme } from "../../../features/global/globalSlice";
 import SearchBar from "../../molecules/actions/SearchBar";
+import Container from "../layout/Container";
+import Row from "../layout/Row";
+import Switch from "../../atoms/controls/Switch";
+import AuthNav from "../../molecules/actions/AuthNav";
+import Icon from "../../atoms/controls/Icon";
 
 export default function Header() {
-  const navigate = useNavigate();
-  const accessToken = useAppSelector(selectAccessToken);
   const dispatch = useAppDispatch();
+  const currentTheme = useAppSelector((state) => state.global.theme);
 
-  const handleAuthenticate = () => {
-    if (accessToken) {
-      dispatch(logoutUser());
-      navigate("/");
-    } else {
-      navigate("/login");
-    }
-  };
-
-  const handleRegister = () => {
-    navigate("/register");
+  const handleThemeToggle = () => {
+    dispatch(toggleTheme());
   };
 
   return (
-    <header className="header__container">
-      <div className="header__top">
-        <span>GMach</span>
-        <nav>
-          {accessToken ? (
-            <Button
-              name="logout"
-              content="Logout"
-              variant="auth"
-              onClick={handleAuthenticate}
-            />
-          ) : (
-            <Button
-              name="login"
-              content="Login"
-              variant="auth"
-              onClick={handleAuthenticate}
-            />
-          )}
-        </nav>
-      </div>
-
-      <div className="header__bottom">
+    <Container className="header__container" variant="fluid">
+      <Row className={`header__top-${currentTheme}`} variant="between">
         <SearchBar />
-
-        {!accessToken && (
-          <Button
-            name="register"
-            content="Register"
-            variant="auth"
-            onClick={handleRegister}
+        <Row className="header__top-utilities" variant="end">
+          <Icon name="gear" />
+          <Switch
+            checked={currentTheme === "dark"}
+            onChange={handleThemeToggle}
+            label="Toggle Dark/Light Mode"
           />
-        )}
-      </div>
-    </header>
+        </Row>
+      </Row>
+
+      <Row className={`header__bottom-${currentTheme}`} variant="between">
+        <span>GMach</span>
+
+        <AuthNav />
+        <Icon name="bars" />
+      </Row>
+    </Container>
   );
 }

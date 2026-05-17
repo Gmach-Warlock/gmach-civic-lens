@@ -1,0 +1,9 @@
+.theme--light {
+  color: hsl(var(--primary-hs), 90%);
+  background-color: hsl(var(--primary-hs), 10%);
+}
+
+.theme--dark {
+  color: hsl(var(--primary-hs), 10%);
+  background-color: hsl(var(--primary-hs), 90%);
+}
