@@ -3,7 +3,7 @@ import Input from "../../atoms/controls/Input";
 import Button from "../../atoms/controls/Button";
 import type { GenericFormProps } from "../../../app/interfaces/componentInterfaces";
 
-export function GenericForm({
+export function Form({
   fields,
   submitButtonText,
   onSubmit,

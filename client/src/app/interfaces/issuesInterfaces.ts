@@ -1,4 +1,4 @@
-import type { LoadingStateType } from "../types/generalTypes";
+import type { LoadingStateType } from "../types/usersTypes";
 import type {
   CategoryType,
   StatusType,

@@ -1,0 +1,115 @@
+/* ==========================================================================
+   Component: Sidebar & Backdrop Overlay
+   ========================================================================== */
+
+/* 1. Backdrop Overlay */
+.c-sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* Dimmed background */
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px); /* Optional: subtle glass blur */
+  z-index: 999; /* Sits just underneath the sidebar drawer */
+
+  /* Hidden states by default */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* Active state for overlay */
+.c-sidebar-overlay--active {
+  opacity: 1;
+  pointer-events: auto; /* Allows clicking the backdrop to close */
+}
+
+/* 2. Main Sidebar Drawer Panel */
+.c-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px; /* Set a clean mobile-friendly width */
+  height: 100vh;
+  background-color: #1e293b; /* Choose a slate/dark background matching your app */
+  color: #ffffff;
+  z-index: 1000; /* Top-most layer */
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.3);
+
+  display: flex;
+  flex-direction: column;
+
+  /* Slide out of view off-screen left by default */
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Open state for sidebar */
+.c-sidebar--open {
+  transform: translateX(0); /* Slides perfectly into view */
+}
+
+/* 3. Internal Layout Structuring */
+.c-sidebar__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.c-sidebar__brand {
+  font-weight: bold;
+  font-size: 1.25rem;
+}
+
+.c-sidebar__close-btn {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 1.75rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0.25rem;
+}
+
+.c-sidebar__nav {
+  flex: 1; /* Pushes footer to the bottom */
+  padding: 2rem 0;
+}
+
+.c-sidebar__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.c-sidebar__item {
+  margin-bottom: 0.5rem;
+}
+
+.c-sidebar__link {
+  display: block;
+  padding: 0.75rem 1.5rem;
+  color: #cbd5e1;
+  text-decoration: none;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+
+.c-sidebar__link:hover,
+.c-sidebar__link--active {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border-left: 4px solid #3b82f6; /* Clean visual accent bar */
+}
+
+.c-sidebar__footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.85rem;
+  color: #64748b;
+}

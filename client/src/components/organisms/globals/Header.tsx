@@ -1,43 +1,47 @@
-import {
-  useAppDispatch,
-  useAppSelector,
-} from "../../../app/hooks/generalHooks";
-import { toggleTheme } from "../../../features/global/globalSlice";
-import SearchBar from "../../molecules/actions/SearchBar";
+import type { ReactNode } from "react";
 import Container from "../layout/Container";
 import Row from "../layout/Row";
-import Switch from "../../atoms/controls/Switch";
-import AuthNav from "../../molecules/actions/AuthNav";
-import Icon from "../../atoms/controls/Icon";
 
-export default function Header() {
-  const dispatch = useAppDispatch();
-  const currentTheme = useAppSelector((state) => state.global.theme);
+interface HeaderProps {
+  currentTheme: string;
+  topBarLeft?: ReactNode;
+  topBarRight?: ReactNode;
+  bottomBarLeft?: ReactNode;
+  bottomBarCenter?: ReactNode;
+  bottomBarRight?: ReactNode;
+  sidebar?: ReactNode;
+}
 
-  const handleThemeToggle = () => {
-    dispatch(toggleTheme());
-  };
-
+export default function Header({
+  currentTheme,
+  topBarLeft,
+  topBarRight,
+  bottomBarLeft,
+  bottomBarCenter,
+  bottomBarRight,
+  sidebar,
+}: HeaderProps) {
   return (
-    <Container className="header__container" variant="fluid">
-      <Row className={`header__top-${currentTheme}`} variant="between">
-        <SearchBar />
-        <Row className="header__top-utilities" variant="end">
-          <Icon name="gear" />
-          <Switch
-            checked={currentTheme === "dark"}
-            onChange={handleThemeToggle}
-            label="Toggle Dark/Light Mode"
-          />
+    <header>
+      <Container className="header__container" variant="fluid">
+        <Row
+          className={`header__top-${currentTheme} gap-${2}`}
+          variant="between"
+        >
+          {topBarLeft}
+          <Row className="header__top-utilities" variant="end" gap={2}>
+            {topBarRight}
+          </Row>
         </Row>
-      </Row>
 
-      <Row className={`header__bottom-${currentTheme}`} variant="between">
-        <span>GMach</span>
+        <Row className={`header__bottom-${currentTheme}`} variant="between">
+          {bottomBarLeft}
+          {bottomBarCenter}
+          {bottomBarRight}
+        </Row>
 
-        <AuthNav />
-        <Icon name="bars" />
-      </Row>
-    </Container>
+        {sidebar}
+      </Container>
+    </header>
   );
 }

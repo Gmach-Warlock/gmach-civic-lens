@@ -1,0 +1,3 @@
+export type GeneralSizes = "xs" | "sm" | "md" | "lg" | "xl";
+export type NumberSizes = 1 | 2 | 3 | 4 | 5;
+export type LoadingState = "idle" | "loading" | "fulfilled" | "rejected";

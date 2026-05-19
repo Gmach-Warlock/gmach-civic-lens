@@ -13,6 +13,7 @@ import Report from "./pages/Report";
 import "./App.scss";
 import ProtectedRoute from "./components/organisms/layout/ProtectedRoute";
 import PublicRoute from "./components/organisms/layout/PublicRoute";
+import Settings from "./pages/Settings";
 
 function App() {
   const router = createBrowserRouter(
@@ -22,6 +23,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/settings" element={<Settings />} />
         </Route>
 
         <Route element={<ProtectedRoute />}>

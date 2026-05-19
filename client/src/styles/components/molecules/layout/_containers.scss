@@ -4,6 +4,13 @@
   margin-inline: auto;
   padding-inline: var(--space-md);
 }
+
+.container--fluid {
+  max-width: 100%;
+  margin-inline: 0;
+  padding-inline: 0; /* Optional: remove padding if you want top/bottom bars to hit the screen edge */
+}
+
 .container--tight {
   max-width: var(--space-container-tight);
   margin-inline: auto;

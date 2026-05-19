@@ -27,7 +27,7 @@ export default function AuthNav() {
   };
 
   return (
-    <Row variant="end" className="auth-nav">
+    <Row variant="end" className="auth-nav" gap={1}>
       {!accessToken && (
         <Button
           name="register"
