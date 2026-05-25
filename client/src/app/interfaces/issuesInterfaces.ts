@@ -1,4 +1,4 @@
-import type { LoadingStateType } from "../types/usersTypes";
+import type { LoadingState } from "../types/globalTypes";
 import type {
   CategoryType,
   StatusType,
@@ -57,7 +57,7 @@ export interface IssuesStateInterface {
   };
   state: {
     loading: boolean;
-    loadingState: LoadingStateType;
+    loadingState: LoadingState;
     message: string | null;
   };
 }

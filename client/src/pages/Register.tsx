@@ -1,192 +1,131 @@
-import { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../app/hooks/generalHooks";
 import { registerUser } from "../features/auth/thunks/registerUser";
-import type { AuthStateInterface } from "../app/interfaces/authInterfaces";
+import type { UserGeneralInfoInterface } from "../app/interfaces/authInterfaces"; // 👈 Imported your flat interface
+import type { FieldConfig } from "../app/interfaces/componentInterfaces";
 import { useNavigate } from "react-router";
 import {
   selectAccessToken,
   selectUser,
 } from "../features/auth/selectors/authSelectors";
 
-export default function Register() {
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    username: "",
-    email: "",
-    password: "",
-    address: "",
-    city: "",
-    zipCode: "",
-  });
+import { Form } from "../components/molecules/actions/Form";
+import Button from "../components/atoms/controls/Button";
 
+export default function Register() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const user = useAppSelector(selectUser);
+  const accessToken = useAppSelector(selectAccessToken);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const registerFields: FieldConfig[] = [
+    {
+      name: "firstName",
+      label: "First Name",
+      type: "text" as const,
+      placeholder: "Jane",
+      required: true,
+      gridClass: "grid-span-1",
+    },
+    {
+      name: "lastName",
+      label: "Last Name",
+      type: "text" as const,
+      placeholder: "Doe",
+      required: true,
+      gridClass: "grid-span-1",
+    },
+    {
+      name: "username",
+      label: "Username",
+      type: "text" as const,
+      placeholder: "Enter your username",
+      required: true,
+    },
+    {
+      name: "email",
+      label: "Email",
+      type: "email" as const,
+      placeholder: "civic@lens.com",
+      required: true,
+    },
+    {
+      name: "address",
+      label: "Address",
+      type: "text" as const,
+      placeholder: "123 Civic Way",
+      required: true,
+    },
+    {
+      name: "city",
+      label: "City",
+      type: "text" as const,
+      placeholder: "Metropolis",
+      required: true,
+    },
+    {
+      name: "zipCode",
+      label: "Zip Code",
+      type: "number" as const,
+      placeholder: "12345",
+      required: true,
+    },
+    {
+      name: "password",
+      label: "Password",
+      type: "password" as const,
+      placeholder: "••••••••",
+      required: true,
+    },
+  ];
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const newAuthStateObject: AuthStateInterface = {
-      user: {
-        general: {
-          firstName: `${formData.firstName}`.trim(),
-          lastName: `${formData.lastName}`.trim(),
-          username: formData.username,
-          email: formData.email,
-          password: formData.password,
-          address: formData.address,
-          city: formData.city,
-          zipCode: formData.zipCode,
-        },
-        meta: {
-          createdAt: new Date().toISOString(),
-          lastLogin: new Date().toISOString(),
-          isAdmin: false,
-          accessToken: "",
-          refreshToken: "",
-        },
-        comments: [],
-      },
-      activity: { requests: [], comments: [] },
-      loadingState: { state: "idle", message: "" },
+  const handleFormSubmit = async (values: Record<string, string>) => {
+    // 1. Construct the flat payload using your existing interface
+    const registrationPayload: UserGeneralInfoInterface = {
+      firstName: values.firstName.trim(),
+      lastName: values.lastName.trim(),
+      username: values.username,
+      email: values.email,
+      password: values.password,
+      address: values.address,
+      city: values.city,
+      zipCode: values.zipCode,
     };
+
     try {
-      await dispatch(registerUser(newAuthStateObject.user)).unwrap();
-
-      setFormData({
-        firstName: "",
-        lastName: "",
-        username: "",
-        email: "",
-        password: "",
-        address: "",
-        city: "",
-        zipCode: "",
-      });
-
-      console.log("Success! Form cleared.");
+      // 2. Pass the flat data directly to your thunk
+      await dispatch(registerUser(registrationPayload)).unwrap();
+      console.log("Success! Form cleared by engine.");
     } catch (error) {
       console.error("Failed to register:", error);
     }
   };
 
-  const user = useAppSelector(selectUser);
-  const accessToken = useAppSelector(selectAccessToken);
-
   return (
     <div className="register__page">
-      <div className="card--form ">
+      <div className="card--form">
         <h2 className="register__title">
           {accessToken
             ? `Welcome, ${user.general.firstName}!`
             : "Create Account"}
         </h2>
-        <form onSubmit={handleSubmit} className={`register__form `}>
-          <div className="form__row">
-            <div className="form__group">
-              <label htmlFor="firstName">First Name</label>
-              <input
-                type="text"
-                id="firstName"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                placeholder="Jane"
-                required
-              />
-            </div>
-            <div className="form__group">
-              <label htmlFor="lastName">Last Name</label>
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                placeholder="Doe"
-                required
-              />
-            </div>
-          </div>
 
-          <div className="form__group">
-            <label htmlFor="username">Username</label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              placeholder="Enter your username"
-              required
-            />
-          </div>
-
-          <div className="form__group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="civic@lens.com"
-              required
-            />
-          </div>
-
-          <div className="form__group">
-            <label htmlFor="address">Address</label>
-            <input
-              type="text"
-              id="address"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              placeholder="123 Civic Way"
-              required
-            />
-          </div>
-          <div className="form__group">
-            <label htmlFor="zipCode">Zip Code</label>
-            <input
-              type="number"
-              id="zipCode"
-              name="zipCode"
-              value={formData.zipCode}
-              onChange={handleChange}
-              placeholder="123 Civic Way"
-              required
-            />
-          </div>
-          <div className="form__group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="••••••••"
-              required
-            />
-          </div>
-
-          <button type="submit" className="register__button">
-            Register
-          </button>
-        </form>
-        {accessToken && (
+        {!accessToken ? (
+          <Form
+            fields={registerFields}
+            submitButtonText="Register"
+            onSubmit={handleFormSubmit}
+            className="register__form"
+          />
+        ) : (
           <div className="success-overlay">
             <p>Your account is ready.</p>
-            <button type="button" onClick={() => navigate("/dashboard")}>
-              Go to Dashboard
-            </button>
+            <Button
+              type="button"
+              name="goto-dashboard"
+              content="Go to Dashboard"
+              variant="success"
+              onClick={() => navigate("/dashboard")}
+            />
           </div>
         )}
       </div>

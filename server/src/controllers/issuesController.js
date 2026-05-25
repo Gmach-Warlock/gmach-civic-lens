@@ -29,20 +29,18 @@ const issueAssociations = [
 class IssuesController {
   static async getAllIssues(req, res) {
     try {
+      console.log("Hitting getAll", req.body);
       const issues = await Issue.findAll({
         include: [
-          // 1. Include the associated Location
           {
             model: Location,
-            as: "location", // Must match the "as" alias in your model association
+            as: "location",
           },
-          // 2. Include the Author of the Issue (User)
           {
             model: User,
             as: "author",
-            attributes: ["id", "username", "firstName", "lastName"], // Only select public info
+            attributes: ["id", "username", "firstName", "lastName"],
           },
-          // 3. Include the Comments, and nested inside each comment, include its author!
           {
             model: Comment,
             as: "comments",
@@ -58,7 +56,6 @@ class IssuesController {
         order: [["createdAt", "DESC"]],
       });
 
-      // Send it to your beautiful formatter!
       const formattedData = formatIssuesResponse(issues);
 
       res.status(200).json(formattedData);
@@ -97,7 +94,6 @@ class IssuesController {
 
       console.log("Received issue data: ", req.body);
 
-      // 1. Create the base issue
       const issue = await Issue.create({
         title: title.trim(),
         description: description.trim(),
@@ -105,22 +101,18 @@ class IssuesController {
         author_id: req.user?.id || null, // Matches the foreignKey 'author_id' in your model
       });
 
-      // 2. If coordinates are provided, create the associated Location!
-      // Using 'lat' and 'lng' to match your database validation rules
       if (lat !== undefined && lng !== undefined) {
         await Location.create({
           lat,
           lng,
-          issue_id: issue.id, // Links it back to the newly created issue
+          issue_id: issue.id,
         });
       }
 
-      // 3. Reload with associations
       await issue.reload({
         include: issueAssociations,
       });
 
-      // 4. Format and return
       const formatted = formatIssuesResponse(issue);
 
       res.status(201).json({

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "../app/hooks/generalHooks";
 import {
@@ -6,27 +5,49 @@ import {
   selectUser,
 } from "../features/auth/selectors/authSelectors";
 import { loginUser } from "../features/auth/thunks/loginUser";
+import type { FieldConfig } from "../app/interfaces/componentInterfaces";
+
+import { Form } from "../components/molecules/actions/Form";
 import Button from "../components/atoms/controls/Button";
 
 export default function Login() {
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  });
-
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  const user = useAppSelector(selectUser);
+  const accessToken = useAppSelector(selectAccessToken);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // 1. Define fields expecting email instead of username
+  const loginFields: FieldConfig[] = [
+    {
+      name: "email",
+      label: "Email",
+      type: "email" as const,
+      placeholder: "john.doe@example.com",
+      required: true,
+    },
+    {
+      name: "password",
+      label: "Password",
+      type: "password" as const,
+      placeholder: "••••••••",
+      required: true,
+    },
+  ];
+
+  // 2. Extract values from the reusable Form engine
+  const handleFormSubmit = async (values: Record<string, string>) => {
+    const loginPayload = {
+      email: values.email.trim(),
+      password: values.password,
+    };
+
     try {
-      const result = await dispatch(loginUser(formData)).unwrap();
-      console.log(result);
+      const result = await dispatch(loginUser(loginPayload)).unwrap();
+      console.log("Login successful:", result);
+
+      // Note: If loginUser updates your Redux state and triggers selectAccessToken,
+      // you might not even need the manual localStorage step here anymore.
       if (result.token) {
         localStorage.setItem("token", result.token);
         navigate("/dashboard");
@@ -36,46 +57,32 @@ export default function Login() {
     }
   };
 
-  const user = useAppSelector(selectUser);
-  const accessToken = useAppSelector(selectAccessToken);
-  const formClassName = `login__form ${accessToken ? "login__form--success" : ""}`;
   return (
     <div className="login page">
       <div className="page__card">
         <h2 className="page__title">
-          {accessToken ? `Welcome, ${user.general.firstName}!` : "Login "}
+          {accessToken ? `Welcome back, ${user.general.firstName}!` : "Login"}
         </h2>
-        <form onSubmit={handleSubmit} className={formClassName}>
-          <div className="form__row"></div>
 
-          <div className="form__group">
-            <label htmlFor="username">Username</label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              placeholder="Enter your username"
-              required
+        {!accessToken ? (
+          <Form
+            fields={loginFields}
+            submitButtonText="Login"
+            onSubmit={handleFormSubmit}
+            className="login__form"
+          />
+        ) : (
+          <div className="success-overlay">
+            <p>You are logged in.</p>
+            <Button
+              type="button"
+              name="goto-dashboard"
+              content="Go to Dashboard"
+              variant="success"
+              onClick={() => navigate("/dashboard")}
             />
           </div>
-
-          <div className="form__group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="••••••••"
-              required
-            />
-          </div>
-
-          <Button name="login__submit" content="Login" />
-        </form>
+        )}
       </div>
     </div>
   );

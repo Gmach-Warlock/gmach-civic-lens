@@ -4,12 +4,12 @@ import type { FormType, InputType } from "../types/componentTypes";
 export interface FieldConfig {
   name: string;
   label: string;
-  // Keep "textarea" here so your container configuration files can use it
   type?: "text" | "email" | "password" | "number" | "select" | "textarea";
   placeholder?: string;
   required?: boolean;
   options?: { value: string; label: string }[];
   gridClass?: string;
+  validate?: (value: string) => string;
 }
 
 export interface FormProps extends ComponentPropsWithoutRef<"form"> {

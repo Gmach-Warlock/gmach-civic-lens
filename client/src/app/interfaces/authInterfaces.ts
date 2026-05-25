@@ -1,4 +1,44 @@
-import type { LoadingStateType } from "../types/usersTypes";
+import type { LoadingState } from "../types/globalTypes";
+
+export interface AuthResponseInterface {
+  message: string;
+  accessToken: string;
+  refreshToken: string;
+  user: UserInterface;
+  activity: UserActivityInterface;
+}
+
+export interface AuthStateInterface {
+  user: UserInterface;
+  activity: UserActivityInterface;
+  loadingState: BaseFetchStatusInterface;
+}
+
+export interface LoginFetchStateInterface {
+  email: string;
+  password: string;
+}
+export interface BaseFetchStatusInterface {
+  state: LoadingState;
+  message: string;
+}
+export interface FetchUsersInterface extends BaseFetchStatusInterface {
+  users: {
+    registrationSuccess: boolean;
+    lastFetchedUser?: string;
+  };
+}
+
+export interface FetchIssueInterface extends BaseFetchStatusInterface {
+  issues: {
+    isUploadingImage: boolean;
+    totalResultsFound: number;
+  };
+}
+
+export interface FetchResourceInterface<T> extends BaseFetchStatusInterface {
+  data: T | null;
+}
 
 export interface UserActivityInterface {
   requests: UserRequestInterface[];
@@ -43,33 +83,4 @@ export interface UserInterface {
   general: UserGeneralInfoInterface;
   meta: UserMetaInfoInterface;
   comments: UserCommentInterface[];
-}
-export interface AuthStateInterface {
-  user: UserInterface;
-  activity: UserActivityInterface;
-  loadingState: BaseFetchStatusInterface;
-}
-
-export interface LoginFetchStateInterface {
-  username: string;
-  password: string;
-}
-export interface BaseFetchStatusInterface {
-  state: LoadingStateType;
-  message: string;
-}
-export interface FetchUsersInterface extends BaseFetchStatusInterface {
-  users: {
-    registrationSuccess: boolean;
-    lastFetchedUser?: string;
-  };
-}
-export interface FetchIssueInterface extends BaseFetchStatusInterface {
-  issues: {
-    isUploadingImage: boolean;
-    totalResultsFound: number;
-  };
-}
-export interface FetchResourceInterface<T> extends BaseFetchStatusInterface {
-  data: T | null;
 }

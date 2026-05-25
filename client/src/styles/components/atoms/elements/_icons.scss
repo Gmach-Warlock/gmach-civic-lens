@@ -1,10 +1,18 @@
-.fa-solid {
+.icon--dark {
   color: white;
 }
 
 .icon {
   display: inline-block;
   line-height: 1;
+
+  &--dark {
+    color: white;
+  }
+
+  &--light {
+    color: var(--color-secondary);
+  }
 
   &--xs {
     font-size: 0.75rem;

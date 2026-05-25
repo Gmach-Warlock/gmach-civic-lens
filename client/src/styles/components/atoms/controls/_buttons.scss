@@ -52,7 +52,7 @@ button {
       --btn-hover-text: #ffffff;
     }
   }
-
+  text-transform: uppercase;
   width: max-content;
   margin-inline: auto;
   background-color: var(--btn-bg);
@@ -85,6 +85,5 @@ button {
 
 .header__container button {
   font-family: var(--font-coco-raffine);
-  text-transform: uppercase;
   letter-spacing: 0.05em;
 }

@@ -5,7 +5,8 @@ export type ButtonVariant =
   | "secondary"
   | "auth"
   | "danger"
-  | "ghost";
+  | "ghost"
+  | "success";
 export type ColumnType =
   | "around"
   | "between"
@@ -17,7 +18,15 @@ export type FormType = "auth" | "issue" | "comment";
 
 export type IconVariant = "solid" | "regular" | "brand" | "light" | "thin";
 export type IconSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl";
-export type InputType = "text" | "number" | "email" | "password" | "radio";
+// app/types/componentTypes.ts
+export type InputType =
+  | "text"
+  | "number"
+  | "email"
+  | "password"
+  | "radio"
+  | "select"
+  | "textarea";
 export type RowType =
   | "around"
   | "between"

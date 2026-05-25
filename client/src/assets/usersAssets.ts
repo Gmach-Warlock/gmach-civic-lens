@@ -1,7 +1,7 @@
 import type {
   BaseFetchStatusInterface,
   FetchIssueInterface,
-} from "../../app/interfaces/authInterfaces";
+} from "../app/interfaces/authInterfaces";
 
 // ✅ Correct: The variable is a function that RETURNS a BaseFetchStatus
 const createInitialLoadingState = (): BaseFetchStatusInterface => ({
