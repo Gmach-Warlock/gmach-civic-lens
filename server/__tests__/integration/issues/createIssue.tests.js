@@ -14,7 +14,7 @@ describe("Issue Model TDD = Database Integration", () => {
   beforeAll(async () => {
     await db.sequelize.sync({ force: true });
 
-    // 2. Wipe tables completely using Sequelize models to clear old test artifacts
+    // Wipe tables completely using Sequelize models to clear old test artifacts
     if (Comment)
       await Comment.destroy({ truncate: { cascade: true }, force: true }).catch(
         () => null,
@@ -27,6 +27,7 @@ describe("Issue Model TDD = Database Integration", () => {
       await User.destroy({ truncate: { cascade: true }, force: true }).catch(
         () => null,
       );
+
     // Generate valid JWT token using the exact user ID
     validTestToken = jwt.sign(
       { id: TEST_USER_ID, email: "testuser@civiclens.com" },
@@ -85,7 +86,49 @@ describe("Issue Model TDD = Database Integration", () => {
     );
   });
 
-  it("should create a new issue in the database", async () => {
+  // --- NEW TDD INTERSECTION TESTS ---
+
+  it("should return 400 if both GPS coordinates and cross streets are missing", async () => {
+    const response = await request(app)
+      .post("/api/issues")
+      .set("Authorization", `Bearer ${validTestToken}`)
+      .send({
+        title: "Missing Location Entirely",
+        description:
+          "Pothole somewhere in the city but no location details given.",
+        category: "Roads",
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body.message).toBe(
+      "Please provide either GPS coordinates or valid cross streets/intersection.",
+    );
+  });
+
+  it("should create a new issue successfully with ONLY cross streets", async () => {
+    const response = await request(app)
+      .post("/api/issues")
+      .set("Authorization", `Bearer ${validTestToken}`)
+      .send({
+        title: "Main Street Pothole",
+        description: "Massive crater in the middle of the intersection.",
+        category: "Roads",
+        crossStreets: "Corner of 5th Ave and Elm St",
+      });
+
+    expect(response.status).toBe(201);
+    expect(response.body).toHaveProperty("issues");
+
+    // Validate formatting structure maps back properly
+    const createdIssue = response.body.issues[0];
+    expect(createdIssue.location.crossStreets).toBe(
+      "Corner of 5th Ave and Elm St",
+    );
+    expect(createdIssue.location.coords.lat).isNull();
+    expect(createdIssue.location.coords.lng).isNull();
+  });
+
+  it("should create a new issue successfully with ONLY GPS coordinates", async () => {
     const response = await request(app)
       .post("/api/issues")
       .set("Authorization", `Bearer ${validTestToken}`)
@@ -99,5 +142,10 @@ describe("Issue Model TDD = Database Integration", () => {
 
     expect(response.status).toBe(201);
     expect(response.body).toHaveProperty("issues");
+
+    const createdIssue = response.body.issues[0];
+    expect(createdIssue.location.coords.lat).toBe(34.0522);
+    expect(createdIssue.location.coords.lng).toBe(-8.2437);
+    expect(createdIssue.location.crossStreets).isNull();
   });
 });

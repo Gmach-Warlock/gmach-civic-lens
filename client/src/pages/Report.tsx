@@ -18,8 +18,12 @@ function Report() {
           label="Please give a brief description of the problem."
         />
         <Input
-          name="location_name"
-          label="Please give use the location of the Issue"
+          name="city-name"
+          label="Please provide us with the city of the Issue"
+        />
+        <Input
+          name="cross-streets"
+          label="Please give us with the cross streets"
         />
         <Button
           name="issue-submit"

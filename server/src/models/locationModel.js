@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       lat: {
         type: DataTypes.DECIMAL(11, 8),
-        allowNull: false,
+        allowNull: true,
         validate: {
           min: -90,
           max: 90,
@@ -20,11 +20,16 @@ module.exports = (sequelize, DataTypes) => {
       },
       lng: {
         type: DataTypes.DECIMAL(11, 8),
-        allowNull: false,
+        allowNull: true,
         validate: {
           min: -180,
           max: 180,
         },
+      },
+      crossStreets: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        field: "cross_streets", // ensures underscored DB column mapping
       },
       locationName: {
         type: DataTypes.STRING,
@@ -35,6 +40,19 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "locations",
       timestamps: true,
       underscored: true,
+      validate: {
+        hasValidLocationData() {
+          const hasCoords = this.lat !== null && this.lng !== null;
+          const hasCrossStreets =
+            this.crossStreets && this.crossStreets.trim().length > 0;
+
+          if (!hasCoords && !hasCrossStreets) {
+            throw new Error(
+              "Either GPS coordinates or cross streets must be provided.",
+            );
+          }
+        },
+      },
     },
   );
   Location.associate = (models) => {

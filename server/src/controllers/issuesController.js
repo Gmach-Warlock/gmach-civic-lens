@@ -65,9 +65,9 @@ class IssuesController {
   }
   static async createIssue(req, res) {
     try {
-      const { title, description, category, lat, lng } = req.body;
+      const { title, description, category, lat, lng, crossStreets } = req.body;
 
-      // --- GUARD LAYER 1: Existence (Matches the exact test message!) ---
+      // --- GUARD LAYER 1: Existence ---
       if (!title || !description || !category) {
         return res.status(400).json({
           message: "All fields (title, description, category) are required.",
@@ -85,6 +85,13 @@ class IssuesController {
         });
       }
 
+      // If crossStreets is provided, verify it's a string
+      if (crossStreets !== undefined && typeof crossStreets !== "string") {
+        return res.status(400).json({
+          message: "Cross streets input must be a plain text string.",
+        });
+      }
+
       // --- GUARD LAYER 3: Formats & Length ---
       if (title.trim().length < 5) {
         return res.status(400).json({
@@ -92,19 +99,34 @@ class IssuesController {
         });
       }
 
+      // Verify that we have at least one valid way to locate this issue
+      const hasCoords =
+        lat !== undefined && lng !== undefined && lat !== null && lng !== null;
+      const hasCrossStreets = crossStreets && crossStreets.trim().length > 0;
+
+      if (!hasCoords && !hasCrossStreets) {
+        return res.status(400).json({
+          message:
+            "Please provide either GPS coordinates or valid cross streets/intersection.",
+        });
+      }
+
       console.log("Received issue data: ", req.body);
 
+      // Create core issue record
       const issue = await Issue.create({
         title: title.trim(),
         description: description.trim(),
         category: category.trim(),
-        author_id: req.user?.id || null, // Matches the foreignKey 'author_id' in your model
+        author_id: req.user?.id || null,
       });
 
-      if (lat !== undefined && lng !== undefined) {
+      // ALWAYS create a location row if we have either piece of geo-data
+      if (hasCoords || hasCrossStreets) {
         await Location.create({
-          lat,
-          lng,
+          lat: hasCoords ? lat : null,
+          lng: hasCoords ? lng : null,
+          crossStreets: hasCrossStreets ? crossStreets.trim() : null,
           issue_id: issue.id,
         });
       }

@@ -22,6 +22,7 @@ export interface IssueInterface {
     address?: string;
     city: string;
     zipCode: string;
+    crossStreets: string;
     coords?: { lat: number; lng: number };
   };
   status: {

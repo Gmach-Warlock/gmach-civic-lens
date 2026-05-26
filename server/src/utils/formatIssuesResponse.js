@@ -42,6 +42,7 @@ const formatIssuesResponse = (issues) => {
           address: issue.address || null,
           city: issue.city || null,
           zipCode: issue.zipCode || null,
+          crossStreets: locationData.crossStreets || null, // New clean property for frontend consumption
           coords: {
             lat: locationData.lat ? parseFloat(locationData.lat) : null,
             lng: locationData.lng ? parseFloat(locationData.lng) : null,
