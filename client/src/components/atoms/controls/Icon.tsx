@@ -31,7 +31,8 @@ function Icon({ name, variant, size, className = "", ...props }: IconProps) {
 
   return (
     <span
-      className={`icon-wrapper icon--${theme} ${sizeClass} ${className}`.trim()}
+      /* Simply space-separate the explicit incoming className variable */
+      className={`icon icon--${theme} ${sizeClass} ${className}`.trim()}
       {...props}
     >
       <i className={`${variantClass} ${nameClass}`.trim()} aria-hidden="true" />

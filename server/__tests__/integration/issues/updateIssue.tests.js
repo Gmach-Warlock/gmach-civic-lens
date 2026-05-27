@@ -98,11 +98,11 @@ describe("PUT /api/issues/:id (updateIssue)", () => {
     expect(response.body.message).toBe("Issue not found");
   });
 
-  it("should successfully update fields and return 200 with the updated entity", async () => {
+  it("should successfully update fields and return 200 with the formatted nested entity", async () => {
     const updatedPayload = {
       title: "Completely New Title",
       description: "Updated description about the road quality.",
-      status: "resolved",
+      status: "resolved", // This maps to your frontend format
     };
 
     const response = await request(app)
@@ -111,11 +111,14 @@ describe("PUT /api/issues/:id (updateIssue)", () => {
       .send(updatedPayload);
 
     expect(response.status).toBe(200);
-    expect(response.body.title).toBe(updatedPayload.title);
-    expect(response.body.description).toBe(updatedPayload.description);
-    expect(response.body.status).toBe(updatedPayload.status);
+    expect(response.body).toHaveProperty("issues");
 
-    // Confirm changes persisted in the database sandbox
+    const updatedIssue = response.body.issues[0];
+    // Assert on our new formatted structure rules
+    expect(updatedIssue.general.title).toBe(updatedPayload.title);
+    expect(updatedIssue.general.description).toBe(updatedPayload.description);
+
+    // Confirm changes permanently persisted in the underlying database
     const updatedRecord = await Issue.findByPk(MOCK_ISSUE_ID);
     expect(updatedRecord.title).toBe(updatedPayload.title);
   });

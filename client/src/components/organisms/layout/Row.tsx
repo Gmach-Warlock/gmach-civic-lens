@@ -15,9 +15,10 @@ function Row({
   gap,
   ...rest
 }: RowProps) {
+  const gapClass = gap !== undefined ? `gap-${gap}` : "gap-none";
   return (
     <div
-      className={`row row--${variant} my-auto gap-${gap} ${className}`.trim()}
+      className={`row row--${variant} my-auto ${gapClass} ${className}`.trim()}
       {...rest}
     >
       {children}

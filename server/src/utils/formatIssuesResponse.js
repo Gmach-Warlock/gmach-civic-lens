@@ -39,10 +39,10 @@ const formatIssuesResponse = (issues) => {
           category: issue.category,
         },
         location: {
-          address: issue.address || null,
-          city: issue.city || null,
-          zipCode: issue.zipCode || null,
-          crossStreets: locationData.crossStreets || null, // New clean property for frontend consumption
+          address: locationData.address || null, // Switched to locationData if needed later
+          city: locationData.city || null, //  Fixed! Pulls from eagerly loaded location table
+          zipCode: locationData.zipCode || null, //  Fixed! Pulls from eagerly loaded location table
+          crossStreets: locationData.crossStreets || null,
           coords: {
             lat: locationData.lat ? parseFloat(locationData.lat) : null,
             lng: locationData.lng ? parseFloat(locationData.lng) : null,

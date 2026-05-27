@@ -124,8 +124,8 @@ describe("Issue Model TDD = Database Integration", () => {
     expect(createdIssue.location.crossStreets).toBe(
       "Corner of 5th Ave and Elm St",
     );
-    expect(createdIssue.location.coords.lat).isNull();
-    expect(createdIssue.location.coords.lng).isNull();
+    expect(createdIssue.location.coords.lat).toBeNull();
+    expect(createdIssue.location.coords.lng).toBeNull();
   });
 
   it("should create a new issue successfully with ONLY GPS coordinates", async () => {
@@ -146,6 +146,6 @@ describe("Issue Model TDD = Database Integration", () => {
     const createdIssue = response.body.issues[0];
     expect(createdIssue.location.coords.lat).toBe(34.0522);
     expect(createdIssue.location.coords.lng).toBe(-8.2437);
-    expect(createdIssue.location.crossStreets).isNull();
+    expect(createdIssue.location.crossStreets).toBeNull();
   });
 });

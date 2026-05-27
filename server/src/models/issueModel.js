@@ -1,5 +1,4 @@
-const { DataTypes, Model } = require("sequelize");
-const db = require("../config/database");
+const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
   class Issue extends Model {
@@ -41,11 +40,19 @@ module.exports = (sequelize, DataTypes) => {
       },
       urgency: {
         type: DataTypes.STRING,
-        defaultValue: "medium", // Matches your front-end UrgencyType
+        defaultValue: "medium",
       },
       upvotes: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
+      },
+      // Explicitly define foreign key parameter for validation layers
+      author_id: {
+        type: DataTypes.UUID,
+        allowNull: false, // Enforces database level constraint
+        validate: {
+          notNull: { msg: "An issue must belong to an authenticated author." },
+        },
       },
     },
     {
@@ -58,13 +65,16 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Issue.associate = (models) => {
-    // 1. Every issue is posted by a User
-    Issue.belongsTo(models.User, { foreignKey: "author_id", as: "author" });
+    // Every issue MUST be posted by a User
+    Issue.belongsTo(models.User, {
+      foreignKey: {
+        name: "author_id",
+        allowNull: false,
+      },
+      as: "author",
+    });
 
-    // 2. An issue has one specific physical location
     Issue.hasOne(models.Location, { foreignKey: "issue_id", as: "location" });
-
-    // 3. An issue can have many comments
     Issue.hasMany(models.Comment, { foreignKey: "issue_id", as: "comments" });
   };
 

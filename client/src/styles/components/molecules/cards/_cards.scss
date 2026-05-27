@@ -1,16 +1,20 @@
-.card {
+.card,
+[class^="card--"],
+[class*=" card--"] {
   padding-inline: var(--space-xs);
   border-radius: var(--rounded-md);
-  border: var(--glass-border);
   min-height: 4rem;
   box-shadow: var(--shadow-lg-narrow)
     hsla(var(--type-accent), var(--lightness-shadow), var(--glass-opacity-mid));
+}
 
-  &--glass {
+.card {
+  &--glass-dark,
+  &--glass-theme-light {
     filter: drop-shadow(
       var(--shadow-xl-narrow)
         hsla(
-          var(--type-accent),
+          var(--accent-hs),
           var(--lightness-shadow),
           var(--glass-opacity-clip)
         )
@@ -18,7 +22,26 @@
     -webkit-backdrop-filter: blur(var(--glass-blur));
     backdrop-filter: blur(var(--glass-blur));
     background-color: hsla(
-      var(--type-accent),
+      var(--secondary-hs),
+      var(--glass-lightness),
+      var(--glass-opacity-mid)
+    );
+  }
+
+  &--glass-light,
+  &--glass-theme-dark {
+    filter: drop-shadow(
+      var(--shadow-xl-narrow)
+        hsla(
+          var(--accent-hs),
+          var(--lightness-shadow),
+          var(--glass-opacity-clip)
+        )
+    );
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    backdrop-filter: blur(var(--glass-blur));
+    background-color: hsla(
+      var(--background-hs),
       var(--glass-lightness),
       var(--glass-opacity-mid)
     );

@@ -21,7 +21,6 @@ describe("createComment route", () => {
   beforeAll(async () => {
     await db.sequelize.sync({ force: false });
 
-    // Clear data safely using Sequelize hooks which handles table names perfectly
     if (Comment)
       await Comment.destroy({ truncate: { cascade: true }, force: true });
     if (Issue)
@@ -38,7 +37,6 @@ describe("createComment route", () => {
       JWT_SECRET,
     );
 
-    // Seed the user
     if (User) {
       const [userInstance] = await User.findOrCreate({
         where: { id: TEST_USER_ID },
@@ -54,7 +52,6 @@ describe("createComment route", () => {
       tempUser = userInstance;
     }
 
-    // 2. Seed the parent Issue to satisfy the foreign key constraint
     if (Issue) {
       const [issueInstance] = await Issue.findOrCreate({
         where: { id: MOCK_ISSUE_ID },
@@ -63,7 +60,7 @@ describe("createComment route", () => {
           description: "Pothole on Main St.",
           status: "open",
           category: "Infrastructure",
-          // Add any other required fields your Issue model demands here
+          author_id: TEST_USER_ID, // --- FIXED: Constraint satisfied ---
         },
       });
       tempIssue = issueInstance;
@@ -71,7 +68,6 @@ describe("createComment route", () => {
   });
 
   afterAll(async () => {
-    // 3. Clean up the seeded records in reverse order
     if (tempIssue && Issue) {
       await Issue.destroy({ where: { id: MOCK_ISSUE_ID } }).catch(() => null);
     }
@@ -94,7 +90,7 @@ describe("createComment route", () => {
     const response = await request(app)
       .post("/api/comments/")
       .set("Authorization", `Bearer ${validTestToken}`)
-      .send({}); // Empty payload
+      .send({});
 
     expect(response.status).toBe(400);
     expect(response.body.message).toBe(

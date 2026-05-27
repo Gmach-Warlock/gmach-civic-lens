@@ -16,7 +16,6 @@ describe("getCommentById route", () => {
   beforeAll(async () => {
     await db.sequelize.sync({ force: false });
 
-    // Clear data safely using Sequelize hooks which handles table names perfectly
     if (Comment)
       await Comment.destroy({ truncate: { cascade: true }, force: true });
     if (Issue)
@@ -52,6 +51,7 @@ describe("getCommentById route", () => {
           description: "Pothole on Main St.",
           status: "open",
           category: "Infrastructure",
+          author_id: TEST_USER_ID, // --- FIXED: Constraint satisfied ---
         },
       });
     }
@@ -90,7 +90,7 @@ describe("getCommentById route", () => {
   });
 
   it("should return 404 if the comment does not exist", async () => {
-    const fakeUuid = crypto.randomUUID(); // Valid format, but doesn't exist in DB
+    const fakeUuid = crypto.randomUUID();
     const response = await request(app)
       .get(`/api/comments/${fakeUuid}`)
       .set("Authorization", `Bearer ${validTestToken}`);

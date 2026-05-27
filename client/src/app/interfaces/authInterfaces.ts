@@ -57,6 +57,7 @@ export interface UserGeneralInfoInterface {
 }
 
 export interface UserMetaInfoInterface {
+  id: string;
   createdAt: string;
   lastLogin: string;
   isAdmin: boolean;

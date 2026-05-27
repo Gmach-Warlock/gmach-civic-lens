@@ -5,6 +5,29 @@ import type {
   UrgencyType,
 } from "../types/issuesTypes";
 
+export interface CommentInterface {
+  id: string;
+  content: string;
+  createdAt: string;
+  author: {
+    id: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+  } | null;
+}
+
+export interface CreateIssueRequestInterface {
+  title: string;
+  description: string;
+  category: CategoryType;
+
+  // Optional geolocation tracking properties
+  lat?: number | null;
+  lng?: number | null;
+  crossStreets?: string | null;
+}
+
 export interface IssueInterface {
   meta: {
     id: string;
@@ -22,7 +45,7 @@ export interface IssueInterface {
     address?: string;
     city: string;
     zipCode: string;
-    crossStreets: string;
+    crossStreets?: string;
     coords?: { lat: number; lng: number };
   };
   status: {
@@ -34,13 +57,7 @@ export interface IssueInterface {
   social: {
     upvotes: number;
     tags: string[];
-    comments: {
-      id: string;
-      authorId: string;
-      authorName: string;
-      content: string;
-      createdAt: string;
-    }[];
+    comments: CommentInterface[];
   };
 }
 

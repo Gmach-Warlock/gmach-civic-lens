@@ -122,7 +122,7 @@ describe("GET issue by ID", () => {
   });
 
   // --- RAIL 4: Success Case (200) ---
-  it("should have an issue key", async () => {
+  it("should have an issues key containing the formatted issue array", async () => {
     expect(tempIssue).toBeDefined();
 
     const response = await request(app)
@@ -130,7 +130,9 @@ describe("GET issue by ID", () => {
       .set("Authorization", `Bearer ${validTestToken}`);
 
     expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty("issue");
+    expect(response.body).toHaveProperty("issues");
+    expect(Array.isArray(response.body.issues)).toBe(true);
+    expect(response.body.issues[0].meta.id).toBe(tempIssue.id);
   });
 });
 

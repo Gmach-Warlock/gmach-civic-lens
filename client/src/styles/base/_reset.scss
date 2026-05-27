@@ -11,6 +11,11 @@ body {
   color: white;
 }
 
+span,
+p {
+  font-family: var(--font-second);
+}
+
 html {
   scroll-behavior: smooth;
 }

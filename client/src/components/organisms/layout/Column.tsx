@@ -15,9 +15,10 @@ function Column({
   gap,
   ...rest
 }: ColumnProps) {
+  const gapClass = gap !== undefined ? `gap-${gap}` : "gap-none";
   return (
     <div
-      className={`column column--${variant} mx-auto gap-${gap} ${className}`.trim()}
+      className={`column column--${variant} ${gapClass} ${className}`.trim()}
       {...rest}
     >
       {children}

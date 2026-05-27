@@ -16,6 +16,7 @@ $gap-scale: (
 
 $grid-spans: (
   "full": 12,
+  "9": 9,
   "6": 6,
   "4": 4,
   "3": 3,
@@ -98,24 +99,114 @@ $stacks: (
   }
 }
 
+// ==========================================================================
 // 6. Display & Flex Layout Utilities
+// ==========================================================================
+
+// Display Triggers
 .flex {
   display: flex;
 }
+.inline-flex {
+  display: inline-flex;
+}
+
+// Flex Directions
+.flex-row {
+  flex-direction: row;
+}
+.flex-col {
+  flex-direction: column;
+}
+.flex-row-reverse {
+  flex-direction: row-reverse;
+}
+.flex-col-reverse {
+  flex-direction: column-reverse;
+}
+
+// Flex Wrap
+.flex-wrap {
+  flex-wrap: wrap;
+}
+.flex-nowrap {
+  flex-wrap: nowrap;
+}
+
+// Flex Sizing Behaviors
 .flex-1 {
-  flex: 1;
+  flex: 1 1 0%;
+}
+.flex-auto {
+  flex: 1 1 auto;
+}
+.flex-initial {
+  flex: 0 1 auto;
+}
+.flex-none {
+  flex: none;
+}
+.grow {
+  flex-grow: 1;
+}
+.grow-0 {
+  flex-grow: 0;
+}
+.shrink {
+  flex-shrink: 1;
 }
 .shrink-0 {
   flex-shrink: 0;
 }
-.self-start {
-  align-self: flex-start;
+
+// --- Alignment Configurations ---
+$justify-options: (
+  "start": flex-start,
+  "end": flex-end,
+  "center": center,
+  "between": space-between,
+  "around": space-around,
+  "evenly": space-evenly,
+);
+
+$align-options: (
+  "start": flex-start,
+  "end": flex-end,
+  "center": center,
+  "baseline": baseline,
+  "stretch": stretch,
+);
+
+// Main Axis Alignment (Justify Content)
+@each $key, $val in $justify-options {
+  .justify-#{$key} {
+    justify-content: $val;
+  }
 }
-.self-end {
-  align-self: flex-end;
+
+// Cross Axis Alignment (Align Items)
+@each $key, $val in $align-options {
+  .items-#{$key} {
+    align-items: $val;
+  }
 }
+
+// Individual Self Alignment
+@each $key, $val in $align-options {
+  .self-#{$key} {
+    align-self: $val;
+  }
+}
+
+// Grid-Specific Self Alignment Utilities
 .place-self-center {
   place-self: center;
+}
+.justify-self-start {
+  justify-self: start;
+}
+.justify-self-center {
+  justify-self: center;
 }
 .justify-self-end {
   justify-self: end;
@@ -134,7 +225,9 @@ $stacks: (
 .visible {
   display: block;
 }
-
+.text-center {
+  text-align: center;
+}
 // 8. Debug Tools
 .debug {
   z-index: var(--z-debug);

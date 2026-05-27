@@ -29,11 +29,20 @@ module.exports = (sequelize, DataTypes) => {
       crossStreets: {
         type: DataTypes.STRING,
         allowNull: true,
-        field: "cross_streets", // ensures underscored DB column mapping
+        field: "cross_streets",
       },
       locationName: {
         type: DataTypes.STRING,
         allowNull: true,
+      },
+      city: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      zipCode: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        field: "zip_code",
       },
     },
     {

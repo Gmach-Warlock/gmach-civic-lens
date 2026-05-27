@@ -1,4 +1,6 @@
 import type { ComponentPropsWithoutRef, CSSProperties } from "react";
+import { useAppSelector } from "../../../app/hooks/generalHooks";
+import { selectTheme } from "../../../features/global/globalSelectors";
 
 export type HeadingSize = 1 | 2 | 3 | 4 | 5 | 6;
 export type HeadingStyle = "basic" | "blocked" | "clipped" | "pill";
@@ -26,9 +28,10 @@ export default function Heading({
   ...props
 }: HeadingProps) {
   const Tag = `h${size}` as const;
+  const theme = useAppSelector(selectTheme);
 
   const mergedClassName =
-    `heading heading--${headingStyle} heading--color-${color} ${className}`.trim();
+    `heading heading--${headingStyle}-${theme} heading--color-${color} ${className}`.trim();
 
   const hsMap: Record<HeadingColor, string> = {
     primary: "var(--primary-hs)",

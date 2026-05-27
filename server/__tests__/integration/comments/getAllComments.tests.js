@@ -1,5 +1,6 @@
 const request = require("supertest");
 const jwt = require("jsonwebtoken");
+const crypto = require("crypto"); // --- FIXED: Added missing import ---
 const app = require("../../../src/app");
 const db = require("../../../src/models");
 const { User, Comment, Issue } = db;
@@ -16,7 +17,6 @@ describe("getAllComments route", () => {
   beforeAll(async () => {
     await db.sequelize.sync({ force: false });
 
-    // 1. Wipe the tables cleanly
     if (Comment)
       await Comment.destroy({ truncate: { cascade: true }, force: true }).catch(
         () => null,
@@ -57,6 +57,7 @@ describe("getAllComments route", () => {
           description: "Pothole on Main St.",
           status: "open",
           category: "Infrastructure",
+          author_id: TEST_USER_ID, // --- FIXED: Constraint satisfied ---
         },
       });
       tempIssue = issueInstance;
