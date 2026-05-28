@@ -1,5 +1,4 @@
 const db = require("../models");
-const { Comment } = db;
 const { uuidRegex } = require("../utils/validation");
 
 class CommentsController {
@@ -58,14 +57,14 @@ class CommentsController {
       }
 
       // --- ACTUATION: DATABASE WRITE ---
-      const newComment = await Comment.create({
+      const newComment = await db.Comment.create({
         content: content.trim(),
         issue_id: issueId,
         author_id,
       });
 
       // Fetch the newly created comment along with user associations for the frontend
-      const structuredComment = await Comment.findByPk(newComment.id, {
+      const structuredComment = await db.Comment.findByPk(newComment.id, {
         include: [
           {
             model: db.User,
@@ -94,7 +93,7 @@ class CommentsController {
 
   static async getAllComments(req, res) {
     try {
-      const comments = await Comment.findAll();
+      const comments = await db.Comment.findAll();
 
       // Send them back with a 200 status
       return res.status(200).json({ comments });
@@ -107,7 +106,7 @@ class CommentsController {
     try {
       const { id } = req.params;
 
-      const comment = await Comment.findByPk(id);
+      const comment = await db.Comment.findByPk(id);
 
       if (!comment) {
         return res.status(404).json({ error: "Comment not found." });
@@ -138,7 +137,7 @@ class CommentsController {
       }
 
       // 3. GUARD LAYER: Fetch Entity
-      const comment = await Comment.findByPk(id);
+      const comment = await db.Comment.findByPk(id);
       if (!comment) {
         return res.status(404).json({
           message: "Comment not found",
@@ -176,7 +175,7 @@ class CommentsController {
       }
 
       // 2. GUARD LAYER: Fetch Entity
-      const comment = await Comment.findByPk(id);
+      const comment = await db.Comment.findByPk(id);
       if (!comment) {
         return res.status(404).json({
           message: "Comment not found",
