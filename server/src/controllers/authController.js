@@ -217,6 +217,22 @@ class AuthController {
         theme, // 1. Destructure theme from request body
       } = req.body;
 
+      if (email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          return res.status(400).json({ error: "Invalid email format." });
+        }
+      }
+
+      // 2. Zip Code Format Guard
+      if (zipCode) {
+        // Matches 5 digits or 5+4 format
+        const zipRegex = /^\d{5}(-\d{4})?$/;
+        if (!zipRegex.test(zipCode)) {
+          return res.status(400).json({ error: "Invalid zip code format." });
+        }
+      }
+
       const updateFields = {};
 
       // ... existing email, zipCode, and password guards ...

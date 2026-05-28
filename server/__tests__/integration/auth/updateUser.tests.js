@@ -44,7 +44,7 @@ describe("updateUser route", () => {
 
   it("should successfully update user profile details with a valid token", async () => {
     const response = await request(app)
-      .put("/api/auth/me") // Assuming PUT to /me handles the updates
+      .patch("/api/auth/me") // Assuming PUT to /me handles the updates
       .set("Authorization", `Bearer ${validToken}`)
       .send({
         firstName: "Johnny",
@@ -62,7 +62,7 @@ describe("updateUser route", () => {
 
   it("should return a 400 status if an invalid email format is provided", async () => {
     const response = await request(app)
-      .put("/api/auth/me")
+      .patch("/api/auth/me")
       .set("Authorization", `Bearer ${validToken}`)
       .send({
         email: "not-an-email",
@@ -74,7 +74,7 @@ describe("updateUser route", () => {
 
   it("should return a 400 status if an invalid zip code format is provided", async () => {
     const response = await request(app)
-      .put("/api/auth/me")
+      .patch("/api/auth/me")
       .set("Authorization", `Bearer ${validToken}`)
       .send({
         zipCode: "abc",
@@ -90,7 +90,7 @@ describe("updateUser route", () => {
     });
 
     const response = await request(app)
-      .put("/api/auth/me")
+      .patch("/api/auth/me")
       .set("Authorization", `Bearer ${validToken}`)
       .send({ firstName: "ErrorTrigger" });
 
