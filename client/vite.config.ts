@@ -5,11 +5,16 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   server: {
+    host: true, // This is the same as --host 0.0.0.0
+    port: 5173,
+    strictPort: true,
+    watch: {
+      usePolling: true, // Necessary for Windows/Docker volume syncing
+    },
     proxy: {
-      // This tells Vite: "If you see a request starting with /api,
-      // forward it to my backend running on port 3000"
+      // Change 'localhost' to 'server' (your docker service name)
       "/api": {
-        target: "http://localhost:4000",
+        target: "http://server:4000",
         changeOrigin: true,
         secure: false,
       },

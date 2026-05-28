@@ -1,18 +1,23 @@
 import { useEffect } from "react";
-
-export interface SidebarLink {
-  label: string;
-  href: string;
-  icon?: string; // If you want to pass custom icon names later
-}
+import { NavLink } from "react-router";
+import Button from "../../atoms/controls/Button";
+import Icon from "../../atoms/controls/Icon";
 
 export interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
+  filter: "all" | "mine";
+  setFilter: (filter: "all" | "mine") => void;
+  setSearchQuery?: (query: string) => void; // Added for the search feature
 }
 
-export function Sidebar({ isOpen, onClose }: SidebarProps) {
-  // Prevent background scrolling when the sidebar/drawer is open
+export function Sidebar({
+  isOpen,
+  onClose,
+  filter,
+  setFilter,
+  setSearchQuery,
+}: SidebarProps) {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -24,15 +29,17 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     };
   }, [isOpen]);
 
+  const handleLinkClick = () => {
+    if (window.innerWidth < 768) onClose();
+  };
+
   return (
     <>
-      {/* Backdrop overlay to close the menu when clicking outside */}
       <div
         className={`c-sidebar-overlay ${isOpen ? "c-sidebar-overlay--active" : ""}`}
         onClick={onClose}
       />
 
-      {/* Main Navigation Drawer */}
       <aside className={`c-sidebar ${isOpen ? "c-sidebar--open" : ""}`}>
         <div className="c-sidebar__header">
           <span className="c-sidebar__brand">Civic Lens</span>
@@ -40,7 +47,6 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             type="button"
             className="c-sidebar__close-btn"
             onClick={onClose}
-            aria-label="Close menu"
           >
             &times;
           </button>
@@ -49,22 +55,81 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         <nav className="c-sidebar__nav">
           <ul className="c-sidebar__list">
             <li className="c-sidebar__item">
-              <a href="/dashboard" className="c-sidebar__link">
+              <NavLink
+                to="/dashboard"
+                className={({ isActive }) =>
+                  `c-sidebar__link ${isActive ? "c-sidebar__link--active" : ""}`
+                }
+                onClick={handleLinkClick}
+              >
                 Dashboard
-              </a>
+              </NavLink>
             </li>
+
             <li className="c-sidebar__item">
-              <a href="/reports" className="c-sidebar__link">
-                Infrastructure Reports
-              </a>
-            </li>
-            <li className="c-sidebar__item">
-              <a
-                href="/settings"
-                className="c-sidebar__link c-sidebar__link--active"
+              <NavLink
+                to="/settings"
+                className={({ isActive }) =>
+                  `c-sidebar__link ${isActive ? "c-sidebar__link--active" : ""}`
+                }
+                onClick={handleLinkClick}
               >
                 Settings
-              </a>
+              </NavLink>
+            </li>
+
+            <li aria-hidden="true">
+              <hr className="c-sidebar__divider" />
+            </li>
+
+            {/* Merchandising: The Primary CTA */}
+            <li className="c-sidebar__item c-sidebar__item--cta">
+              <NavLink
+                to="/reports/new"
+                onClick={handleLinkClick}
+                className="c-sidebar__btn-link"
+              >
+                Report an Issue {<Icon name="megaphone" />}
+              </NavLink>
+            </li>
+
+            <li aria-hidden="true">
+              <hr className="c-sidebar__divider" />
+            </li>
+
+            {/* The Feed Control Hub */}
+            <li className="c-sidebar__section">
+              <span className="c-sidebar__label">FEED FILTER</span>
+
+              {/* Secondary Search Entry */}
+              <div className="c-sidebar__search-container">
+                <input
+                  type="text"
+                  placeholder="Search issues..."
+                  className="c-sidebar__search-input"
+                  onChange={(e) => setSearchQuery?.(e.target.value)}
+                />
+                <Button name="search-sidebar">
+                  <Icon name="magnifying-glass" />
+                </Button>
+              </div>
+
+              <div className="c-sidebar__filter-group">
+                <Button
+                  name="all"
+                  className={filter === "all" ? "is-active" : ""}
+                  onClick={() => setFilter("all")}
+                >
+                  All
+                </Button>
+                <Button
+                  name="mine"
+                  className={filter === "mine" ? "is-active" : ""}
+                  onClick={() => setFilter("mine")}
+                >
+                  Mine
+                </Button>
+              </div>
             </li>
           </ul>
         </nav>

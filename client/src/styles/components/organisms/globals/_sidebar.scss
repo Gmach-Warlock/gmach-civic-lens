@@ -37,7 +37,7 @@
   color: #ffffff;
   z-index: 1000; /* Top-most layer */
   box-shadow: 4px 0 15px rgba(0, 0, 0, 0.3);
-
+  font-family: var(--font-second);
   display: flex;
   flex-direction: column;
 
@@ -112,4 +112,51 @@
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   font-size: 0.85rem;
   color: #64748b;
+}
+
+/* 4. Feed Filter & Search Hub */
+.c-sidebar__section {
+  padding: 1rem 1.5rem;
+}
+
+.c-sidebar__label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #94a3b8;
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+}
+
+.c-sidebar__search-container {
+  display: flex; /* Force children onto one line */
+  align-items: center;
+  gap: 0.5rem; /* Space between input and button */
+  margin-bottom: 1rem;
+}
+
+.c-sidebar__search-input {
+  flex: 1; /* Input takes up all available space */
+  min-width: 0; /* Prevents flex items from overflowing */
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
+  color: white;
+}
+
+.c-sidebar__filter-group {
+  display: flex;
+  gap: 0.5rem;
+
+  /* If you want the All/Mine buttons to share the width 50/50 */
+  button {
+    flex: 1;
+  }
+}
+
+.c-sidebar__divider {
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 1rem 0;
 }

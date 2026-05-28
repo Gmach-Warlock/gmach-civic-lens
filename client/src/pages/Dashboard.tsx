@@ -66,20 +66,6 @@ export default function Dashboard() {
       navigate("/report");
     }
   };
-  const handleAll = () => {
-    if (!accessToken) {
-      throw new Error("There has been an error. Please login again.");
-    } else {
-      console.log("handleReport test");
-    }
-  };
-  const handleMine = () => {
-    if (!accessToken) {
-      throw new Error("There has been an error. Please login again.");
-    } else {
-      console.log("handleMine test");
-    }
-  };
 
   const handleUpvote = (issueId: string) => {
     dispatch(upvoteIssue(issueId));
@@ -111,29 +97,6 @@ export default function Dashboard() {
       className={`dashboard card--${theme}`}
       key={`${issues.length}-${authStatus}-${issueStatus}`}
     >
-      {/* Sidebar */}
-      <Column className="dashboard__sidebar w-full" variant="start">
-        <Button
-          name="Report"
-          type="button"
-          content="Report"
-          onClick={handleReport}
-          className="self-start"
-        />
-        <Button
-          name="All Issues"
-          type="button"
-          content="All"
-          onClick={handleAll}
-        />
-        <Button
-          name="My Issues"
-          type="button"
-          content="Mine"
-          onClick={handleMine}
-        />
-      </Column>
-
       {/* Main Column */}
       <Column className="dashboard__main-column" variant="centered">
         <Heading
@@ -143,7 +106,15 @@ export default function Dashboard() {
           content={`Welcome Back ${user?.general?.firstName ?? "User"}!`}
           className="dashboard__heading text-center"
         />
-
+        <Button
+          name="Report"
+          type="button"
+          content="Report"
+          onClick={handleReport}
+          className="w-fit self-center"
+        >
+          <Icon name="megaphone" />
+        </Button>
         {/* Issues Feed */}
         <Heading
           size={3}
