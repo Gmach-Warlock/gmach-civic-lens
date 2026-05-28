@@ -52,7 +52,6 @@ class IssuesController {
         });
       }
 
-      // 1. EXTRACT ALL DATA: Destructure city and zipCode alongside the others
       const {
         title,
         description,
@@ -82,7 +81,11 @@ class IssuesController {
         });
       }
 
-      if (crossStreets !== undefined && typeof crossStreets !== "string") {
+      if (
+        crossStreets !== undefined &&
+        crossStreets !== null &&
+        typeof crossStreets !== "string"
+      ) {
         return res.status(400).json({
           message: "Cross streets input must be a plain text string.",
         });
@@ -95,20 +98,52 @@ class IssuesController {
         });
       }
 
-      const hasCoords =
-        lat !== undefined && lng !== undefined && lat !== null && lng !== null;
+      // --- GUARD LAYER 4: Coordinate Ranges (Mathematical Guard) 🌐 ---
+      const hasLat = lat !== undefined && lat !== null && lat !== "";
+      const hasLng = lng !== undefined && lng !== null && lng !== "";
+
+      if (hasLat || hasLng) {
+        // If one coordinate is provided, both are required
+        if (!hasLat || !hasLng) {
+          return res.status(400).json({
+            message: "Both Latitude and Longitude must be provided together.",
+          });
+        }
+
+        const numericLat = Number(lat);
+        const numericLng = Number(lng);
+
+        if (isNaN(numericLat) || isNaN(numericLng)) {
+          return res.status(400).json({
+            message: "Coordinates must be valid numbers.",
+          });
+        }
+
+        if (numericLat < -90 || numericLat > 90) {
+          return res.status(400).json({
+            message: "Latitude must be a valid coordinate between -90 and 90.",
+          });
+        }
+
+        if (numericLng < -180 || numericLng > 180) {
+          return res.status(400).json({
+            message:
+              "Longitude must be a valid coordinate between -180 and 180.",
+          });
+        }
+      }
+
       const hasCrossStreets = crossStreets && crossStreets.trim().length > 0;
       const hasCity = city && city.trim().length > 0;
       const hasZip = zipCode && zipCode.trim().length > 0;
+      const hasCoords = hasLat && hasLng;
 
       if (!hasCoords && !hasCrossStreets && !hasCity && !hasZip) {
         return res.status(400).json({
           message:
-            "Please provide a valid address, location, city, or zip code.",
+            "Please provide either GPS coordinates or valid cross streets/intersection.", // 👈 Matched to test spec
         });
       }
-
-      console.log("Received issue data: ", req.body);
 
       // Create core issue record
       const issue = await Issue.create({
@@ -118,20 +153,17 @@ class IssuesController {
         author_id: authenticatedUser.id,
       });
 
-      // 2. DATA WRITE LAYER: Map all values straight into the Location record
+      // DATA WRITE LAYER: Map all values straight into the Location record
       await Location.create({
-        lat: hasCoords ? lat : null,
-        lng: hasCoords ? lng : null,
+        lat: hasCoords ? Number(lat) : null,
+        lng: hasCoords ? Number(lng) : null,
         crossStreets: hasCrossStreets ? crossStreets.trim() : null,
-        city: hasCity ? city.trim() : null, // <-- Pass clean city string
-        zipCode: hasZip ? zipCode.trim() : null, // <-- Pass clean zipCode string
+        city: hasCity ? city.trim() : null,
+        zipCode: hasZip ? zipCode.trim() : null,
         issue_id: issue.id,
       });
 
-      await issue.reload({
-        include: issueAssociations,
-      });
-
+      await issue.reload({ include: issueAssociations });
       const formatted = formatIssuesResponse(issue);
 
       res.status(201).json({
@@ -140,7 +172,19 @@ class IssuesController {
       });
     } catch (error) {
       console.error("DEBUG CREATE ISSUE ERROR:", error);
-      res.status(400).json({ error: error.message });
+
+      // If it's a Sequelize Validation error, extract the clean error message we defined
+      if (
+        error.name === "SequelizeValidationError" &&
+        error.errors.length > 0
+      ) {
+        return res.status(400).json({ message: error.errors[0].message });
+      }
+
+      // Fallback for general execution errors
+      res
+        .status(400)
+        .json({ message: error.message || "An unexpected error occurred." });
     }
   }
   static async upvoteIssue(req, res) {
@@ -226,6 +270,7 @@ class IssuesController {
       }
 
       const issue = await Issue.findByPk(id);
+      console.log("Hitting updateIssue. Issue: ", issue);
       if (!issue) {
         return res.status(404).json({ message: "Issue not found" });
       }
@@ -240,7 +285,9 @@ class IssuesController {
       await issue.update(req.body);
 
       await issue.reload({ include: issueAssociations });
-      res.status(200).json(formatIssuesResponse(issue));
+
+      const formatted = formatIssuesResponse(issue);
+      res.status(200).json(formatted);
     } catch (error) {
       res.status(400).json({ error: error.message });
     }

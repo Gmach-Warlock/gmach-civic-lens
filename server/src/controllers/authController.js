@@ -22,6 +22,7 @@ class AuthController {
         address,
         city,
         zipCode,
+        theme,
       } = req.body;
 
       // --- LAYER 1: EXISTENCE GUARD ---
@@ -80,6 +81,7 @@ class AuthController {
         address,
         city,
         zipCode,
+        theme: theme || "dark",
       });
 
       const formatted = formatUserResponse(newUser);
@@ -212,37 +214,23 @@ class AuthController {
         address,
         city,
         zipCode,
+        theme, // 1. Destructure theme from request body
       } = req.body;
 
-      // Create an object to hold only the fields being updated
       const updateFields = {};
 
-      // --- OPTIONAL FORMAT GUARDS (Only run validation if field is provided) ---
-      if (email !== undefined) {
-        if (typeof email !== "string" || !emailRegex.test(email)) {
-          return res.status(400).json({ error: "Invalid email format." });
-        }
-        updateFields.email = email;
-      }
+      // ... existing email, zipCode, and password guards ...
 
-      if (zipCode !== undefined) {
-        if (typeof zipCode !== "string" || !zipCodeRegex.test(zipCode)) {
-          return res.status(400).json({ error: "Invalid zip code format." });
-        }
-        updateFields.zipCode = zipCode;
-      }
+      // 2. Add theme to the textFields object
+      const textFields = {
+        username,
+        firstName,
+        lastName,
+        address,
+        city,
+        theme,
+      };
 
-      if (password !== undefined) {
-        if (typeof password !== "string" || !passwordRegex.test(password)) {
-          return res.status(400).json({
-            error:
-              "Password must be at least 8 characters long and include uppercase, lowercase, number, and a special character.",
-          });
-        }
-        updateFields.password = await bcrypt.hash(password, 12);
-      }
-
-      const textFields = { username, firstName, lastName, address, city };
       for (const [key, value] of Object.entries(textFields)) {
         if (value !== undefined) {
           if (typeof value !== "string") {

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "../app/hooks/generalHooks";
 import {
   selectAccessToken,
@@ -10,14 +10,19 @@ import type { FieldConfig } from "../app/interfaces/componentInterfaces";
 import { Form } from "../components/molecules/actions/Form";
 import Button from "../components/atoms/controls/Button";
 
+// Import your global toast action and your email regex utility 👇
+import { addToast } from "../features/global/globalSlice";
+import { emailRegex } from "../assets/authRegexes";
+
 export default function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useAppDispatch();
-
+  console.log("Current Location State:", location.state);
   const user = useAppSelector(selectUser);
   const accessToken = useAppSelector(selectAccessToken);
-
-  // 1. Define fields expecting email instead of username
+  const from = location.state?.from || "/dashboard";
+  // 1. Define fields
   const loginFields: FieldConfig[] = [
     {
       name: "email",
@@ -37,8 +42,22 @@ export default function Login() {
 
   // 2. Extract values from the reusable Form engine
   const handleFormSubmit = async (values: Record<string, string>) => {
+    const cleanedEmail = values.email.trim();
+
+    // --- FRONTEND EMAIL GUARD ---
+    if (!emailRegex.test(cleanedEmail)) {
+      dispatch(
+        addToast({
+          message: "Please enter a valid email address.",
+          type: "error",
+        }),
+      );
+      return; // Stop form submission early
+    }
+    // ----------------------------
+
     const loginPayload = {
-      email: values.email.trim(),
+      email: cleanedEmail,
       password: values.password,
     };
 
@@ -46,14 +65,28 @@ export default function Login() {
       const result = await dispatch(loginUser(loginPayload)).unwrap();
       console.log("Login successful:", result);
 
-      // Note: If loginUser updates your Redux state and triggers selectAccessToken,
-      // you might not even need the manual localStorage step here anymore.
       if (result.token) {
         localStorage.setItem("token", result.token);
-        navigate("/dashboard");
+
+        // Trigger a friendly toast notification using the user's name from the response payload
+        dispatch(
+          addToast({
+            message: `Welcome back, ${result.user?.firstName || "User"}!`,
+            type: "success",
+          }),
+        );
+
+        navigate(from, { replace: true });
       }
     } catch (err) {
       console.error("Login failed:", err);
+      // Optional: Add an error toast for invalid login credentials here
+      dispatch(
+        addToast({
+          message: "Invalid email or password. Please try again.",
+          type: "error",
+        }),
+      );
     }
   };
 
@@ -79,7 +112,7 @@ export default function Login() {
               name="goto-dashboard"
               content="Go to Dashboard"
               variant="success"
-              onClick={() => navigate("/dashboard")}
+              onClick={() => navigate(from, { replace: true })}
             />
           </div>
         )}

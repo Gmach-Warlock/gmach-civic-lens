@@ -27,6 +27,7 @@ export const createInitialUserState = (): AuthStateInterface => ({
       isAdmin: false,
       accessToken: "",
       refreshToken: "",
+      theme: "dark",
     },
     comments: [],
   },

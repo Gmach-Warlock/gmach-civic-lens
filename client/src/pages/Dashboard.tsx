@@ -5,34 +5,63 @@ import {
   selectUser,
 } from "../features/auth/selectors/authSelectors";
 import Heading from "../components/atoms/elements/Heading";
-import { useEffect } from "react";
+import { useEffect, useState } from "react"; // 👈 Added useState
 import { getIssues } from "../features/issues/thunks/getIssues";
-import { selectIssues } from "../features/issues/selectors/issuesSelectors";
 import Button from "../components/atoms/controls/Button";
 import { selectTheme } from "../features/global/globalSelectors";
 import Column from "../components/organisms/layout/Column";
 import Row from "../components/organisms/layout/Row";
 import { upvoteIssue } from "../features/issues/thunks/upvoteIssue";
+import { postComment } from "../features/issues/thunks/postComment";
 import Icon from "../components/atoms/controls/Icon";
 import { formatRelativeTime } from "../app/utils/formattingUtils";
+import Overlay from "../components/organisms/sections/Overlay";
+import EditIssueForm from "../components/molecules/actions/EditIssueForm";
+import { addToast } from "../features/global/globalSlice";
 
 export default function Dashboard() {
   const user = useAppSelector(selectUser);
   const accessToken = useAppSelector(selectAccessToken);
-  const issues = useAppSelector(selectIssues);
+  const issues = useAppSelector((state) => state.issues.general.issues);
   const theme = useAppSelector(selectTheme);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch(getIssues());
-  }, [dispatch]);
+  // Track which issue card is opening the comment overlay
+  const [activeCommentIssueId, setActiveCommentIssueId] = useState<
+    string | null
+  >(null);
 
-  console.log(issues);
+  const [commentText, setCommentText] = useState<string>("");
+  const [activeEditIssueId, setActiveEditIssueId] = useState<string | null>(
+    null,
+  );
+
+  const issueStatus = useAppSelector(
+    (state) => state.issues.state.loadingState,
+  );
+  const authStatus = useAppSelector((state) => state.auth.loadingState.state);
+
+  useEffect(() => {
+    console.log("Effect triggered by status or message change");
+    dispatch(getIssues());
+
+    // Adding the messages here ensures that every time a thunk finishes
+    // and writes a "Success" message to the state, this effect fires.
+  }, [dispatch, authStatus, issueStatus]);
 
   const handleReport = () => {
     if (!accessToken) {
-      throw new Error("There has been an error. Please login again.");
+      // 1. Dispatch to your custom Redux toast system
+      dispatch(
+        addToast({
+          message: "Please login to report an infrastructure issue.",
+          type: "error",
+        }),
+      );
+
+      // 2. Navigate and "remember" where the user wanted to go
+      navigate("/login", { state: { from: "/report" } });
     } else {
       navigate("/report");
     }
@@ -56,8 +85,33 @@ export default function Dashboard() {
     dispatch(upvoteIssue(issueId));
   };
 
+  const handleSubmitComment = async () => {
+    if (!activeCommentIssueId || !commentText.trim()) return;
+
+    // Dispatch the thunk with your payload contract
+    await dispatch(
+      postComment({
+        issueId: activeCommentIssueId,
+        content: commentText.trim(),
+      }),
+    );
+
+    // Clear text state and collapse the modal overlay seamlessly
+    setCommentText("");
+    setActiveCommentIssueId(null);
+  };
+
+  // Find the currently selected issue to display its title in the overlay header
+  const selectedIssue = issues.find(
+    (img) => img.meta.id === activeCommentIssueId,
+  );
+
   return (
-    <div className={`dashboard card--${theme}`}>
+    <div
+      className={`dashboard card--${theme}`}
+      key={`${issues.length}-${authStatus}-${issueStatus}`}
+    >
+      {/* Sidebar */}
       <Column className="dashboard__sidebar w-full" variant="start">
         <Button
           name="Report"
@@ -79,6 +133,8 @@ export default function Dashboard() {
           onClick={handleMine}
         />
       </Column>
+
+      {/* Main Column */}
       <Column className="dashboard__main-column" variant="centered">
         <Heading
           size={2}
@@ -88,6 +144,7 @@ export default function Dashboard() {
           className="dashboard__heading text-center"
         />
 
+        {/* Issues Feed */}
         <Heading
           size={3}
           color="primary"
@@ -96,12 +153,10 @@ export default function Dashboard() {
         />
 
         {issues.map((issue) => {
-          // Guard ownership evaluation accurately matches your slice profile state keys
-          const isOwner =
-            user?.meta.id === issue.meta.authorId ||
-            user?.meta?.id === issue.meta.authorId;
+          const isOwner = user?.meta.id === issue.meta.authorId;
 
           return (
+            /* Issue */
             <div
               className={`card--glass-${theme} my-4 p-4 rounded-sm w-full core-card`}
               key={issue.meta.id}
@@ -114,17 +169,21 @@ export default function Dashboard() {
                   headingStyle="basic"
                   content={issue.general.title}
                 />
-                <Icon
-                  name="id-badge"
-                  size="sm"
-                  className={`icon--status-${issue.status.current.toLowerCase()}`}
+                <Button
+                  name="check"
+                  type="button"
+                  className="w-fit btn--vote"
+                  content="Upvote"
+                  onClick={() => handleUpvote(issue.meta.id)}
                 />
               </Row>
 
+              {/* Description */}
               <p className="my-3 text-sm leading-relaxed">
                 {issue.general.description}
               </p>
 
+              {/* Location */}
               <Row
                 gap={4}
                 className="mb-2 text-sm opacity-80"
@@ -133,6 +192,8 @@ export default function Dashboard() {
                 <span>City: {issue.location.city}📍</span>
                 <span>Zip: {issue.location.zipCode}</span>
               </Row>
+
+              {/* Author */}
               <Row
                 gap={4}
                 className="mb-2 text-sm opacity-80"
@@ -142,6 +203,7 @@ export default function Dashboard() {
                 <span>Created {formatRelativeTime(issue.meta.createdAt)}</span>
               </Row>
 
+              {/* Status */}
               <Row variant="between">
                 <Row>
                   <span>
@@ -157,6 +219,8 @@ export default function Dashboard() {
                   Last updated {formatRelativeTime(issue.status.lastActionDate)}
                 </span>
               </Row>
+
+              {/* Urgency */}
               <Row className="items-center gap-1" variant="between">
                 <Row>
                   <span className="capitalize">
@@ -167,27 +231,33 @@ export default function Dashboard() {
                     />
                   </span>
                 </Row>
-                <Button
-                  name="Add"
-                  type="button"
-                  content="Me Too"
-                  onClick={() => handleUpvote(issue.meta.id)}
-                />
-                <span>Upvotes: {issue.social.upvotes}</span>
+
+                <span>
+                  Upvotes: {issue.social.upvotes}{" "}
+                  <Icon
+                    name="check"
+                    variant="regular"
+                    className="w-fit btn"
+                    size="sm"
+                    onClick={() => handleUpvote(issue.meta.id)}
+                  />
+                </span>
               </Row>
 
+              {/* Edit (Original Author only) */}
               {isOwner && (
                 <Button
                   name="Edit"
                   type="button"
                   content="Modify"
-                  onClick={() => navigate(`/report/edit/${issue.meta.id}`)}
+                  onClick={() => setActiveEditIssueId(issue.meta.id)} // This keeps the user on the dashboard!
                   className="btn--secondary"
                 />
               )}
-              {/* --- COMMENTS SUB-SECTION --- */}
+
+              {/* Comments */}
               <Column
-                className="comments-section mt-4 pt-3 border-t border-glass-light w-full"
+                className="comments-section mt-4 pt-3 border-t border-glass-light w-full items-center"
                 variant="centered"
               >
                 <Heading
@@ -195,7 +265,7 @@ export default function Dashboard() {
                   color="primary"
                   headingStyle="basic"
                   content="Discussion"
-                  className="mb-2 text-xs opacity-70 uppercase tracking-wider"
+                  className="my-1 text-xs opacity-70 uppercase tracking-wider"
                 />
 
                 {issue.social.comments.length === 0 ? (
@@ -224,11 +294,79 @@ export default function Dashboard() {
                     ))}
                   </Column>
                 )}
+                {/* 1. Trigger Overlay with Issue ID when clicking the plus button 👇 */}
+                <Icon
+                  name="plus"
+                  className="btn w-fit my-2 cursor-pointer"
+                  onClick={() => setActiveCommentIssueId(issue.meta.id)}
+                />
               </Column>
             </div>
           );
         })}
       </Column>
+
+      <Overlay
+        isOpen={activeEditIssueId !== null}
+        onClose={() => setActiveEditIssueId(null)}
+        title="Modify Issue"
+      >
+        {activeEditIssueId && ( // <-- TypeScript usually catches this, but sometimes needs help
+          <EditIssueForm
+            issueId={activeEditIssueId}
+            onSuccess={() => setActiveEditIssueId(null)}
+          />
+        )}
+        <div className="p-4">
+          {/* You can now drop your <EditIssueForm /> here once you build it! */}
+          <p className="text-sm opacity-80">
+            Editing issue: {activeEditIssueId}
+          </p>
+          {activeEditIssueId && (
+            <EditIssueForm
+              issueId={activeEditIssueId}
+              onSuccess={() => setActiveEditIssueId(null)}
+            />
+          )}
+          {/* Your form goes here */}
+        </div>
+      </Overlay>
+
+      {/* 2. OVERLAY MANAGEMENT MOUNTED AT THE ROOT LAYER */}
+      <Overlay
+        isOpen={activeCommentIssueId !== null}
+        onClose={() => {
+          setActiveCommentIssueId(null);
+          setCommentText(""); // Reset text if they abandon the modal
+        }}
+        title={`Add Comment: ${selectedIssue?.general.title || ""}`}
+      >
+        <div className="p-2">
+          <p className="text-sm opacity-80 mb-4">
+            Post a public comment regarding this infrastructure item.
+          </p>
+
+          {/* 3. Bind the textarea value and onChange handler 👇 */}
+          <textarea
+            className="w-full p-2 bg-glass-dark rounded-sm border border-glass-light text-sm focus:outline-none focus:border-secondary text-white"
+            rows={4}
+            placeholder="Type your feedback here..."
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
+          />
+
+          <Row className="justify-end mt-3">
+            {/* 4. Link the button directly to the submit handler 👇 */}
+            <Button
+              name="submit-comment"
+              type="button"
+              content="Post Comment"
+              onClick={handleSubmitComment}
+              disabled={!commentText.trim()} // Lock button if input is completely empty
+            />
+          </Row>
+        </div>
+      </Overlay>
     </div>
   );
 }

@@ -1,25 +1,29 @@
 import { useRef, type FormEvent } from "react";
-import Input from "../../atoms/controls/Input"; // Adjust paths to match your folder structure
+import { searchIssues } from "../../../features/issues/thunks/searchIssues";
 import Button from "../../atoms/controls/Button";
+import Input from "../../atoms/controls/Input";
 import Row from "../../organisms/layout/Row";
+import Icon from "../../atoms/controls/Icon";
+import { useAppDispatch } from "../../../app/hooks/generalHooks";
 
 interface SearchBarProps {
   placeholder?: string;
-  onSearch?: (searchTerm: string) => void;
   className?: string;
 }
 
 export default function SearchBar({
   placeholder = "Search...",
-  onSearch,
   className = "",
 }: SearchBarProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const dispatch = useAppDispatch(); // 3. Initialize dispatch
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (onSearch && inputRef.current) {
-      onSearch(inputRef.current.value);
+    if (inputRef.current?.value !== undefined) {
+      // 4. Dispatch the search action
+      dispatch(searchIssues(inputRef.current.value));
+      console.log("searching");
     }
   };
 
@@ -40,10 +44,10 @@ export default function SearchBar({
         <Button
           type="submit"
           name="search-submit"
-          content="Search"
-          variant="primary"
           className="search-bar__button"
-        />
+        >
+          <Icon name="magnifying-glass" />
+        </Button>
       </Row>
     </form>
   );

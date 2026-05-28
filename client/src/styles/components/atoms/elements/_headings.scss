@@ -94,8 +94,4 @@
       hsl(var(--current-hs), var(--lightness-shadow, 20%));
     paint-order: stroke fill;
   }
-
-  &:hover {
-    transform: scale(var(--hover-scale, 1.05));
-  }
 }

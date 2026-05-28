@@ -11,17 +11,18 @@ const formatUserResponse = (user) => {
         zipCode: user.zipCode,
       },
       meta: {
+        id: user.id, // 👈 CRITICAL: Keeps your dashboard edit checks green!
         createdAt: user.createdAt,
         lastLogin: new Date().toISOString(),
         isAdmin: !!user.isAdmin,
       },
+      comments: [],
     },
-    activity: { requests: [], comments: [] },
+    activity: {
+      requests: [],
+      comments: [],
+    },
   };
-};
-
-const formatIssuesResponse = (issues) => {
-  return {};
 };
 
 module.exports = formatUserResponse;

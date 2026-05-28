@@ -14,16 +14,16 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DECIMAL(11, 8),
         allowNull: true,
         validate: {
-          min: -90,
-          max: 90,
+          min: { args: [-90], msg: "Latitude must be between -90 and 90." },
+          max: { args: [90], msg: "Latitude must be between -90 and 90." },
         },
       },
       lng: {
         type: DataTypes.DECIMAL(11, 8),
         allowNull: true,
         validate: {
-          min: -180,
-          max: 180,
+          min: { args: [-180], msg: "Longitude must be between -180 and 180." },
+          max: { args: [180], msg: "Longitude must be between -180 and 180." },
         },
       },
       crossStreets: {
@@ -51,10 +51,23 @@ module.exports = (sequelize, DataTypes) => {
       underscored: true,
       validate: {
         hasValidLocationData() {
-          const hasCoords = this.lat !== null && this.lng !== null;
+          const hasLat =
+            this.lat !== null && this.lat !== undefined && this.lat !== "";
+          const hasLng =
+            this.lng !== null && this.lng !== undefined && this.lng !== "";
+          const hasCoords = hasLat && hasLng;
+
           const hasCrossStreets =
             this.crossStreets && this.crossStreets.trim().length > 0;
 
+          // Guard against half-filled coordinates
+          if ((hasLat && !hasLng) || (!hasLat && hasLng)) {
+            throw new Error(
+              "Both Latitude and Longitude must be provided together.",
+            );
+          }
+
+          // Guard against complete absence of positioning data
           if (!hasCoords && !hasCrossStreets) {
             throw new Error(
               "Either GPS coordinates or cross streets must be provided.",
@@ -64,11 +77,13 @@ module.exports = (sequelize, DataTypes) => {
       },
     },
   );
+
   Location.associate = (models) => {
     Location.belongsTo(models.Issue, {
       foreignKey: "issue_id",
       as: "issue",
     });
   };
+
   return Location;
 };

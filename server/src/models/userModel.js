@@ -1,5 +1,6 @@
-const { DataTypes, Model } = require("sequelize");
-const db = require("../config/database");
+const { Model } = require("sequelize");
+// Import your regex to use it for model-level validation
+const { zipCodeRegex } = require("../utils/validation");
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {}
@@ -23,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
         validate: { notEmpty: true },
       },
       username: {
-        type: DataTypes.TEXT,
+        type: DataTypes.TEXT, // Note: standard practice usually uses STRING(255) unless you expect massive usernames
         allowNull: false,
         unique: true,
         validate: { notEmpty: true },
@@ -51,21 +52,35 @@ module.exports = (sequelize, DataTypes) => {
       zipCode: {
         type: DataTypes.STRING,
         allowNull: true,
+        validate: {
+          isValidZip(value) {
+            // Only validate if a ZIP code is actually provided (since allowNull is true)
+            if (value && !zipCodeRegex.test(value)) {
+              throw new Error("Invalid US Zip Code format.");
+            }
+          },
+        },
+      },
+      theme: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: "system", // 'light', 'dark', or 'system'
       },
       isAdmin: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
         allowNull: false,
-        field: "is_admin", // Explicitly maps camelCase to snake_case in your PG database
+        field: "is_admin",
       },
     },
     {
-      sequelize: db,
+      sequelize, // Use the instance passed into the module wrapper
       modelName: "User",
       tableName: "users",
       underscored: true,
-      paranoid: true,
+      paranoid: true, // Enables soft deletes (requires deleted_at column in DB)
     },
   );
+
   return User;
 };

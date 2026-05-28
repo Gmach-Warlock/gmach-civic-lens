@@ -216,6 +216,9 @@ $align-options: (
 .w-full {
   width: 100%;
 }
+.w-fit {
+  width: fit-content;
+}
 .h-full {
   height: var(--space-full);
 }
@@ -234,4 +237,11 @@ $align-options: (
   outline: 2px solid lime !important;
   min-height: 50px;
   min-width: 100px;
+}
+
+.font-main {
+  font-family: var(--font-main);
+}
+.font-second {
+  font-family: var(--font-second);
 }

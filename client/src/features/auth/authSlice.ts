@@ -23,38 +23,52 @@ const authSlice = createSlice({
   reducers: {
     logoutUser: () => {
       localStorage.removeItem("access-token");
+      localStorage.removeItem("refresh-token");
       return createInitialUserState();
     },
   },
   extraReducers: (builder) => {
+    // 1. REGISTER USER HANDLER
     builder.addCase(registerUser.fulfilled, (state, action) => {
       const { accessToken, refreshToken, user } = action.payload;
+
       state.loadingState.state = "idle";
       state.user = user;
       state.user.meta.accessToken = accessToken;
       state.user.meta.refreshToken = refreshToken;
+
       localStorage.setItem("access-token", accessToken);
       localStorage.setItem("refresh-token", refreshToken);
     });
+
+    // 2. LOGIN USER HANDLER
     builder.addCase(loginUser.fulfilled, (state, action) => {
       const { accessToken, refreshToken, user } = action.payload;
       console.log(accessToken, refreshToken);
+
       state.loadingState.state = "idle";
-      state.loadingState.message = `User returned sucessfully at ${new Date().toLocaleString()}`;
+      state.loadingState.message = `User returned successfully at ${new Date().toLocaleString()}`;
+
       state.user = user;
       state.user.meta.accessToken = accessToken;
       state.user.meta.refreshToken = refreshToken;
+
       localStorage.setItem("access-token", accessToken);
       localStorage.setItem("refresh-token", refreshToken);
     });
+
+    // 3. VERIFY TOKEN HANDLER
     builder.addCase(verifyToken.fulfilled, (state, action) => {
       const { accessToken, refreshToken, user } = action.payload;
       console.log(accessToken, refreshToken);
+
       state.loadingState.state = "idle";
-      state.loadingState.message = `User verified sucessfully at ${new Date().toLocaleString()}`;
+      state.loadingState.message = `User verified successfully at ${new Date().toLocaleString()}`;
+
       state.user = user;
       state.user.meta.accessToken = accessToken;
       state.user.meta.refreshToken = refreshToken;
+
       localStorage.setItem("access-token", accessToken);
       localStorage.setItem("refresh-token", refreshToken);
     });

@@ -1,4 +1,4 @@
-const commentsRouter = require("express").Router();
+const commentsRouter = require("express").Router({ mergeParams: true });
 const commentsController = require("../controllers/commentsController");
 const { requireUser } = require("../middleware/auth");
 

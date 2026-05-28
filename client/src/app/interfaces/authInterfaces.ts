@@ -1,4 +1,4 @@
-import type { LoadingState } from "../types/globalTypes";
+import type { GlobalThemeType, LoadingState } from "../types/globalTypes";
 
 export interface AuthResponseInterface {
   message: string;
@@ -63,6 +63,7 @@ export interface UserMetaInfoInterface {
   isAdmin: boolean;
   accessToken: string;
   refreshToken: string;
+  theme: GlobalThemeType;
 }
 
 export interface UserRequestInterface {

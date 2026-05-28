@@ -9,6 +9,11 @@ import type React from "react";
 import type { CreateIssueRequestInterface } from "../app/interfaces/issuesInterfaces";
 import type { CategoryType } from "../app/types/issuesTypes";
 import { useNavigate } from "react-router";
+import { isValidCoordinate } from "../assets/authHelpers";
+
+// Import your toast slice action and your text security guard 👇
+import { addToast } from "../features/global/globalSlice";
+import { noHtmlRegex } from "../assets/authRegexes";
 
 function Report() {
   const dispatch = useAppDispatch();
@@ -18,7 +23,7 @@ function Report() {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    category: "" as CategoryType, // Explicitly typed to allow blank initial state safely
+    category: "" as CategoryType,
     cityName: "",
     crossStreets: "",
     lat: "",
@@ -55,20 +60,56 @@ function Report() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Correct type structure contract matching the thunk data layer requirements
+    // --- FRONTEND SECURITY GUARDS ---
+    // Check for malicious HTML tags or basic script strings in user inputs
+    if (
+      noHtmlRegex.test(formData.title) ||
+      noHtmlRegex.test(formData.description)
+    ) {
+      dispatch(
+        addToast({
+          message:
+            "HTML or script tags are not allowed in the title or description text.",
+          type: "error",
+        }),
+      );
+      return; // Stop form submission early
+    }
+
+    // 2. New Coordinate Range Guard 🌐
+    const coordCheck = isValidCoordinate(formData.lat, formData.lng);
+    if (!coordCheck.isValid) {
+      dispatch(
+        addToast({
+          message: coordCheck.error || "Invalid coordinates.",
+          type: "error",
+        }),
+      );
+      return; // Short-circuit submission
+    }
+    // ---------------------------------
+
     const issuePayload: CreateIssueRequestInterface = {
-      title: formData.title,
-      description: formData.description,
+      title: formData.title.trim(),
+      description: formData.description.trim(),
       category: formData.category,
       crossStreets: formData.crossStreets.trim() || undefined,
       lat: formData.lat ? Number(formData.lat) : null,
       lng: formData.lng ? Number(formData.lng) : null,
     };
 
-    // Cleaned up the incorrect array type-casting error here:
     dispatch(createIssue(issuePayload))
       .unwrap()
       .then(() => {
+        // 1. Fire off success notice
+        dispatch(
+          addToast({
+            message: "Infrastructure report successfully submitted!",
+            type: "success",
+          }),
+        );
+
+        // 2. Clear state fields out
         setFormData({
           title: "",
           description: "",
@@ -78,11 +119,22 @@ function Report() {
           lat: "",
           lng: "",
         });
+
+        // 3. Move back to the feed view
+        navigate("/dashboard");
       })
       .catch((error) => {
         console.error("Failed to create issue:", error.message || error);
+
+        // Fire off failure notice to inform user something went wrong on the server layer
+        dispatch(
+          addToast({
+            message:
+              error.message || "Failed to submit report. Please try again.",
+            type: "error",
+          }),
+        );
       });
-    navigate("/dashboard");
   };
 
   return (

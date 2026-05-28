@@ -1,9 +1,10 @@
-import { forwardRef, type ComponentPropsWithoutRef } from "react";
+import { forwardRef } from "react";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 import type {
   ButtonType,
   ButtonVariant,
 } from "../../../app/types/componentTypes";
-import type { GlobalThemeType } from "../../../features/global/globalSlice";
+import type { GlobalThemeType } from "../../../app/types/globalTypes";
 import { useAppSelector } from "../../../app/hooks/generalHooks";
 import { selectTheme } from "../../../features/global/globalSelectors";
 
@@ -11,15 +12,16 @@ export interface ButtonProps extends ComponentPropsWithoutRef<"button"> {
   type?: ButtonType;
   name: string;
   content?: string;
+  children?: ReactNode; // Add this line
   variant?: ButtonVariant;
   theme?: GlobalThemeType;
 }
-
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       type = "submit",
       content,
+      children,
       name,
       variant = "primary",
       className,
@@ -38,7 +40,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         id={props.id ?? name}
         {...props}
       >
-        {content || "Submit"}
+        {children || content || "Submit"}
       </button>
     );
   },

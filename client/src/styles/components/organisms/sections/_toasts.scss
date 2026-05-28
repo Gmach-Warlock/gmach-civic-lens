@@ -1,0 +1,71 @@
+.toasts-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  pointer-events: none; /* Allows clicks to pass through empty container spaces */
+}
+
+.toast {
+  pointer-events: auto; /* Re-enables interactions inside the actual alert card */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 300px;
+  max-width: 450px;
+  padding: 1rem;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background-color: #ffffff;
+  color: #333333;
+  animation: slideIn 0.2s ease-out;
+}
+
+/* Modifier state schemes */
+.toast--success {
+  border-left: 4px solid #10b981;
+}
+.toast--error {
+  border-left: 4px solid #ef4444;
+}
+.toast--info {
+  border-left: 4px solid #3b82f6;
+}
+
+.toast__content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.toast__message {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+.toast__close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  color: #9ca3af;
+  padding: 0 0 0 1rem;
+}
+
+.toast__close-btn:hover {
+  color: #4b5563;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
