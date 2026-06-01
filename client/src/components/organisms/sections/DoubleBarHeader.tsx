@@ -16,6 +16,11 @@ import Icon from "../../atoms/controls/Icon";
 
 export default function DoubleBarHeader() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  // 1. Add the filter state here
+  const [filter, setFilter] = useState<"all" | "mine">("all");
+  // 2. Add search query state if you want that functional as well
+  const [searchQuery, setSearchQuery] = useState("");
+
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const currentTheme = useAppSelector(selectTheme);
@@ -25,6 +30,7 @@ export default function DoubleBarHeader() {
   const handleThemeToggle = () => dispatch(toggleTheme());
   const handleCog = () => navigate("/settings");
 
+  console.log(searchQuery);
   return (
     <Header
       currentTheme={currentTheme}
@@ -42,7 +48,16 @@ export default function DoubleBarHeader() {
       bottomBarLeft={<span>GMach</span>}
       bottomBarCenter={<AuthNav />}
       bottomBarRight={<Icon name="bars" onClick={toggleSidebar} />}
-      sidebar={<Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />}
+      // 3. Pass the actual state and setters to the Sidebar
+      sidebar={
+        <Sidebar
+          isOpen={isSidebarOpen}
+          onClose={closeSidebar}
+          filter={filter}
+          setFilter={setFilter}
+          setSearchQuery={setSearchQuery}
+        />
+      }
     />
   );
 }
