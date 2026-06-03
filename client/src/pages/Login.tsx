@@ -1,28 +1,24 @@
 import { useLocation, useNavigate } from "react-router";
 import { useAppDispatch, useAppSelector } from "../app/hooks/generalHooks";
-import {
-  selectAccessToken,
-  selectUser,
-} from "../features/auth/selectors/authSelectors";
 import { loginUser } from "../features/auth/thunks/loginUser";
 import type { FieldConfig } from "../app/interfaces/componentInterfaces";
-
-import { Form } from "../components/molecules/actions/Form";
+import Icon from "../components/atoms/controls/Icon";
 import Button from "../components/atoms/controls/Button";
-
-// Import your global toast action and your email regex utility 👇
+import { Form } from "../components/molecules/actions/Form";
 import { addToast } from "../features/global/globalSlice";
 import { emailRegex } from "../assets/authRegexes";
+import ImpulseLine from "../components/atoms/elements/ImpulseLine";
+import { selectTheme } from "../features/global/globalSelectors";
+import { useFormEscape } from "../app/hooks/useFormEscape";
 
 export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
-  console.log("Current Location State:", location.state);
-  const user = useAppSelector(selectUser);
-  const accessToken = useAppSelector(selectAccessToken);
   const from = location.state?.from || "/dashboard";
-  // 1. Define fields
+  const theme = useAppSelector(selectTheme);
+  const { handleCancel } = useFormEscape();
+
   const loginFields: FieldConfig[] = [
     {
       name: "email",
@@ -40,11 +36,9 @@ export default function Login() {
     },
   ];
 
-  // 2. Extract values from the reusable Form engine
   const handleFormSubmit = async (values: Record<string, string>) => {
     const cleanedEmail = values.email.trim();
 
-    // --- FRONTEND EMAIL GUARD ---
     if (!emailRegex.test(cleanedEmail)) {
       dispatch(
         addToast({
@@ -52,70 +46,84 @@ export default function Login() {
           type: "error",
         }),
       );
-      return; // Stop form submission early
+      return;
     }
-    // ----------------------------
-
-    const loginPayload = {
-      email: cleanedEmail,
-      password: values.password,
-    };
 
     try {
-      const result = await dispatch(loginUser(loginPayload)).unwrap();
-      console.log("Login successful:", result);
-
+      const result = await dispatch(
+        loginUser({ email: cleanedEmail, password: values.password }),
+      ).unwrap();
       if (result.token) {
         localStorage.setItem("token", result.token);
-
-        // Trigger a friendly toast notification using the user's name from the response payload
         dispatch(
           addToast({
             message: `Welcome back, ${result.user?.firstName || "User"}!`,
             type: "success",
           }),
         );
-
         navigate(from, { replace: true });
       }
     } catch (err) {
       console.error("Login failed:", err);
-      // Optional: Add an error toast for invalid login credentials here
       dispatch(
-        addToast({
-          message: "Invalid email or password. Please try again.",
-          type: "error",
-        }),
+        addToast({ message: "Invalid email or password.", type: "error" }),
       );
     }
   };
 
   return (
-    <div className="login page">
-      <div className="page__card">
-        <h2 className="page__title">
-          {accessToken ? `Welcome back, ${user.general.firstName}!` : "Login"}
-        </h2>
+    <div className={`login page--${theme}`}>
+      <div className="page__card card--form">
+        <Icon name="x" className="icon--close" onClick={handleCancel} />
+        <h2 className="page__title">Login</h2>
 
-        {!accessToken ? (
-          <Form
-            fields={loginFields}
-            submitButtonText="Login"
-            onSubmit={handleFormSubmit}
-            className="login__form"
+        {/* Animated Subtitle Hook */}
+        <div className="login__subtitle">
+          <p className="login__subtitle-text">Empowering civic action.</p>
+        </div>
+
+        <Form
+          fields={loginFields}
+          submitButtonText="Login"
+          onSubmit={handleFormSubmit}
+          className="login__form"
+        />
+
+        {/* CTA for New Users */}
+        <div className="login__register-cta">
+          <ImpulseLine
+            message="New to Civic Lens?"
+            className="login__cta-text"
+            delay={0.6}
+            animation={{
+              opacity: 0,
+              y: 10,
+              // This function runs for every letter (index i)
+              color: (i: number) => {
+                const colors = [
+                  "#FF5733",
+                  "#33FF57",
+                  "#3357FF",
+                  "#F333FF",
+                  "#FF33A1",
+                  "#33FFF5",
+                ];
+                return colors[i % colors.length];
+              },
+              duration: 1.2,
+              ease: "back.out(2)",
+            }}
           />
-        ) : (
-          <div className="success-overlay">
-            <p>You are logged in.</p>
-            <Button
-              type="button"
-              name="goto-dashboard"
-              content="Go to Dashboard"
-              variant="success"
-              onClick={() => navigate(from, { replace: true })}
-            />
-          </div>
-        )}
+          <Button
+            type="button"
+            name="register-redirect"
+            variant="secondary" // Or whatever variant fits your "ghost" style
+            onClick={() => navigate("/register")}
+            className="login__register-btn"
+          >
+            Create an account
+          </Button>
+        </div>
       </div>
     </div>
   );

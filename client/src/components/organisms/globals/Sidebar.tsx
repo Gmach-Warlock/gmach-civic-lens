@@ -1,5 +1,12 @@
-import { useEffect } from "react";
-import { NavLink } from "react-router";
+import {
+  useEffect,
+  type Dispatch,
+  type SetStateAction,
+  type MouseEvent,
+} from "react";
+import { NavLink, useNavigate } from "react-router";
+import { useAppDispatch } from "../../../app/hooks/generalHooks";
+import { addToast } from "../../../features/global/globalSlice";
 import Button from "../../atoms/controls/Button";
 import Icon from "../../atoms/controls/Icon";
 
@@ -7,8 +14,9 @@ export interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
   filter: "all" | "mine";
-  setFilter: (filter: "all" | "mine") => void;
-  setSearchQuery?: (query: string) => void; // Added for the search feature
+  setFilter: Dispatch<SetStateAction<"all" | "mine">>;
+  setSearchQuery?: (query: string) => void;
+  isLoggedIn: boolean;
 }
 
 export function Sidebar({
@@ -17,7 +25,11 @@ export function Sidebar({
   filter,
   setFilter,
   setSearchQuery,
+  isLoggedIn,
 }: SidebarProps) {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -29,8 +41,32 @@ export function Sidebar({
     };
   }, [isOpen]);
 
-  const handleLinkClick = () => {
-    if (window.innerWidth < 768) onClose();
+  /**
+   * The "Retail Manager" Guard
+   * Intercepts unauthorized clicks and redirects to Login.
+   */
+  const handleProtectedAction = (
+    e: MouseEvent<HTMLAnchorElement | HTMLButtonElement>,
+    isPunitive = false,
+  ) => {
+    if (!isLoggedIn) {
+      e.preventDefault();
+
+      dispatch(
+        addToast({
+          message: isPunitive
+            ? "Access Denied: You must be logged in to report issues."
+            : "Authorization required to access this feature.",
+          type: "error",
+        }),
+      );
+
+      onClose();
+      navigate("/login");
+    } else {
+      // Close sidebar on mobile after a successful action
+      if (window.innerWidth < 768) onClose();
+    }
   };
 
   return (
@@ -60,7 +96,7 @@ export function Sidebar({
                 className={({ isActive }) =>
                   `c-sidebar__link ${isActive ? "c-sidebar__link--active" : ""}`
                 }
-                onClick={handleLinkClick}
+                onClick={(e) => handleProtectedAction(e)}
               >
                 Dashboard
               </NavLink>
@@ -72,7 +108,7 @@ export function Sidebar({
                 className={({ isActive }) =>
                   `c-sidebar__link ${isActive ? "c-sidebar__link--active" : ""}`
                 }
-                onClick={handleLinkClick}
+                onClick={(e) => handleProtectedAction(e)}
               >
                 Settings
               </NavLink>
@@ -82,14 +118,13 @@ export function Sidebar({
               <hr className="c-sidebar__divider" />
             </li>
 
-            {/* Merchandising: The Primary CTA */}
             <li className="c-sidebar__item c-sidebar__item--cta">
               <NavLink
                 to="/reports/new"
-                onClick={handleLinkClick}
                 className="c-sidebar__btn-link"
+                onClick={(e) => handleProtectedAction(e, true)}
               >
-                Report an Issue {<Icon name="megaphone" />}
+                Report an Issue <Icon name="megaphone" />
               </NavLink>
             </li>
 
@@ -97,19 +132,32 @@ export function Sidebar({
               <hr className="c-sidebar__divider" />
             </li>
 
-            {/* The Feed Control Hub */}
             <li className="c-sidebar__section">
               <span className="c-sidebar__label">FEED FILTER</span>
 
-              {/* Secondary Search Entry */}
               <div className="c-sidebar__search-container">
                 <input
                   type="text"
                   placeholder="Search issues..."
                   className="c-sidebar__search-input"
-                  onChange={(e) => setSearchQuery?.(e.target.value)}
+                  onFocus={() => {
+                    if (!isLoggedIn) {
+                      dispatch(
+                        addToast({
+                          message: "Login to search current issues.",
+                          type: "info",
+                        }),
+                      );
+                    }
+                  }}
+                  onChange={(e) => {
+                    if (isLoggedIn) setSearchQuery?.(e.target.value);
+                  }}
                 />
-                <Button name="search-sidebar">
+                <Button
+                  name="search-sidebar"
+                  onClick={(e) => handleProtectedAction(e)}
+                >
                   <Icon name="magnifying-glass" />
                 </Button>
               </div>
@@ -118,14 +166,18 @@ export function Sidebar({
                 <Button
                   name="all"
                   className={filter === "all" ? "is-active" : ""}
-                  onClick={() => setFilter("all")}
+                  onClick={(e) =>
+                    isLoggedIn ? setFilter("all") : handleProtectedAction(e)
+                  }
                 >
                   All
                 </Button>
                 <Button
                   name="mine"
                   className={filter === "mine" ? "is-active" : ""}
-                  onClick={() => setFilter("mine")}
+                  onClick={(e) =>
+                    isLoggedIn ? setFilter("mine") : handleProtectedAction(e)
+                  }
                 >
                   Mine
                 </Button>

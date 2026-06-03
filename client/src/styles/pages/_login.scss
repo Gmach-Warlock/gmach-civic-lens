@@ -2,52 +2,86 @@
   color: var(--color-primary);
   font-family: var(--font-coco-raffine);
   font-size: var(--text-2xl);
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.5rem; // Reduced to make room for subtitle
   text-align: center;
+}
+
+.login__subtitle {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+
+  &-text {
+    font-size: var(--text-sm);
+    color: var(--color-secondary); // Or a muted variant
+    font-style: italic;
+    animation: fadeInUp 1s ease-out;
+  }
 }
 
 .login__form {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-  color: var(--color-primary);
 }
 
-/* --- Success Transitions --- */
-
-.login__form {
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  opacity: 1;
-  max-height: 1000px;
-  overflow: hidden;
-}
-
-.login__form--success {
-  opacity: 0;
-  max-height: 0;
-  margin: 0;
-  padding: 0;
-  pointer-events: none;
-  transform: scale(0.95) translateY(-20px);
-}
-
-.login-overlay {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.login__register-cta {
+  margin-top: 2rem;
   text-align: center;
-  padding: 2rem 0;
-  animation: fadeIn 0.8s ease forwards;
+  font-size: var(--text-sm);
+  border-top: 1px solid rgba(var(--color-primary-rgb), 0.1);
+  padding-top: 1.5rem;
+
+  p {
+    color: var(--color-grey-500);
+    margin-bottom: 0.5rem;
+  }
 }
 
-.login-overlay p {
+.login__register-link {
   color: var(--color-primary);
-  font-size: var(--text-lg);
-  margin-bottom: 1.5rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: opacity 0.2s;
+
+  &:hover {
+    text-decoration: underline;
+    opacity: 0.8;
+  }
 }
 
-@keyframes fadeIn {
+.login__cta-text {
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 2px; // Tighten the letters for a cohesive "line" look
+
+  .impulse-letter {
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: var(--text-sm);
+    /* Create a permanent shifting color effect */
+    animation: colorCycle 4s infinite alternate;
+
+    // Offset the animation for each letter to create the rainbow wave
+    @for $i from 1 through 20 {
+      &:nth-child(#{$i}) {
+        animation-delay: #{$i * 0.1}s;
+      }
+    }
+  }
+}
+
+.login__register-btn {
+  /* Give the button a slight glow to match the rainbow text above it */
+  transition: all 0.3s ease;
+  &:hover {
+    box-shadow: 0 0 15px rgba(var(--color-primary-rgb), 0.4);
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes fadeInUp {
   from {
     opacity: 0;
     transform: translateY(10px);
@@ -55,5 +89,19 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+@keyframes colorCycle {
+  0% {
+    color: var(--color-primary);
+    transform: scale(1);
+  }
+  50% {
+    color: var(--color-accent);
+    transform: scale(1.1);
+  }
+  100% {
+    color: var(--color-secondary);
+    transform: scale(1);
   }
 }

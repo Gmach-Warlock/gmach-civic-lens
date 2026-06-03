@@ -2,17 +2,36 @@
   display: flex;
   align-items: stretch;
   gap: 0;
+  width: 100%; // Ensure the wrapper itself wants to fill the parent
 
   .form__group {
     margin-bottom: 0;
-    flex: 1;
+    flex: 1; // Tells the container to grow
+    display: flex; // Added: makes the container a flexbox too
+  }
+
+  // Target the actual input inside the search bar
+  .search-bar__input {
+    flex: 1; // Tells the input to fill the .form__group
+    width: 100%; // Ensures it doesn't default to a fixed size
+    min-width: 0; // CRITICAL: Allows flex items to shrink below their content size
   }
 
   .input-field {
     height: 100%;
+    width: 100%;
     padding-top: 0.15rem;
     padding-bottom: 0.15rem;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+  }
+
+  .search-bar__button {
+    flex-shrink: 0; // Ensure the button never squishes
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }

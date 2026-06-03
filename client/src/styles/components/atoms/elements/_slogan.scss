@@ -1,19 +1,49 @@
-.slogan {
-  font-size: var(--text-2xl);
-  text-align: center;
-  background: linear-gradient(
-    to bottom,
-    hsl(0, 0%, 100%) 0%,
-    hsl(0, 0%, 88%) 85%,
-    hsl(0, 0%, 60%) 90%,
-    hsl(0, 0%, 40%) 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0px 10px 8px rgba(0, 0, 0, 0.5));
-  line-height: 1;
-  z-index: var(--z-foreground);
+div.slogan {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem; // Give them space so they don't overlap
+  min-height: 150px; // Ensure the container actually has height for both lines
+  margin: 2rem auto;
+  position: relative;
+  z-index: 5; // Put it above the background grid
+
+  .slogan__line {
+    display: block;
+    width: 100%;
+
+    // Ensure the impulse-letter within the slogan line is visible
+    .impulse-letter {
+      font-family: var(--font-primary);
+      font-weight: 900;
+      font-size: clamp(1.5rem, 5vw, 2.5rem); // Responsive sizing
+      text-transform: uppercase;
+
+      // Force visibility in case a global style is hiding spans
+      visibility: visible !important;
+      opacity: 1;
+    }
+  }
+}
+
+@keyframes sloganRainbow {
+  0% {
+    color: #00d2ff;
+    transform: translateY(0);
+  }
+  33% {
+    color: #3a7bd5;
+    transform: translateY(-3px);
+  }
+  66% {
+    color: #00ff88;
+    transform: translateY(0);
+  }
+  100% {
+    color: #00d2ff;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 640px) {

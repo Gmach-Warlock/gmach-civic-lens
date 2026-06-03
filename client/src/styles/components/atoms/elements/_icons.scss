@@ -2,10 +2,12 @@
   display: inline-block;
   line-height: 1;
 
-  &--dark {
+  &--dark,
+  &--theme-light {
     color: white;
   }
-  &--light {
+  &--light,
+  &--theme-dark {
     color: var(--color-secondary);
   }
 
@@ -80,5 +82,29 @@
   }
   &--3xl {
     font-size: 3rem;
+  }
+}
+
+.card--form {
+  .icon {
+    &.icon--light,
+    &.icon--dark {
+      // Your new override colors here
+      color: var(--color-primary);
+      fill: var(--color-accent);
+      position: absolute; // This is the "Object"
+      top: var(--space-sm);
+      right: var(--space-sm);
+      // UI/UX Best Practices
+      cursor: var(--cursor-action);
+      padding: var(--space-xs); // Increases hit area for the user
+      transition: var(--transition-fast);
+    }
+    .icon {
+      &:hover {
+        transform: scale(var(--hover-scale));
+        color: var(--color-report-alert); // Give them visual feedback
+      }
+    }
   }
 }

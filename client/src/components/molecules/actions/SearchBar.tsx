@@ -1,29 +1,29 @@
 import { useRef, type FormEvent } from "react";
-import { searchIssues } from "../../../features/issues/thunks/searchIssues";
 import Button from "../../atoms/controls/Button";
 import Input from "../../atoms/controls/Input";
 import Row from "../../organisms/layout/Row";
 import Icon from "../../atoms/controls/Icon";
-import { useAppDispatch } from "../../../app/hooks/generalHooks";
 
 interface SearchBarProps {
   placeholder?: string;
   className?: string;
+  onSearch?: (query: string) => void; // New prop for orchestration
 }
 
 export default function SearchBar({
   placeholder = "Search...",
   className = "",
+  onSearch,
 }: SearchBarProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const dispatch = useAppDispatch(); // 3. Initialize dispatch
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (inputRef.current?.value !== undefined) {
-      // 4. Dispatch the search action
-      dispatch(searchIssues(inputRef.current.value));
-      console.log("searching");
+    const query = inputRef.current?.value;
+
+    if (query !== undefined && onSearch) {
+      onSearch(query);
+      console.log("Search orchestrated from parent:", query);
     }
   };
 

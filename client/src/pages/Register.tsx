@@ -4,22 +4,20 @@ import { registerUser } from "../features/auth/thunks/registerUser";
 import type { UserGeneralInfoInterface } from "../app/interfaces/authInterfaces";
 import type { FieldConfig } from "../app/interfaces/componentInterfaces";
 import { useNavigate } from "react-router";
-import {
-  selectAccessToken,
-  selectUser,
-} from "../features/auth/selectors/authSelectors";
+import { selectAccessToken } from "../features/auth/selectors/authSelectors";
 import { addToast } from "../features/global/globalSlice";
 import { Form } from "../components/molecules/actions/Form";
-import Button from "../components/atoms/controls/Button";
 
 // Import your frontend validation regex utilities here 👇
 import { emailRegex, passwordRegex, zipCodeRegex } from "../assets/authRegexes";
+import Icon from "../components/atoms/controls/Icon";
+import { useFormEscape } from "../app/hooks/useFormEscape";
 
 export default function Register() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const user = useAppSelector(selectUser);
   const accessToken = useAppSelector(selectAccessToken);
+  const { handleCancel } = useFormEscape();
 
   useEffect(() => {
     if (accessToken) {
@@ -167,31 +165,15 @@ export default function Register() {
   return (
     <div className="register__page">
       <div className="card--form">
-        <h2 className="register__title">
-          {accessToken
-            ? `Welcome, ${user.general.firstName}!`
-            : "Create Account"}
-        </h2>
+        <Icon name="x" onClick={handleCancel} className="icon--close" />
+        <h2 className="register__title">Create Account</h2>
 
-        {!accessToken ? (
-          <Form
-            fields={registerFields}
-            submitButtonText="Register"
-            onSubmit={handleFormSubmit}
-            className="register__form"
-          />
-        ) : (
-          <div className="success-overlay">
-            <p>Your account is ready.</p>
-            <Button
-              type="button"
-              name="goto-dashboard"
-              content="Go to Dashboard"
-              variant="success"
-              onClick={() => navigate("/dashboard")}
-            />
-          </div>
-        )}
+        <Form
+          fields={registerFields}
+          submitButtonText="Register"
+          onSubmit={handleFormSubmit}
+          className="register__form"
+        />
       </div>
     </div>
   );

@@ -1,0 +1,43 @@
+.impulse-line {
+  display: flex;
+  justify-content: center;
+  gap: 0.1rem;
+}
+
+.impulse-letter {
+  display: inline-block;
+  font-weight: 900;
+  // Apply a persistent, mesmerizing color-shift
+  animation: rainbowShift 5s linear infinite;
+
+  // Stagger the start time for every letter to create the "wave"
+  @for $i from 1 through 30 {
+    &:nth-child(#{$i}) {
+      animation-delay: #{$i * 0.15}s;
+    }
+  }
+}
+
+@keyframes rainbowShift {
+  0% {
+    color: #ff5733; // Warm Orange
+    transform: translateY(0);
+    filter: drop-shadow(0 0 2px rgba(255, 87, 51, 0.2));
+  }
+  25% {
+    color: #33ff57; // Vibrant Green
+    transform: translateY(-2px);
+  }
+  50% {
+    color: #3357ff; // Deep Blue
+    filter: drop-shadow(0 0 8px rgba(51, 87, 255, 0.5));
+  }
+  75% {
+    color: #f333ff; // Purple/Magenta
+    transform: translateY(-2px);
+  }
+  100% {
+    color: #ff33a1; // Bright Pink
+    transform: translateY(0);
+  }
+}

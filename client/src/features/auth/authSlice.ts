@@ -58,9 +58,13 @@ const authSlice = createSlice({
     });
 
     // 3. VERIFY TOKEN HANDLER
+    builder.addCase(verifyToken.pending, (state) => {
+      state.loadingState.state = "loading";
+      state.loadingState.message = "Verifying session...";
+    });
+
     builder.addCase(verifyToken.fulfilled, (state, action) => {
       const { accessToken, refreshToken, user } = action.payload;
-      console.log(accessToken, refreshToken);
 
       state.loadingState.state = "idle";
       state.loadingState.message = `User verified successfully at ${new Date().toLocaleString()}`;
@@ -71,6 +75,19 @@ const authSlice = createSlice({
 
       localStorage.setItem("access-token", accessToken);
       localStorage.setItem("refresh-token", refreshToken);
+    });
+
+    builder.addCase(verifyToken.rejected, (state, action) => {
+      state.loadingState.state = "idle"; // Crucial: move out of loading
+      state.loadingState.message =
+        (action.payload as string) || "Verification failed";
+
+      // Reset user state on failure
+      state.user = createInitialUserState().user;
+
+      // Clean up storage
+      localStorage.removeItem("access-token");
+      localStorage.removeItem("refresh-token");
     });
   },
 });

@@ -5,6 +5,7 @@ import { createIssue } from "../features/issues/thunks/createIssue";
 import { FormGroup } from "../components/atoms/layout/FormGroup";
 import Input from "../components/atoms/controls/Input";
 import Button from "../components/atoms/controls/Button";
+import Row from "../components/organisms/layout/Row";
 import type React from "react";
 import type { CreateIssueRequestInterface } from "../app/interfaces/issuesInterfaces";
 import type { CategoryType } from "../app/types/issuesTypes";
@@ -14,6 +15,8 @@ import { isValidCoordinate } from "../assets/authHelpers";
 // Import your toast slice action and your text security guard 👇
 import { addToast } from "../features/global/globalSlice";
 import { noHtmlRegex } from "../assets/authRegexes";
+import { useFormEscape } from "../app/hooks/useFormEscape";
+import Icon from "../components/atoms/controls/Icon";
 
 function Report() {
   const dispatch = useAppDispatch();
@@ -36,6 +39,8 @@ function Report() {
     { value: "Utilities", label: "Utilities" },
     { value: "Sanitation", label: "Sanitation" },
   ];
+
+  const { handleCancel } = useFormEscape();
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -140,6 +145,7 @@ function Report() {
   return (
     <div className="report card--form">
       <form className="report__form form" onSubmit={handleSubmit}>
+        <Icon name="x" className="icon--close" onClick={handleCancel} />
         <h2>Report an issue in your area</h2>
         <p>Zip: {user.general.zipCode}</p>
 
@@ -200,12 +206,21 @@ function Report() {
           />
         </FormGroup>
 
-        <Button
-          name="issue-submit"
-          content="Submit"
-          className="btn--submit-form"
-          type="submit"
-        />
+        <Row>
+          <Button
+            name="issue-cancel"
+            content="Cancel"
+            className="btn--cancel"
+            type="button"
+            onClick={handleCancel}
+          />
+          <Button
+            name="issue-submit"
+            content="Submit"
+            className="btn--submit-form"
+            type="submit"
+          />
+        </Row>
       </form>
     </div>
   );
