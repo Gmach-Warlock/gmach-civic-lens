@@ -1,7 +1,7 @@
 .heading {
   font-weight: 900;
   transition: transform var(--transition-fast);
-
+  text-align: center;
   // 1. Dynamic Fallback Color using your inline custom property
   // If no style overrides it, it will use the mapped color string
   color: hsl(var(--current-hs), var(--text-lightness, 50%));
@@ -93,5 +93,28 @@
     -webkit-text-stroke: 1px
       hsl(var(--current-hs), var(--lightness-shadow, 20%));
     paint-order: stroke fill;
+  }
+  &--color-mono {
+    // Base color for mono text
+    color: var(--color-neutral-dark); // Use your preferred neutral/white
+
+    // Override the theme-based styles for mono specifically
+    &.heading--basic {
+      color: var(--color-neutral-dark);
+    }
+
+    &.heading--blocked {
+      text-shadow: 1px 1px 0px var(--color-neutral-light);
+      -webkit-text-stroke: 1px var(--color-neutral-light);
+    }
+
+    &.heading--clipped,
+    &.heading--pill {
+      // You can define a grayscale/mono gradient here if desired
+      background: linear-gradient(to bottom, #ffffff 0%, #a0a0a0 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
   }
 }

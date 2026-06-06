@@ -11,14 +11,18 @@ import {
 import { addToast } from "../features/global/globalSlice";
 import { Form } from "../components/molecules/actions/Form";
 import Button from "../components/atoms/controls/Button";
+import Icon from "../components/atoms/controls/Icon";
 
 // Import your frontend validation regex utilities here 👇
 import { emailRegex, passwordRegex, zipCodeRegex } from "../assets/authRegexes";
+import { useEscapeNavigation } from "../app/hooks/useEscapeNavigation";
+import { selectTheme } from "../features/global/globalSelectors";
 
 export default function Register() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const user = useAppSelector(selectUser);
+  const theme = useAppSelector(selectTheme);
   const accessToken = useAppSelector(selectAccessToken);
 
   useEffect(() => {
@@ -88,6 +92,7 @@ export default function Register() {
     },
   ];
 
+  const { handleCancel } = useEscapeNavigation();
   const handleFormSubmit = async (values: Record<string, string>) => {
     const cleanedEmail = values.email.trim();
     const cleanedZip = values.zipCode.trim();
@@ -165,8 +170,9 @@ export default function Register() {
   };
 
   return (
-    <div className="register__page">
-      <div className="card--form">
+    <div className={`register page page--${theme}`}>
+      <div className="form page__card">
+        <Icon name="x" onClick={handleCancel} className="icon--close" />
         <h2 className="register__title">
           {accessToken
             ? `Welcome, ${user.general.firstName}!`

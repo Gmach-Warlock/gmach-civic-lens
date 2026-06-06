@@ -82,3 +82,16 @@
     font-size: 3rem;
   }
 }
+
+.page__card {
+  position: relative;
+}
+
+.page__card .icon {
+  color: var(--color-primary);
+  position: absolute;
+  top: 1rem; // Adjust to your liking
+  right: 1rem; // Adjust to your liking
+  cursor: pointer;
+  z-index: 10;
+}

@@ -13,6 +13,9 @@ import Button from "../components/atoms/controls/Button";
 // Import your global toast action and your email regex utility 👇
 import { addToast } from "../features/global/globalSlice";
 import { emailRegex } from "../assets/authRegexes";
+import Icon from "../components/atoms/controls/Icon";
+import { useEscapeNavigation } from "../app/hooks/useEscapeNavigation";
+import { selectTheme } from "../features/global/globalSelectors";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -21,6 +24,7 @@ export default function Login() {
   console.log("Current Location State:", location.state);
   const user = useAppSelector(selectUser);
   const accessToken = useAppSelector(selectAccessToken);
+  const theme = useAppSelector(selectTheme);
   const from = location.state?.from || "/dashboard";
   // 1. Define fields
   const loginFields: FieldConfig[] = [
@@ -39,6 +43,8 @@ export default function Login() {
       required: true,
     },
   ];
+
+  const { handleCancel } = useEscapeNavigation();
 
   // 2. Extract values from the reusable Form engine
   const handleFormSubmit = async (values: Record<string, string>) => {
@@ -91,8 +97,9 @@ export default function Login() {
   };
 
   return (
-    <div className="login page">
-      <div className="page__card">
+    <div className={`login page page--${theme}`}>
+      <div className="page__card form">
+        <Icon name="x" onClick={handleCancel} className="icon--close" />
         <h2 className="page__title">
           {accessToken ? `Welcome back, ${user.general.firstName}!` : "Login"}
         </h2>

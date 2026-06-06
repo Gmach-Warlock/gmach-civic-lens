@@ -4,3 +4,11 @@
   align-items: center;
   min-height: 80vh;
 }
+
+.page--light {
+  background-color: var(--color-secondary);
+}
+
+.page--dark {
+  background-color: var(--color-primary);
+}

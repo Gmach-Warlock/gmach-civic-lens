@@ -14,6 +14,8 @@ import "./App.scss";
 import ProtectedRoute from "./components/organisms/layout/ProtectedRoute";
 import PublicRoute from "./components/organisms/layout/PublicRoute";
 import Settings from "./pages/Settings";
+import Terms from "./pages/Terms";
+import Privacy from "./pages/Privacy";
 
 function App() {
   const router = createBrowserRouter(
@@ -23,6 +25,8 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/privacy" element={<Privacy />} />
         </Route>
 
         <Route element={<ProtectedRoute />}>

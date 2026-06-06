@@ -1,3 +1,40 @@
+.form {
+  position: relative;
+  background: hsla(0, 0%, 100%, 0.8); // Slightly transparent base
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+  border: var(--glass-border);
+  border-radius: var(--rounded-lg);
+  box-shadow: var(--shadow-high);
+  padding: var(--space-xl);
+  max-width: 400px;
+  width: 100%;
+
+  // Apply the theme transition you defined
+  transition: transform var(--transition-normal);
+
+  &:hover {
+    transform: scale(1.01); // Subtle lift
+  }
+}
+
+.input-field {
+  // Use your inset shadow variable for that "pressed" look
+  box-shadow: var(--shadow-inset-field);
+  border: 1px solid hsla(var(--primary-hs), 30%);
+  border-radius: var(--rounded-sm);
+  padding: var(--space-sm);
+  background: transparent;
+  width: 100%;
+  margin-top: var(--space-xs);
+  transition: border var(--transition-fast);
+
+  &:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+}
+
 .form__group {
   display: flex;
   flex-direction: column;

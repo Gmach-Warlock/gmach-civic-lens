@@ -1,0 +1,46 @@
+// Footer.module.scss
+
+.footer-container {
+  &--dark,
+  &--light {
+    padding: 2rem 1rem;
+    text-align: center;
+  }
+
+  &--dark {
+    background-color: var(--color-background);
+    border-top: 1px solid var(--color-blueprint-blue);
+    color: var(--color-neutral-light);
+  }
+
+  &--light {
+    background-color: hsl(var(--background-hs), 80%);
+    border-top: 1px solid var(--color-secondary);
+    color: var(--color-background);
+  }
+
+  .footer-content {
+    font-size: 0.875rem;
+
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0.5rem 0 0 0;
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+
+      a {
+        text-decoration: none;
+        // Uses the current text color context automatically
+        color: inherit;
+        opacity: 0.8;
+
+        &:hover {
+          opacity: 1;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}

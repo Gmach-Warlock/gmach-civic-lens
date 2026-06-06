@@ -6,6 +6,7 @@ import { verifyToken } from "./features/auth/thunks/verifyToken";
 import { selectUserTheme } from "./features/auth/selectors/authSelectors";
 import DoubleBarHeader from "./components/organisms/sections/DoubleBarHeader";
 import ToastsContainer from "./components/organisms/sections/ToastsContainer";
+import Footer from "./components/organisms/globals/Footer";
 
 export default function Root() {
   const dispatch = useAppDispatch();
@@ -37,6 +38,14 @@ export default function Root() {
         <Outlet />
       </main>
       <ToastsContainer />
+      <Footer
+        year={2026}
+        copyrighter="GMach Development"
+        links={[
+          { label: "Terms", path: "/terms" },
+          { label: "Privacy", path: "/privacy" },
+        ]}
+      />
     </div>
   );
 }

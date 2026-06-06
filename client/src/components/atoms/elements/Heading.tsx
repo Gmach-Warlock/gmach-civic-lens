@@ -10,7 +10,8 @@ export type HeadingColor =
   | "accent"
   | "background"
   | "neutral-light"
-  | "neutral-dark";
+  | "neutral-dark"
+  | "mono";
 
 export interface HeadingProps extends ComponentPropsWithoutRef<"h1"> {
   size: HeadingSize;
@@ -30,8 +31,12 @@ export default function Heading({
   const Tag = `h${size}` as const;
   const theme = useAppSelector(selectTheme);
 
+  // Surgical fix: Only add the theme modifier if NOT mono
+  const themeClass =
+    color !== "mono" ? `heading--${headingStyle}-${theme}` : "";
+
   const mergedClassName =
-    `heading heading--${headingStyle}-${theme} heading--color-${color} ${className}`.trim();
+    `heading ${themeClass} heading--${headingStyle} heading--color-${color} ${className}`.trim();
 
   const hsMap: Record<HeadingColor, string> = {
     primary: "var(--primary-hs)",
@@ -40,6 +45,7 @@ export default function Heading({
     background: "var(--background-hs)",
     "neutral-light": "var(--neutral-hs)",
     "neutral-dark": "var(--neutral-hs)",
+    mono: "var(--neutral-hs)", // Adjusted to a neutral hue
   };
 
   const mergedStyle: CSSProperties = {
@@ -48,10 +54,8 @@ export default function Heading({
   };
 
   return (
-    <>
-      <Tag {...props} className={mergedClassName} style={mergedStyle}>
-        {children || props.content}
-      </Tag>
-    </>
+    <Tag {...props} className={mergedClassName} style={mergedStyle}>
+      {children || props.content}
+    </Tag>
   );
 }

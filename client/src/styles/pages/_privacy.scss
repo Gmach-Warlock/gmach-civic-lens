@@ -1,0 +1,24 @@
+.privacy .heading {
+  place-self: center;
+}
+
+.privacy-list {
+  padding-left: 1.5rem;
+  counter-reset: privacy-counter;
+
+  li {
+    list-style: none;
+    margin-bottom: 2rem;
+    position: relative;
+
+    &::before {
+      counter-increment: privacy-counter;
+      content: counter(privacy-counter) ".";
+      position: absolute;
+      left: -1.5rem;
+      font-weight: 900;
+      font-size: 1.4rem;
+      color: var(--color-primary); // Matches your design system
+    }
+  }
+}
