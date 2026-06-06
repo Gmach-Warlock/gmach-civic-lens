@@ -104,6 +104,7 @@ class AuthController {
         ...formatted,
       });
     } catch (error) {
+      console.error("🚨 Registration Error:", error); // Add this
       res.status(400).json({ error: error.message });
     }
   }
