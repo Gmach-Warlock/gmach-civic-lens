@@ -9,6 +9,10 @@ describe("Users API (/api/auth/register)", () => {
   });
 
   describe("POST /api/auth/register", () => {
+    beforeEach(async () => {
+      // This clears the table completely before every single test
+      await db.User.destroy({ where: {}, truncate: true, cascade: true });
+    });
     // --- HAPPY PATH ---
     it("should return 201, generate tokens, and return the formatted user on success", async () => {
       const validUser = {
