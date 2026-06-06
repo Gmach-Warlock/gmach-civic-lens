@@ -39,6 +39,7 @@ jobs:
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_NAME: civiclens_test
           DB_HOST: localhost
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
   test-client:
     runs-on: ubuntu-latest
