@@ -1,0 +1,43 @@
+name: Civic Lens CI/CD
+
+# This pipeline triggers on every push to the master branch
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    # Strategy to test on the latest LTS version of Node
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+      # Step 1: Check out the code from the repository
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Step 2: Set up the Node environment
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      # Step 3: Install dependencies
+      - name: Install Dependencies
+        run: npm install
+
+      # Step 4: Run your Test Suite
+      # This ensures that no broken code ever reaches production
+      - name: Run Integration Tests
+        run: npm run test
+        env:
+          NODE_ENV: test
+          # Add any other secrets here if needed for testing
