@@ -34,9 +34,11 @@ jobs:
       - run: npm test
         env:
           NODE_ENV: test
-          # Reference your secrets here instead of hardcoded values
+          # Map these strictly to match your config.js requirements
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_NAME: civiclens_test
+          DB_HOST: localhost
 
   test-client:
     runs-on: ubuntu-latest
