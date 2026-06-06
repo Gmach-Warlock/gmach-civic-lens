@@ -29,7 +29,9 @@ describe("Users API (/api/auth/register)", () => {
       const response = await request(app)
         .post("/api/auth/register")
         .send(validUser);
-
+      if (response.status !== 201) {
+        console.log("❌ Happy Path Failed! Response Body:", response.body);
+      }
       // Root level properties
       expect(response.status).toBe(201);
       expect(response.body).toHaveProperty("message", "User created!");
