@@ -4,9 +4,7 @@ import type { RootState, AppDispatch } from "../app/store/store";
 import type { FieldConfig } from "../app/interfaces/componentInterfaces";
 import { updateUserDetails } from "../features/auth/thunks/updateUser";
 import { addToast } from "../features/global/globalSlice";
-import { selectUserTheme } from "../features/auth/selectors/authSelectors"; // Import the new selector
-
-// Import your regex utilities
+import { selectUserTheme } from "../features/auth/selectors/authSelectors";
 import { emailRegex, passwordRegex, zipCodeRegex } from "../assets/authRegexes";
 import { useNavigate } from "react-router";
 
@@ -14,8 +12,7 @@ function Settings() {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { general } = useSelector((state: RootState) => state.auth.user);
-  const currentTheme = useSelector(selectUserTheme); // Get theme from meta
-
+  const currentTheme = useSelector(selectUserTheme); 
   const settingsFields: FieldConfig[] = [
     {
       name: "username",
@@ -70,7 +67,6 @@ function Settings() {
       name: "theme",
       label: "Preferred Theme",
       type: "select",
-      // Using the current theme from state as the placeholder
       placeholder: currentTheme,
       options: [
         { label: "Light Mode", value: "light" },
@@ -124,7 +120,6 @@ function Settings() {
     }
 
     try {
-      // This will now include { theme: "dark" } etc. if changed
       await dispatch(updateUserDetails(updates)).unwrap();
       dispatch(
         addToast({ message: "Profile updated successfully!", type: "success" }),

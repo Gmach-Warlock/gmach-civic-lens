@@ -94,7 +94,7 @@ export default function Dashboard() {
 
   return (
     <div
-      className={`dashboard card--${theme}`}
+      className={`dashboard dashboard--${theme} card--${theme}`}
       key={`${issues.length}-${authStatus}-${issueStatus}`}
     >
       {/* Main Column */}

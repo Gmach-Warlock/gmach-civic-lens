@@ -3,6 +3,56 @@
   grid-template-columns: repeat(12, 1fr);
   width: 100%;
   min-height: 100vh;
+  position: relative;
+  background-color: var(--color-background);
+
+  // The base pseudo-element for the grid
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0; // Shorthand for top/right/bottom/left: 0
+    pointer-events: none;
+    z-index: var(--z-below);
+    background-attachment: fixed;
+  }
+
+  // Dark Theme Grid: Subtle blue-grey lines
+  &--dark {
+    background-image:
+      repeating-linear-gradient(
+        to right,
+        hsla(var(--primary-hs), 100%, 0.08) 0px,
+        hsla(var(--primary-hs), 100%, 0.08) 1px,
+        transparent 1px,
+        transparent 100px
+      ),
+      repeating-linear-gradient(
+        to bottom,
+        hsla(var(--primary-hs), 100%, 0.08) 0px,
+        hsla(var(--primary-hs), 100%, 0.08) 1px,
+        transparent 1px,
+        transparent 100px
+      );
+  }
+
+  // Light Theme Grid: Subtle warm-neutral lines
+  &--light {
+    background-image:
+      repeating-linear-gradient(
+        to right,
+        hsla(var(--neutral-hs), 20%, 0.12) 0px,
+        hsla(var(--neutral-hs), 20%, 0.12) 1px,
+        transparent 1px,
+        transparent 100px
+      ),
+      repeating-linear-gradient(
+        to bottom,
+        hsla(var(--neutral-hs), 20%, 0.12) 0px,
+        hsla(var(--neutral-hs), 20%, 0.12) 1px,
+        transparent 1px,
+        transparent 100px
+      );
+  }
 }
 
 .dashboard__sidebar {

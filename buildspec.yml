@@ -1,0 +1,18 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - npm install
+  pre_build:
+    commands:
+      - echo Running tests against the TEST database...
+      # Tell the app to use the TEST variable for the test run
+      - export DB_NAME=$DB_TEST_NAME
+      - npm test
+  build:
+    commands:
+      - echo Building for production...
+      # When you eventually run your build/deploy commands,
+      # they will have access to the $DB_PROD_NAME variable
+      - npm run build
