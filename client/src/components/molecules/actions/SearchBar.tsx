@@ -1,29 +1,34 @@
 import { useRef, type FormEvent } from "react";
-import { searchIssues } from "../../../features/issues/thunks/searchIssues";
 import Button from "../../atoms/controls/Button";
 import Input from "../../atoms/controls/Input";
 import Row from "../../organisms/layout/Row";
 import Icon from "../../atoms/controls/Icon";
-import { useAppDispatch } from "../../../app/hooks/generalHooks";
 
 interface SearchBarProps {
   placeholder?: string;
   className?: string;
+  // New prop to delegate search execution
+  onSearch?: (searchTerm: string) => void;
 }
 
 export default function SearchBar({
   placeholder = "Search...",
   className = "",
+  onSearch, // Destructure the new prop
 }: SearchBarProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const dispatch = useAppDispatch(); // 3. Initialize dispatch
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (inputRef.current?.value !== undefined) {
-      // 4. Dispatch the search action
-      dispatch(searchIssues(inputRef.current.value));
-      console.log("searching");
+    const searchTerm = inputRef.current?.value;
+
+    if (searchTerm !== undefined && searchTerm.trim() !== "") {
+      // If parent provided a handler, use it; otherwise, do nothing or default
+      if (onSearch) {
+        onSearch(searchTerm);
+      } else {
+        console.warn("SearchBar: No onSearch handler provided");
+      }
     }
   };
 
