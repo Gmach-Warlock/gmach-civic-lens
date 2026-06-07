@@ -38,7 +38,7 @@ phases:
       - npx sequelize-cli db:seed:all --env test
       - echo Running tests...
       - export DB_NAME=$DB_TEST_NAME
-      - npm test
+      - NODE_ENV=test npm test
   build:
     commands:
       - cd $CODEBUILD_SRC_DIR/server
