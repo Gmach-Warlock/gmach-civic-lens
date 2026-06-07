@@ -28,14 +28,15 @@ phases:
       - cd $CODEBUILD_SRC_DIR/server
       - echo "Checking DB_PASSWORD length..."
       - echo ${DB_PASSWORD} | wc -c
-      - docker run --name postgres-test -e POSTGRES_USER=drill_sergeant -e POSTGRES_PASSWORD=$DB_PASSWORD -e POSTGRES_DB=postgres -p 5432:5432 -d postgres:15-alpine
+      # 1. Use the ECR public mirror to avoid Docker Hub rate limits
+      - docker run --name postgres-test -e POSTGRES_USER=drill_sergeant -e POSTGRES_PASSWORD=$DB_PASSWORD -e POSTGRES_DB=postgres -p 5432:5432 -d public.ecr.aws/docker/library/postgres:15-alpine
       - sleep 10
-      - echo "Creating database 'civiclens'..."
-      # Create the database explicitly
+      - echo "Creating database 'civiclens_test'..."
       - docker exec -e PGPASSWORD=$DB_PASSWORD postgres-test psql -U drill_sergeant -d postgres -c "CREATE DATABASE civiclens_test;"
+      # 2. Run the sync script we created
       - chmod +x scripts/db-sync.sh
       - NODE_ENV=test ./scripts/db-sync.sh
-      - echo Running tests...
+      - echo "Running tests..."
       - export DB_NAME=$DB_TEST_NAME
       - NODE_ENV=test npm test
   build:
