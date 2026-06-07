@@ -34,8 +34,8 @@ phases:
       # Create the database explicitly
       - docker exec -e PGPASSWORD=$DB_PASSWORD postgres-test psql -U drill_sergeant -d postgres -c "CREATE DATABASE civiclens;"
       - echo "Running migrations and seeds..."
-      - npx sequelize-cli db:migrate
-      - npx sequelize-cli db:seed:all
+      - npx sequelize-cli db:migrate --env test
+      - npx sequelize-cli db:seed:all --env test
       - echo Running tests...
       - export DB_NAME=$DB_TEST_NAME
       - npm test
