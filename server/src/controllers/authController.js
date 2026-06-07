@@ -107,6 +107,12 @@ class AuthController {
           .status(400)
           .json({ error: "Please provide a valid email and password." });
 
+      if (!emailRegex.test(email) || !passwordRegex.test(password)) {
+        return res
+          .status(400)
+          .json({ error: "Please use the proper email and password formats." });
+      }
+
       const user = await User.findOne({ where: { email } });
       if (!user || !(await bcrypt.compare(password, user.password))) {
         return res.status(401).json({ error: "Invalid email or password" });
