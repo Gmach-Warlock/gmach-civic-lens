@@ -27,9 +27,9 @@ phases:
     commands:
       - cd $CODEBUILD_SRC_DIR/server
       - echo "Starting PostgreSQL for testing..."
-      - docker run --name postgres-test -e POSTGRES_USER=drill_sergeant -e POSTGRES_PASSWORD=password -e POSTGRES_DB=civiclens_test -p 5432:5432 -d postgres:15-alpine
-      - sleep 10 # Give the database a moment to initialize
-      - echo Running tests against the TEST database...
+      - docker run --name postgres-test -e POSTGRES_USER=drill_sergeant -e POSTGRES_PASSWORD=$DB_PASSWORD -e POSTGRES_DB=civiclens_test -p 5432:5432 -d postgres:15-alpine
+      - sleep 10
+      - echo Running tests...
       - export DB_NAME=$DB_TEST_NAME
       - npm test
   build:
