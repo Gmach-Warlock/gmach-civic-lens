@@ -85,8 +85,8 @@ class AuthController {
 
       const formatted = formatUserResponse(newUser);
       const accessToken = jwt.sign(
-        { id: newUser.id, username: newUser.username },
-        process.env.JWT_SECRET || "fallback-secret-for-testing",
+        { id: user.id, username: user.username },
+        process.env.JWT_SECRET || "fallback-test-secret-123", // ADD THIS FALLBACK
         { expiresIn: "1h" },
       );
 
@@ -144,8 +144,8 @@ class AuthController {
       // --- SUCCESSFUL LOGIN ---
       const formatted = formatUserResponse(user);
       const accessToken = jwt.sign(
-        { id: newUser.id, username: newUser.username },
-        process.env.JWT_SECRET || "fallback-secret-for-testing",
+        { id: user.id, username: user.username },
+        process.env.JWT_SECRET || "fallback-test-secret-123", // ADD THIS FALLBACK
         { expiresIn: "1h" },
       );
       const refreshToken = jwt.sign(
@@ -184,8 +184,8 @@ class AuthController {
       // --- LAYER 3: RESPOND WITH FRESH TOKENS ---
       const formatted = formatUserResponse(user);
       const accessToken = jwt.sign(
-        { id: newUser.id, username: newUser.username },
-        process.env.JWT_SECRET || "fallback-secret-for-testing",
+        { id: user.id, username: user.username },
+        process.env.JWT_SECRET || "fallback-test-secret-123", // ADD THIS FALLBACK
         { expiresIn: "1h" },
       );
 
