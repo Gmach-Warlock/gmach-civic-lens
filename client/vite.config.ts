@@ -1,18 +1,23 @@
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  // 1. Move 'test' inside the config, but ensure it matches Vitest's expected structure
+  test: {
+    environment: "jsdom",
+    globals: true,
+    setupFiles: "./src/vitest.setup.js",
+  },
+  // 2. Keep server config as its own top-level property
   server: {
-    host: true, // This is the same as --host 0.0.0.0
+    host: true,
     port: 5173,
     strictPort: true,
     watch: {
-      usePolling: true, // Necessary for Windows/Docker volume syncing
+      usePolling: true,
     },
     proxy: {
-      // Change 'localhost' to 'server' (your docker service name)
       "/api": {
         target: "http://server:4000",
         changeOrigin: true,

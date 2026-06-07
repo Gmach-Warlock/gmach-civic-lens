@@ -44,6 +44,17 @@ jobs:
 
   test-client:
     runs-on: ubuntu-latest
+    # Define these at the job level so Vite sees them during build/test
+    env:
+      VITE_ADOBE_URL: ${{ secrets.VITE_ADOBE_URL }}
+      VITE_FONT_AWESOME_URL: ${{ secrets.VITE_FONT_AWESOME_URL }}
+      VITE_SERVER_URL: http://localhost:4000
+      VITE_REGISTER_USER_PATH: /api/auth/register
+      VITE_LOGIN_USER_PATH: /api/auth/login
+      VITE_VERIFY_TOKEN_PATH: api/auth/me
+      VITE_CREATE_ISSUE_PATH: api/issues/
+      VITE_GET_ALL_ISSUES_PATH: api/issues/
+      VITE_UPVOTE_ISSUE_PATH: api/issues/
     defaults:
       run:
         working-directory: ./client
@@ -52,7 +63,5 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "24.x"
-          cache: "npm"
-          cache-dependency-path: ./client/package-lock.json
       - run: npm install
       - run: npm test
