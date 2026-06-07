@@ -26,9 +26,13 @@ phases:
   pre_build:
     commands:
       - cd $CODEBUILD_SRC_DIR/server
-      - echo "Starting PostgreSQL for testing..."
+      - echo "Starting PostgreSQL..."
       - docker run --name postgres-test -e POSTGRES_USER=drill_sergeant -e POSTGRES_PASSWORD=$DB_PASSWORD -e POSTGRES_DB=civiclens_test -p 5432:5432 -d postgres:15-alpine
-      - sleep 10
+      - sleep 15 # Give it a bit more time to be ready
+      - echo "Running migrations and seeds..."
+      # This ensures the database schema exists and initial data is present
+      - npx sequelize-cli db:migrate
+      - npx sequelize-cli db:seed:all
       - echo Running tests...
       - export DB_NAME=$DB_TEST_NAME
       - npm test
