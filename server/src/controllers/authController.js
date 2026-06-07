@@ -1,7 +1,6 @@
 const bcrypt = require("bcrypt");
 const { User } = require("../models");
 const jwt = require("jsonwebtoken");
-const JWT_SECRET = process.env.JWT_SECRET;
 const formatUserResponse = require("../utils/formatUserResponse");
 const {
   passwordRegex,
@@ -87,7 +86,7 @@ class AuthController {
       const formatted = formatUserResponse(newUser);
       const accessToken = jwt.sign(
         { id: newUser.id, username: newUser.username },
-        JWT_SECRET,
+        process.env.JWT_SECRET || "fallback-secret-for-testing",
         { expiresIn: "1h" },
       );
 
@@ -138,12 +137,15 @@ class AuthController {
       if (!user || !(await bcrypt.compare(password, user.password))) {
         return res.status(401).json({ error: "Invalid email or password" });
       }
-
+      console.log(
+        "DEBUG: JWT_SECRET inside createUser:",
+        process.env.JWT_SECRET,
+      );
       // --- SUCCESSFUL LOGIN ---
       const formatted = formatUserResponse(user);
       const accessToken = jwt.sign(
-        { id: user.id, username: user.username },
-        JWT_SECRET,
+        { id: newUser.id, username: newUser.username },
+        process.env.JWT_SECRET || "fallback-secret-for-testing",
         { expiresIn: "1h" },
       );
       const refreshToken = jwt.sign(
@@ -182,8 +184,8 @@ class AuthController {
       // --- LAYER 3: RESPOND WITH FRESH TOKENS ---
       const formatted = formatUserResponse(user);
       const accessToken = jwt.sign(
-        { id: user.id, username: user.username },
-        JWT_SECRET,
+        { id: newUser.id, username: newUser.username },
+        process.env.JWT_SECRET || "fallback-secret-for-testing",
         { expiresIn: "1h" },
       );
 
