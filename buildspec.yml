@@ -26,12 +26,12 @@ phases:
   pre_build:
     commands:
       - cd $CODEBUILD_SRC_DIR/server
-      - echo "Starting PostgreSQL..."
+      - echo "Checking DB_PASSWORD: ${DB_PASSWORD:0:3}..."
       - docker run --name postgres-test -e POSTGRES_USER=drill_sergeant -e POSTGRES_PASSWORD=$DB_PASSWORD -e POSTGRES_DB=postgres -p 5432:5432 -d postgres:15-alpine
       - sleep 10
       - echo "Creating database 'civiclens'..."
       # Create the database explicitly
-      - docker exec postgres-test psql -U drill_sergeant -c "CREATE DATABASE civiclens;"
+      - docker exec -e PGPASSWORD=$DB_PASSWORD postgres-test psql -U drill_sergeant -c "CREATE DATABASE civiclens;"
       - echo "Running migrations and seeds..."
       - npx sequelize-cli db:migrate
       - npx sequelize-cli db:seed:all
