@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const { User } = require("../models");
 const jwt = require("jsonwebtoken");
 const getJwtSecret = () => process.env.JWT_SECRET || "test-fallback-secret-123";
+const getRefreshSecret = () => process.env.JWT_REFRESH || "refreshsecret";
 const formatUserResponse = require("../utils/formatUserResponse");
 const {
   passwordRegex,
