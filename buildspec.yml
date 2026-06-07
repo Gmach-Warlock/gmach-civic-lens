@@ -21,6 +21,8 @@ env:
 phases:
   install:
     commands:
+      - echo "Current directory is:" && pwd
+      - echo "Contents of current directory" && ls -F
       - cd server
       - npm install
   pre_build:
