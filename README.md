@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-- Civic Lens is a high-fidelity, full-stack application designed to optimize the feedback loop between citizens and municipal authorities. By applying core merchandising principles to interface design, Civic Lens transforms the reporting of neighborhood issues into a structured, high-conversion user experience.
+- Civic Lens is a full-stack application designed to optimize the feedback loop between citizens and municipal authorities. By applying core merchandising principles to interface design, Civic Lens transforms the reporting of neighborhood issues into a structured, high-conversion user experience.
 
 ## Strategic Value Proposition
 
