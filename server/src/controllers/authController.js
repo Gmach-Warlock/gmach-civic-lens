@@ -85,7 +85,7 @@ class AuthController {
 
       const formatted = formatUserResponse(newUser);
       const accessToken = jwt.sign(
-        { id: user.id, username: user.username },
+        { id: newUser.id, username: newUser.username },
         process.env.JWT_SECRET || "fallback-test-secret-123", // ADD THIS FALLBACK
         { expiresIn: "1h" },
       );
