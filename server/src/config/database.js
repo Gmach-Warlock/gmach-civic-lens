@@ -5,8 +5,14 @@ if (process.env.NODE_ENV !== "test") {
 
 const { Sequelize } = require("sequelize");
 
+const isTest = process.env.NODE_ENV === "test";
+const isProd = process.env.NODE_ENV === "production";
 // 1. Assign defaults directly to the variables we will use
-const dbName = process.env.DB_NAME || "civiclens_test";
+const dbName = isTest
+  ? process.env.DB_NAME_TEST || "civiclens_test"
+  : isProd
+    ? process.env.DB_NAME_PROD || "civiclens_production"
+    : process.env.DB_NAME || "civiclens";
 const dbUser = process.env.DB_USERNAME || "postgres";
 const dbPass = process.env.DB_PASSWORD || "password";
 const dbHost = process.env.DB_HOST || "localhost";

@@ -1,18 +1,37 @@
 version: 0.2
 
+env:
+  variables:
+    DB_HOST: "localhost"
+    DB_USERNAME: "drill_sergeant"
+    DB_TEST_NAME: "civiclens_test"
+    DB_PROD_NAME: "civiclens_production"
+
+    VITE_SERVER_URL: "http://localhost:4000/api"
+    VITE_REGISTER_USER_PATH: "/auth/register"
+    VITE_LOGIN_USER_PATH: "/auth/login"
+    VITE_VERIFY_TOKEN_PATH: "/auth/me"
+    VITE_CREATE_ISSUE_PATH: "/issues/"
+    VITE_GET_ALL_ISSUES_PATH: "/issues/"
+    VITE_UPVOTE_ISSUE_PATH: "/issues/"
+  secrets-manager:
+    DB_PASSWORD: "arn:aws:secretsmanager:us-east-2:637739133331:secret:civiclens/db-passsword-OocwkV"
+    VITE_ADOBE_URL: "arn:aws:secretsmanager:us-east-2:637739133331:secret:civiclens/adobe-url-nr1MkV"
+    VITE_FONT_AWESOME_URL: "arn:aws:secretsmanager:us-east-2:637739133331:secret:civiclens/font-awesome-url-CWuphK"
 phases:
   install:
     commands:
+      - cd server
       - npm install
   pre_build:
     commands:
+      - cd server
       - echo Running tests against the TEST database...
-      # Tell the app to use the TEST variable for the test run
       - export DB_NAME=$DB_TEST_NAME
       - npm test
   build:
     commands:
+      - cd server
       - echo Building for production...
-      # When you eventually run your build/deploy commands,
-      # they will have access to the $DB_PROD_NAME variable
+      - export DB_NAME=$DB_PROD_NAME
       - npm run build
