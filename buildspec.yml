@@ -18,6 +18,8 @@ env:
     DB_PASSWORD: "arn:aws:secretsmanager:us-east-2:637739133331:secret:civiclens/db-passsword-OocwkV"
     VITE_ADOBE_URL: "arn:aws:secretsmanager:us-east-2:637739133331:secret:civiclens/adobe-url-nr1MkV"
     VITE_FONT_AWESOME_URL: "arn:aws:secretsmanager:us-east-2:637739133331:secret:civiclens/font-awesome-url-CWuphK"
+    JWT_SECRET: "arn:aws:secretsmanager:us-east-2:637739133331:secret:civiclens/jwt-secret-DZg8kW"
+    JWT_REFRESH: "arn:aws:secretsmanager:us-east-2:637739133331:secret:civiclens/jwt-refresh-YjLOiW"
 phases:
   install:
     commands:
