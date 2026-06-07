@@ -21,19 +21,17 @@ env:
 phases:
   install:
     commands:
-      - echo "Current directory is:" && pwd
-      - echo "Contents of current directory" && ls -F
-      - cd server
+      - cd $CODEBUILD_SRC_DIR/server
       - npm install
   pre_build:
     commands:
-      - cd server
-      - echo Running tests against the TEST database...
+      - cd $CODEBUILD_SRC_DIR/server
+      - echo Running tests...
       - export DB_NAME=$DB_TEST_NAME
       - npm test
   build:
     commands:
-      - cd server
-      - echo Building for production...
+      - cd $CODEBUILD_SRC_DIR/server
+      - echo Building...
       - export DB_NAME=$DB_PROD_NAME
       - npm run build
