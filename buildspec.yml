@@ -31,13 +31,12 @@ phases:
       - docker run --name postgres-test -e POSTGRES_USER=drill_sergeant -e POSTGRES_PASSWORD=$DB_PASSWORD -e POSTGRES_DB=postgres -p 5432:5432 -d postgres:15-alpine
       - sleep 10
       - echo "Creating database 'civiclens'..."
-      # Create the database explicitly
       - docker exec -e PGPASSWORD=$DB_PASSWORD postgres-test psql -U drill_sergeant -d postgres -c "CREATE DATABASE civiclens_test;"
-      - echo "Running migrations and seeds..."
-      - npx sequelize-cli db:migrate:undo:all --env test
-      - npx sequelize-cli db:migrate --env test
-      - npx sequelize-cli db:seed:all --env test
-      - echo Running tests...
+      - echo "Running model-based sync..."
+      # Create the file on the fly with a simple echo
+      - echo "require('./models').sequelize.sync({ force: true }).then(() => process.exit(0)).catch(e => { console.error(e); process.exit(1); })" > sync.js
+      - NODE_ENV=test node sync.js
+      - echo "Running tests..."
       - export DB_NAME=$DB_TEST_NAME
       - NODE_ENV=test npm test
   build:
