@@ -26,7 +26,8 @@ phases:
   pre_build:
     commands:
       - cd $CODEBUILD_SRC_DIR/server
-      - echo "Checking DB_PASSWORD: ${DB_PASSWORD:0:3}..."
+      - echo "Checking DB_PASSWORD length..."
+      - echo ${DB_PASSWORD} | wc -c
       - docker run --name postgres-test -e POSTGRES_USER=drill_sergeant -e POSTGRES_PASSWORD=$DB_PASSWORD -e POSTGRES_DB=postgres -p 5432:5432 -d postgres:15-alpine
       - sleep 10
       - echo "Creating database 'civiclens'..."
