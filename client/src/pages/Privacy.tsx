@@ -1,8 +1,24 @@
 import Prose from "../components/organisms/layout/Prose";
 import Heading from "../components/atoms/elements/Heading";
 import Button from "../components/atoms/controls/Button";
+import { useAppDispatch } from "../app/hooks/generalHooks";
+import { useNavigate } from "react-router";
+import { addToast } from "../features/global/globalSlice";
 
 function Privacy() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const handleAccept = () => {
+    dispatch(
+      addToast({
+        message: "Privacy policy accepted. Redirecting home...",
+        type: "success",
+      }),
+    );
+    navigate("/", { replace: true });
+  };
+
   return (
     <div className="privacy">
       <Prose>
@@ -47,7 +63,12 @@ function Privacy() {
           </li>
         </ol>
 
-        <Button name="privacy" content="Accept" className="self-center my-4" />
+        <Button
+          name="privacy"
+          content="Accept"
+          className="self-center my-4"
+          onClick={handleAccept}
+        />
       </Prose>
     </div>
   );

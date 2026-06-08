@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import Button from "../../atoms/controls/Button";
 import Icon from "../../atoms/controls/Icon";
 import { useAppDispatch } from "../../../app/hooks/generalHooks";
@@ -24,6 +24,7 @@ export function Sidebar({
   isAuthenticated,
 }: SidebarProps) {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   // Helper for "Coming Soon" features
   const triggerNotReady = (e: React.MouseEvent, feature: string) => {
@@ -34,7 +35,7 @@ export function Sidebar({
   // Helper for Protected features
   const handleProtectedClick = (e: React.MouseEvent, path: string) => {
     if (!isAuthenticated) {
-      e.preventDefault();
+      e.preventDefault(); // Stop NavLink
       console.log(path);
       onClose();
       dispatch(
@@ -43,16 +44,12 @@ export function Sidebar({
           type: "error",
         }),
       );
-      // Explicitly navigate them to the login page
-      // Note: You might need to import useNavigate in Sidebar.tsx
-      // Or just use window.location.href = '/login' for a simple force-redirect
-      window.location.href = "/login";
+      navigate("/login"); // 3. Programmatic redirect
     } else {
-      // If authorized, just handle mobile close behavior
+      // If authorized, just handle mobile close and let NavLink do its thing
       if (window.innerWidth < 768) onClose();
     }
   };
-
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "unset";
     return () => {

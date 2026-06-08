@@ -1,8 +1,24 @@
 import Heading from "../components/atoms/elements/Heading";
 import Prose from "../components/organisms/layout/Prose";
 import Button from "../components/atoms/controls/Button";
+import { useAppDispatch } from "../app/hooks/generalHooks";
+import { useNavigate } from "react-router";
+import { addToast } from "../features/global/globalSlice";
 
 function Terms() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const handleAccept = () => {
+    dispatch(
+      addToast({
+        message: "Terms accepted. Returning to home...",
+        type: "success",
+      }),
+    );
+    navigate("/", { replace: true });
+  };
+
   return (
     <div className="terms">
       <Prose>
@@ -54,7 +70,12 @@ function Terms() {
           honest—I’m just clicking this to get to the dashboard.
         </div>
 
-        <Button name="terms" content="Accept" className="self-center my-4" />
+        <Button
+          name="terms"
+          content="Accept"
+          className="self-center my-4"
+          onClick={handleAccept}
+        />
       </Prose>
     </div>
   );
