@@ -105,12 +105,26 @@ export default function Login() {
         </h2>
 
         {!accessToken ? (
-          <Form
-            fields={loginFields}
-            submitButtonText="Login"
-            onSubmit={handleFormSubmit}
-            className="login__form"
-          />
+          <>
+            <Form
+              fields={loginFields}
+              submitButtonText="Login"
+              onSubmit={handleFormSubmit}
+              className="login__form"
+            />
+
+            {/* NEW SECTION: Register Redirect */}
+            <div className="login__register-prompt">
+              <p className="impulse">New to Civic Lens?</p>
+              <Button
+                type="button"
+                name="goto-register"
+                content="Create an Account"
+                variant="secondary"
+                onClick={() => navigate("/register")}
+              />
+            </div>
+          </>
         ) : (
           <div className="success-overlay">
             <p>You are logged in.</p>

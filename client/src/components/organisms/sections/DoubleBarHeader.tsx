@@ -21,11 +21,11 @@ export default function DoubleBarHeader() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const currentTheme = useAppSelector(selectTheme);
-  const token = useAppSelector(selectAccessToken); // Your selector for accessToken
+  const token = useAppSelector(selectAccessToken);
 
   const isAuthenticated = !!token;
   const [filter, setFilter] = useState<"all" | "mine">("all");
-  // Reusable protected navigation handler
+
   const protectedNavigate = (path: string) => {
     if (isAuthenticated) {
       navigate(path);
@@ -39,10 +39,31 @@ export default function DoubleBarHeader() {
     }
   };
 
-  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+  const handleFeatureNotReady = (featureName: string) => {
+    dispatch(
+      addToast({
+        message: `${featureName} is coming in the next update!`,
+        type: "info",
+      }),
+    );
+  };
+
+  const toggleSidebar = () => {
+    dispatch(
+      addToast({
+        message: "The sidebar features are currently under construction.",
+        type: "info",
+      }),
+    );
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   const closeSidebar = () => setIsSidebarOpen(false);
   const handleThemeToggle = () => dispatch(toggleTheme());
-  const handleSearch = () => protectedNavigate("/search");
+  const handleSearch = (term: string) => {
+    console.log("Term received by header:", term);
+    handleFeatureNotReady("SearchBar");
+  };
   const handleCog = () => protectedNavigate("/settings");
 
   return (
@@ -68,6 +89,8 @@ export default function DoubleBarHeader() {
           onClose={closeSidebar}
           filter={filter}
           setFilter={setFilter}
+          onNotReady={handleFeatureNotReady}
+          isAuthenticated={isAuthenticated} // Pass the boolean here
         />
       }
     />

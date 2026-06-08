@@ -47,6 +47,51 @@
   margin-bottom: 1.5rem;
 }
 
+/* --- Registration Prompt --- */
+
+.login__register-prompt {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border); /* Adds a subtle separator */
+  text-align: center;
+
+  p {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    margin-bottom: 0.75rem;
+  }
+
+  /* Ensures the button doesn't look squished */
+  button {
+    width: 100%;
+  }
+}
+
+.login__register-prompt {
+  // ... your existing styles (margin, border, text-align) ...
+
+  p {
+    color: var(--color-text-muted);
+    font-size: var(--text-sm);
+    margin-bottom: 0.75rem;
+
+    /* Apply the animation here */
+    animation: fadeInUp 0.8s ease-out forwards;
+    opacity: 0; /* Starts hidden so it can fade in */
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

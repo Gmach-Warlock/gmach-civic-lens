@@ -3,6 +3,8 @@ import Button from "../../atoms/controls/Button";
 import Input from "../../atoms/controls/Input";
 import Row from "../../organisms/layout/Row";
 import Icon from "../../atoms/controls/Icon";
+import { useAppDispatch } from "../../../app/hooks/generalHooks";
+import { addToast } from "../../../features/global/globalSlice";
 
 interface SearchBarProps {
   placeholder?: string;
@@ -17,18 +19,26 @@ export default function SearchBar({
   onSearch, // Destructure the new prop
 }: SearchBarProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const dispatch = useAppDispatch();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const searchTerm = inputRef.current?.value;
 
-    if (searchTerm !== undefined && searchTerm.trim() !== "") {
-      // If parent provided a handler, use it; otherwise, do nothing or default
-      if (onSearch) {
-        onSearch(searchTerm);
-      } else {
-        console.warn("SearchBar: No onSearch handler provided");
-      }
+    // Check if it's empty
+    if (searchTerm === undefined || searchTerm.trim() === "") {
+      dispatch(
+        addToast({
+          message: "Please enter a search term!",
+          type: "error", // Or 'info'
+        }),
+      );
+      return; // Stop here
+    }
+
+    // If we get here, the search is valid
+    if (onSearch) {
+      onSearch(searchTerm);
     }
   };
 

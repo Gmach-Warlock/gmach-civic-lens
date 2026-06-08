@@ -2,36 +2,63 @@ import { useEffect } from "react";
 import { NavLink } from "react-router";
 import Button from "../../atoms/controls/Button";
 import Icon from "../../atoms/controls/Icon";
+import { useAppDispatch } from "../../../app/hooks/generalHooks";
+import { addToast } from "../../../features/global/globalSlice";
 
 export interface SidebarProps {
   isOpen: boolean;
   onClose: () => void;
   filter: "all" | "mine";
   setFilter: (filter: "all" | "mine") => void;
-  setSearchQuery?: (query: string) => void; // Added for the search feature
+  setSearchQuery?: (query: string) => void;
+  onNotReady: (feature: string) => void;
+  isAuthenticated: boolean;
 }
 
 export function Sidebar({
   isOpen,
   onClose,
-  filter,
-  setFilter,
+
   setSearchQuery,
+  onNotReady,
+  isAuthenticated,
 }: SidebarProps) {
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = "hidden";
+  const dispatch = useAppDispatch();
+
+  // Helper for "Coming Soon" features
+  const triggerNotReady = (e: React.MouseEvent, feature: string) => {
+    e.preventDefault();
+    onNotReady(feature);
+  };
+
+  // Helper for Protected features
+  const handleProtectedClick = (e: React.MouseEvent, path: string) => {
+    if (!isAuthenticated) {
+      e.preventDefault();
+      console.log(path);
+      onClose();
+      dispatch(
+        addToast({
+          message: "You must be logged in to access this area. Redirecting...",
+          type: "error",
+        }),
+      );
+      // Explicitly navigate them to the login page
+      // Note: You might need to import useNavigate in Sidebar.tsx
+      // Or just use window.location.href = '/login' for a simple force-redirect
+      window.location.href = "/login";
     } else {
-      document.body.style.overflow = "unset";
+      // If authorized, just handle mobile close behavior
+      if (window.innerWidth < 768) onClose();
     }
+  };
+
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? "hidden" : "unset";
     return () => {
       document.body.style.overflow = "unset";
     };
   }, [isOpen]);
-
-  const handleLinkClick = () => {
-    if (window.innerWidth < 768) onClose();
-  };
 
   return (
     <>
@@ -54,25 +81,27 @@ export function Sidebar({
 
         <nav className="c-sidebar__nav">
           <ul className="c-sidebar__list">
+            {/* PROTECTED: Dashboard */}
             <li className="c-sidebar__item">
               <NavLink
                 to="/dashboard"
                 className={({ isActive }) =>
-                  `c-sidebar__link ${isActive ? "c-sidebar__link--active" : ""}`
+                  `c-sidebar__link ${isActive ? "c-sidebar--active" : ""}`
                 }
-                onClick={handleLinkClick}
+                onClick={(e) => handleProtectedClick(e, "/dashboard")}
               >
                 Dashboard
               </NavLink>
             </li>
 
+            {/* PROTECTED: Settings */}
             <li className="c-sidebar__item">
               <NavLink
                 to="/settings"
                 className={({ isActive }) =>
-                  `c-sidebar__link ${isActive ? "c-sidebar__link--active" : ""}`
+                  `c-sidebar__link ${isActive ? "c-sidebar--active" : ""}`
                 }
-                onClick={handleLinkClick}
+                onClick={(e) => handleProtectedClick(e, "/settings")}
               >
                 Settings
               </NavLink>
@@ -82,14 +111,14 @@ export function Sidebar({
               <hr className="c-sidebar__divider" />
             </li>
 
-            {/* Merchandising: The Primary CTA */}
+            {/* PROTECTED: Report Issue */}
             <li className="c-sidebar__item c-sidebar__item--cta">
               <NavLink
                 to="/reports/new"
-                onClick={handleLinkClick}
                 className="c-sidebar__btn-link"
+                onClick={(e) => handleProtectedClick(e, "/reports/new")}
               >
-                Report an Issue {<Icon name="megaphone" />}
+                Report an Issue <Icon name="megaphone" />
               </NavLink>
             </li>
 
@@ -97,11 +126,9 @@ export function Sidebar({
               <hr className="c-sidebar__divider" />
             </li>
 
-            {/* The Feed Control Hub */}
+            {/* NOT READY: Feed Controls */}
             <li className="c-sidebar__section">
               <span className="c-sidebar__label">FEED FILTER</span>
-
-              {/* Secondary Search Entry */}
               <div className="c-sidebar__search-container">
                 <input
                   type="text"
@@ -109,7 +136,10 @@ export function Sidebar({
                   className="c-sidebar__search-input"
                   onChange={(e) => setSearchQuery?.(e.target.value)}
                 />
-                <Button name="search-sidebar">
+                <Button
+                  name="search-sidebar"
+                  onClick={(e) => triggerNotReady(e, "Search")}
+                >
                   <Icon name="magnifying-glass" />
                 </Button>
               </div>
@@ -117,15 +147,13 @@ export function Sidebar({
               <div className="c-sidebar__filter-group">
                 <Button
                   name="all"
-                  className={filter === "all" ? "is-active" : ""}
-                  onClick={() => setFilter("all")}
+                  onClick={(e) => triggerNotReady(e, "Filter")}
                 >
                   All
                 </Button>
                 <Button
                   name="mine"
-                  className={filter === "mine" ? "is-active" : ""}
-                  onClick={() => setFilter("mine")}
+                  onClick={(e) => triggerNotReady(e, "Filter")}
                 >
                   Mine
                 </Button>

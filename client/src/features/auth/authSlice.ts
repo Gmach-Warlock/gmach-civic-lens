@@ -1,3 +1,4 @@
+import type { SerializedError } from "@reduxjs/toolkit";
 import type { AuthStateInterface } from "../../app/interfaces/authInterfaces";
 import { createSlice } from "@reduxjs/toolkit";
 import { registerUser } from "./thunks/registerUser";
@@ -28,50 +29,69 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // 1. REGISTER USER HANDLER
-    builder.addCase(registerUser.fulfilled, (state, action) => {
-      const { accessToken, refreshToken, user } = action.payload;
+    const handlePending = (state: AuthStateInterface) => {
+      state.loadingState.state = "loading";
+      state.loadingState.message = "Loading...";
+    };
 
+    const handleRejected = (
+      state: AuthStateInterface,
+      action: { error: SerializedError }, // Explicitly type the action
+    ) => {
       state.loadingState.state = "idle";
-      state.user = user;
-      state.user.meta.accessToken = accessToken;
-      state.user.meta.refreshToken = refreshToken;
+      state.loadingState.message = action.error.message || "An error occurred";
 
-      localStorage.setItem("access-token", accessToken);
-      localStorage.setItem("refresh-token", refreshToken);
-    });
+      // Ensure user is cleared if auth fails
+      state.user = createInitialUserState().user;
+    };
 
-    // 2. LOGIN USER HANDLER
-    builder.addCase(loginUser.fulfilled, (state, action) => {
-      const { accessToken, refreshToken, user } = action.payload;
-      console.log(accessToken, refreshToken);
+    // 1. REGISTER USER
+    builder
+      .addCase(registerUser.pending, handlePending)
+      .addCase(registerUser.rejected, handleRejected)
+      .addCase(registerUser.fulfilled, (state, action) => {
+        // Fixed!
+        const { accessToken, refreshToken, user } = action.payload;
 
-      state.loadingState.state = "idle";
-      state.loadingState.message = `User returned successfully at ${new Date().toLocaleString()}`;
+        state.loadingState.state = "idle";
 
-      state.user = user;
-      state.user.meta.accessToken = accessToken;
-      state.user.meta.refreshToken = refreshToken;
+        // Fixed: Preserve existing meta properties
+        state.user = {
+          ...user,
+          meta: {
+            ...user.meta,
+            accessToken,
+            refreshToken,
+          },
+        };
 
-      localStorage.setItem("access-token", accessToken);
-      localStorage.setItem("refresh-token", refreshToken);
-    });
+        localStorage.setItem("access-token", accessToken);
+        localStorage.setItem("refresh-token", refreshToken);
+      });
 
-    // 3. VERIFY TOKEN HANDLER
-    builder.addCase(verifyToken.fulfilled, (state, action) => {
-      const { accessToken, refreshToken, user } = action.payload;
-      console.log(accessToken, refreshToken);
+    // 2. LOGIN USER
+    builder
+      .addCase(loginUser.pending, handlePending)
+      .addCase(loginUser.rejected, handleRejected)
+      .addCase(loginUser.fulfilled, (state, action) => {
+        const { accessToken, refreshToken, user } = action.payload;
+        state.loadingState.state = "idle";
+        state.user = { ...user, meta: { accessToken, refreshToken } };
+        localStorage.setItem("access-token", accessToken);
+        localStorage.setItem("refresh-token", refreshToken);
+      });
 
-      state.loadingState.state = "idle";
-      state.loadingState.message = `User verified successfully at ${new Date().toLocaleString()}`;
-
-      state.user = user;
-      state.user.meta.accessToken = accessToken;
-      state.user.meta.refreshToken = refreshToken;
-
-      localStorage.setItem("access-token", accessToken);
-      localStorage.setItem("refresh-token", refreshToken);
-    });
+    // 3. VERIFY TOKEN
+    builder
+      .addCase(verifyToken.pending, handlePending)
+      .addCase(verifyToken.rejected, handleRejected) // THIS IS WHAT WAS MISSING!
+      .addCase(verifyToken.fulfilled, (state, action) => {
+        const { accessToken, refreshToken, user } = action.payload;
+        state.loadingState.state = "idle";
+        state.user = { ...user, meta: { accessToken, refreshToken } };
+        localStorage.setItem("access-token", accessToken);
+        localStorage.setItem("refresh-token", refreshToken);
+      });
   },
 });
 
