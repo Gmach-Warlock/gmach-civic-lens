@@ -46,6 +46,7 @@ phases:
       - cd $CODEBUILD_SRC_DIR/server
       - echo Building for production...
       - export DB_NAME=$DB_PROD_NAME
+
   post_build:
     commands:
       - docker stop postgres-test

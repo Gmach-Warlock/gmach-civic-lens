@@ -26,9 +26,19 @@ const globalSlice = createSlice({
       state,
       action: PayloadAction<Omit<ToastMessageInterface, "id">>,
     ) => {
+      // Fallback for non-secure contexts (HTTP)
+      const generateId = () => {
+        if (typeof crypto !== "undefined" && crypto.randomUUID) {
+          return crypto.randomUUID();
+        }
+        return (
+          Date.now().toString() + Math.random().toString(36).substring(2, 9)
+        );
+      };
+
       state.toasts.push({
         ...action.payload,
-        id: crypto.randomUUID(),
+        id: generateId(),
       });
     },
     // Filter out the specific toast card when it closes or times out
