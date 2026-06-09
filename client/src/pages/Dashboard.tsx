@@ -124,8 +124,6 @@ export default function Dashboard() {
         />
 
         {issues.map((issue) => {
-          const isOwner = user?.meta.id === issue.meta.authorId;
-
           return (
             /* Issue */
             <div
@@ -215,17 +213,6 @@ export default function Dashboard() {
                 </span>
               </Row>
 
-              {/* Edit (Original Author only) */}
-              {isOwner && (
-                <Button
-                  name="Edit"
-                  type="button"
-                  content="Modify"
-                  onClick={() => setActiveEditIssueId(issue.meta.id)} // This keeps the user on the dashboard!
-                  className="btn--secondary"
-                />
-              )}
-
               {/* Comments */}
               <Column
                 className="comments-section mt-4 pt-3 border-t border-glass-light w-full items-center"
@@ -265,12 +252,6 @@ export default function Dashboard() {
                     ))}
                   </Column>
                 )}
-                {/* 1. Trigger Overlay with Issue ID when clicking the plus button 👇 */}
-                <Icon
-                  name="plus"
-                  className="btn w-fit my-2 cursor-pointer"
-                  onClick={() => setActiveCommentIssueId(issue.meta.id)}
-                />
               </Column>
             </div>
           );
